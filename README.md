@@ -1,6 +1,6 @@
 # MIT Connect
 
-MIT Connect is a static multi-role college portal UI built with HTML, CSS, and vanilla JavaScript.
+MIT Connect is a multi-role college portal UI built with React, Vite, CSS, and React Router.
 
 The project represents a campus management system for Movi Institute of Technology, with a branded split-screen login page and role-based dashboards for students, admin, faculty, and finance teams.
 
@@ -12,7 +12,9 @@ The project represents a campus management system for Movi Institute of Technolo
 - Role-specific sidebar menus
 - Blue and cyan themed UI across login and dashboard screens
 - Responsive layout for desktop and mobile screens
-- Demo authentication using front-end JavaScript
+- React component-based architecture
+- Route-based navigation using React Router
+- Demo authentication using front-end state and `localStorage`
 
 ## Roles Included
 
@@ -43,34 +45,48 @@ Use the following demo credentials on the login page:
 
 ```text
 cms/
-├── login.html
-├── dashboard.html
-├── styles.css
+├── index.html
+├── package.json
 └── README.md
+	src/
+	├── App.jsx
+	├── main.jsx
+	├── styles.css
+	├── data/
+	│   └── roleConfig.js
+	└── pages/
+		├── DashboardPage.jsx
+		└── LoginPage.jsx
 ```
 
 ## Pages
 
-### `login.html`
+### `src/pages/LoginPage.jsx`
 
 - Split layout inspired by a modern ERP login screen
 - Left panel shows MIT Connect branding and platform highlights
 - Right panel contains role switcher and login form
 - Stores role and user ID in `localStorage`
-- Redirects authenticated users to `dashboard.html`
+- Redirects authenticated users to `/dashboard`
 
-### `dashboard.html`
+### `src/pages/DashboardPage.jsx`
 
 - Displays role-specific dashboard content
 - Reads current role from query string or `localStorage`
 - Builds sidebar items dynamically based on selected role
 - Shows overview cards, access sections, tasks, and alerts
 
-### `styles.css`
+### `src/styles.css`
 
 - Contains all shared styling for login and dashboard pages
 - Includes responsive layout behavior
 - Defines MIT Connect brand colors and gradients
+
+### `src/data/roleConfig.js`
+
+- Stores demo users and role-specific dashboard data
+- Stores role-wise sidebar menu configuration
+- Centralizes role validation logic
 
 ## Sidebar Access By Role
 
@@ -102,19 +118,37 @@ cms/
 
 ## How To Run
 
-This is a static front-end project, so no build step is required.
+This is a Vite React project.
 
 1. Open the project folder in VS Code.
-2. Open `login.html` in a browser.
-3. Choose a role and sign in with one of the demo credentials.
+2. Install dependencies:
 
-You can also use the VS Code Live Server extension if you want automatic reload while editing.
+```bash
+npm install
+```
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
+4. Open the local Vite URL shown in the terminal.
+5. Choose a role and sign in with one of the demo credentials.
+
+To create a production build:
+
+```bash
+npm run build
+```
 
 ## Technologies Used
 
-- HTML5
+- React
+- Vite
+- React Router
 - CSS3
-- Vanilla JavaScript
+- JavaScript (ES Modules)
 - Google Fonts (`Inter`)
 
 ## Notes
