@@ -13,6 +13,7 @@ import StudentsPage from './pages/StudentsPage';
 import StudentDetailPage from './pages/StudentDetailPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import NotificationPage from './pages/NotificationPage';
+import PayrollPage from './pages/PayrollPage';
 
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
       <Route path="/exams" element={<ProtectedRoute><ExamsPage /></ProtectedRoute>} />
       <Route path="/placement" element={<ProtectedRoute><PlacementPage /></ProtectedRoute>} />
       <Route path="/facility" element={<ProtectedRoute><FacilityPage /></ProtectedRoute>} />
+      <Route path="/payroll" element={<ProtectedRoute><PayrollPage /></ProtectedRoute>} />
       <Route path="/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
       <Route path="/notifications" element={<ProtectedRoute><NotificationPage /></ProtectedRoute>} />
       <Route

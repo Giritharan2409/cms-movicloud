@@ -9,6 +9,7 @@ import AttendancePage from './AttendancePage';
 import ExamsPage from './ExamsPage';
 import PlacementPage from './PlacementPage';
 import FacilityPage from './FacilityPage';
+import PayrollPage from './PayrollPage';
 
 function GraduationIcon() {
   return (
@@ -47,6 +48,7 @@ export default function DashboardPage() {
     '/exams': ExamsPage,
     '/placement': PlacementPage,
     '/facility': FacilityPage,
+    '/payroll': PayrollPage,
   };
   const pageTitles = {
     '/timetable': 'Timetable',
@@ -54,6 +56,7 @@ export default function DashboardPage() {
     '/exams': 'Exams',
     '/placement': 'Placement',
     '/facility': 'Facility',
+    '/payroll': 'Payroll',
   };
   const pageSubtitles = {
     '/timetable': 'View and manage weekly class schedules across subjects and sections.',
@@ -61,6 +64,7 @@ export default function DashboardPage() {
     '/exams': 'Manage exam schedules, seat plans, and result submissions.',
     '/placement': 'Monitor campus recruitment drives and student placement status.',
     '/facility': 'Oversee campus infrastructure, labs, and facility bookings.',
+    '/payroll': 'Manage staff payroll, generate salary slips, and run payroll batches.',
   };
   const ActivePage = activePage ? pageMap[activePage] : null;
 
@@ -78,6 +82,7 @@ export default function DashboardPage() {
     Attendance: '/attendance',
     Placement: '/placement',
     Facility: '/facility',
+    Payroll: '/payroll',
   };
 
   useEffect(() => {
