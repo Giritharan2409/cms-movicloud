@@ -224,10 +224,6 @@ export default function DashboardPage() {
               <button className="mobile-menu-btn" onClick={() => { setIsSidebarVisible(true); setSidebarOpen(true); }} aria-label="Toggle menu">
                 <MenuIcon />
               </button>
-              <div className="topbar-left">
-                <h2>{activePage ? pageTitles[activePage] : ''}</h2>
-                <p>{activePage ? pageSubtitles[activePage] : data.subtitle}</p>
-              </div>
             </div>
             <div className="topbar-right">
               <div style={{ position: 'relative' }}>
@@ -241,7 +237,6 @@ export default function DashboardPage() {
                   onClose={() => setIsNotificationOpen(false)}
                 />
               </div>
-              <span className="badge badge-info">{data.label}</span>
               <button
                 type="button"
                 onClick={handleOpenProfileDetails}
