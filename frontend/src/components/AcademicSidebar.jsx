@@ -2,46 +2,25 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { destroyUserSession, getUserSession } from '../auth/sessionController'
 import { cmsRoles, roleMenuGroups } from '../data/roleConfig'
 
-const iconMap = {
-  Dashboard: 'dashboard',
-  Students: 'group',
-  Faculty: 'person',
-  Department: 'domain',
-  Exams: 'school',
-  Timetable: 'calendar_today',
-  Attendance: 'rule',
-  Placement: 'work',
-  Facility: 'apartment',
-  Fees: 'payments',
-  Reports: 'assessment',
-  Admission: 'person_add',
-  Payroll: 'receipt_long',
-  Invoices: 'description',
-  Analytics: 'query_stats',
-  Notifications: 'notifications',
-  Settings: 'settings',
-  'My Courses': 'menu_book',
-}
-
 const getRouteMap = (role) => ({
   Dashboard: '/dashboard',
   Students: '/students',
-  Faculty: '/dashboard',
-  Department: '/dashboard',
+  Faculty: '/faculty',
+  Department: '/department',
   Exams: '/exams',
   Timetable: '/timetable',
   Attendance: '/attendance',
   Placement: '/placement',
   Facility: '/facility',
   Fees: role === 'admin' ? '/admin-fees' : '/fees',
-  Reports: '/dashboard',
+  Reports: '/reports',
   Admission: '/admission',
   Payroll: '/payroll',
   Invoices: role === 'admin' ? '/admin-invoices' : '/invoices',
   Analytics: '/analytics',
   Notifications: '/notifications',
   Settings: '/settings',
-  'My Courses': '/dashboard',
+  'My Courses': '/my-courses',
 })
 
 export default function AcademicSidebar({ isSidebarVisible = true, onToggleSidebar }) {
@@ -100,10 +79,10 @@ export default function AcademicSidebar({ isSidebarVisible = true, onToggleSideb
                     key={item}
                     to={to}
                     className={() =>
-                      `flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
+                      `flex items-center h-11 px-3 rounded-lg text-[15px] transition-all duration-200 ${
                         isActive
-                          ? 'bg-[#2563eb]/10 text-[#2563eb] font-semibold shadow-sm'
-                          : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                          ? 'bg-gradient-to-r from-[#2563eb] to-[#06b6d4] text-white font-medium shadow-[0_8px_18px_rgba(37,99,235,0.18)]'
+                          : 'text-slate-500 hover:bg-slate-100 hover:text-[#1f2937] font-medium'
                       }`
                     }
                   >
@@ -119,7 +98,7 @@ export default function AcademicSidebar({ isSidebarVisible = true, onToggleSideb
       <div className="p-4 border-t border-slate-100 mt-auto">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-xl text-sm font-medium transition-all duration-200"
+          className="w-full flex items-center px-4 py-3 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-xl text-sm font-medium transition-all duration-200"
         >
           <span>Logout</span>
         </button>
