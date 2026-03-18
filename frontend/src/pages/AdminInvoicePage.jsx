@@ -19,6 +19,17 @@ export default function AdminInvoicePage() {
     localStorage.setItem('admin_invoices', JSON.stringify(invoices));
   }, [invoices]);
 
+  // Listen for real-time updates from localStorage (when students make payments)
+  React.useEffect(() => {
+    const handleInvoiceUpdate = (event) => {
+      const updatedInvoices = event.detail || JSON.parse(localStorage.getItem('admin_invoices') || '[]');
+      setInvoices(updatedInvoices);
+    };
+
+    window.addEventListener('invoiceUpdated', handleInvoiceUpdate);
+    return () => window.removeEventListener('invoiceUpdated', handleInvoiceUpdate);
+  }, []);
+
   const allCourses = useMemo(() => {
     const courses = [...new Set(invoices.map((inv) => inv.course))];
     return courses.filter(Boolean);
