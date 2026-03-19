@@ -1,13 +1,13 @@
-﻿import { getUserSession } from '../auth/sessionController'
+import { getUserSession } from '../auth/sessionController'
 import { cmsRoles } from '../data/roleConfig'
 
-export default function TopBar({ title }) {
+export default function TopBar({ title, isSidebarVisible = true }) {
   const session = getUserSession()
   const role = session?.role || 'student'
   const user = cmsRoles[role] || cmsRoles.student
 
   return (
-    <header className="h-20 bg-white border-b border-slate-100 px-10 flex items-center justify-between sticky top-0 z-10 backdrop-blur-md bg-white/80">
+    <header className={`h-20 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-10 backdrop-blur-md bg-white/80 transition-all duration-300 ${isSidebarVisible ? 'px-10' : 'pl-24 pr-10'}`}>
       <div className="flex items-center gap-4 flex-1">
         <div>
           <h2 className="text-[20px] font-bold text-[#2563eb] tracking-tight">MIT Connect</h2>
