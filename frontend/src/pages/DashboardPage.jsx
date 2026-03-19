@@ -1,70 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { destroyUserSession, getUserSession } from '../auth/sessionController';
+import { getUserSession } from '../auth/sessionController';
 import { cmsRoles, roleMenuGroups } from '../data/roleConfig';
 import { getStudentById } from '../data/studentData';
 import NotificationBell from '../components/NotificationBell';
 import NotificationDropdown from '../components/NotificationDropdown';
-import TimetablePage from './TimetablePage';
-import AttendancePage from './AttendancePage';
-import ExamsPage from './ExamsPage';
-import PlacementPage from './PlacementPage';
-import FacilityPage from './FacilityPage';
-
-function GraduationIcon() {
-  return (
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 2.26L19.02 9 12 12.74 4.98 9 12 5.26zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
-    </svg>
-  );
-}
-
-function MenuIcon() {
-  return (
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-    </svg>
-  );
-}
-
-function LogoutIcon() {
-  return (
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
-    </svg>
-  );
-}
+import Layout from '../components/Layout';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const [activePage, setActivePage] = useState(null);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-
-  const pageMap = {
-    '/timetable': TimetablePage,
-    '/attendance': AttendancePage,
-    '/exams': ExamsPage,
-    '/placement': PlacementPage,
-    '/facility': FacilityPage,
-  };
-  const pageTitles = {
-    '/timetable': 'Timetable',
-    '/attendance': 'Attendance',
-    '/exams': 'Exams',
-    '/placement': 'Placement',
-    '/facility': 'Facility',
-  };
-  const pageSubtitles = {
-    '/timetable': 'View and manage weekly class schedules across subjects and sections.',
-    '/attendance': 'Track and record student attendance for all mapped subjects.',
-    '/exams': 'Manage exam schedules, seat plans, and result submissions.',
-    '/placement': 'Monitor campus recruitment drives and student placement status.',
-    '/facility': 'Oversee campus infrastructure, labs, and facility bookings.',
-  };
-  const ActivePage = activePage ? pageMap[activePage] : null;
 
   const session = getUserSession();
   const sessionRole = session?.role || null;
@@ -86,27 +32,6 @@ export default function DashboardPage() {
 
     navigate(`/students${roleQuery}`);
   }
-
-  const routeMap = {
-    Dashboard: '/dashboard',
-    Students: '/students',
-    Faculty: '/faculty',
-    Department: '/department',
-    Exams: '/exams',
-    Timetable: '/timetable',
-    Attendance: '/attendance',
-    Placement: '/placement',
-    Facility: '/facility',
-    Fees: role === 'admin' ? '/admin-fees' : '/fees',
-    Reports: '/reports',
-    Admission: '/admission',
-    Payroll: '/payroll',
-    Invoices: role === 'admin' ? '/admin-invoices' : '/invoices',
-    Analytics: '/analytics',
-    Notifications: '/notifications',
-    Settings: '/settings',
-    'My Courses': '/my-courses',
-  };
 
   useEffect(() => {
     if (!sessionRole || !sessionUserId) {
@@ -131,136 +56,36 @@ export default function DashboardPage() {
     return () => window.removeEventListener('pageshow', enforceSessionOnPageRestore);
   }, [data.label, location.search, navigate, sessionRole, sessionUserId]);
 
-  function handleLogout() {
-    destroyUserSession();
-    navigate('/', { replace: true });
-  }
-
   return (
-    <>
-      {!isSidebarVisible && (
-        <button
-          type="button"
-          className="sidebar-desktop-toggle"
-          onClick={() => setIsSidebarVisible(true)}
-          aria-label="Show sidebar"
-          title="Show sidebar"
-        >
-          <MenuIcon />
-        </button>
-      )}
-
-      <div
-        className={`sidebar-overlay${sidebarOpen ? ' active' : ''}`}
-        onClick={() => setSidebarOpen(false)}
-        aria-hidden="true"
-      />
-
-      <div className="dashboard-wrapper role-layout">
-        <aside className={`sidebar${sidebarOpen ? ' open' : ''}${isSidebarVisible ? '' : ' hidden-desktop'}`} id="sidebar">
-          <div className="sidebar-logo">
-            <div className="logo-mark">
-              <GraduationIcon />
-            </div>
-            <div className="logo-text-wrap">
-              <div className="logo-title">MIT Connect</div>
-              <div className="logo-sub">{data.label} Portal</div>
-            </div>
-            <button
-              type="button"
-              className="sidebar-toggle-btn"
-              onClick={() => setIsSidebarVisible(false)}
-              aria-label="Hide sidebar"
-              title="Hide sidebar"
-            >
-              <MenuIcon />
-            </button>
+    <Layout title="Dashboard">
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+        <div className="topbar-right">
+          <div style={{ position: 'relative' }}>
+            <NotificationBell
+              role={role}
+              onBellClick={() => setIsNotificationOpen(!isNotificationOpen)}
+            />
+            <NotificationDropdown
+              role={role}
+              isOpen={isNotificationOpen}
+              onClose={() => setIsNotificationOpen(false)}
+            />
           </div>
-
-          <nav className="sidebar-nav">
-            {menuGroups.map((group, groupIndex) => (
-              <div key={group.title}>
-                <div className="nav-section-label">{group.title}</div>
-                <ul>
-                  {group.items.map((item, itemIndex) => (
-                    <li key={item}>
-                      <a
-                        href="#"
-                        className={(() => {
-                          const route = routeMap[item] || '/dashboard';
-                          const isActive =
-                            location.pathname === route ||
-                            (route !== '/dashboard' && location.pathname.startsWith(route));
-                          return isActive ? 'active' : '';
-                        })()}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          const route = routeMap[item] || '/dashboard';
-                          setActivePage(null);
-                          setSidebarOpen(false);
-                          navigate(`${route}?role=${encodeURIComponent(role)}`);
-                        }}
-                      >
-                        {item}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </nav>
-
-          <div className="sidebar-footer">
-            <a
-              href="#"
-              onClick={(event) => {
-                event.preventDefault();
-                handleLogout();
-              }}
-            >
-              <LogoutIcon />
-              Logout
-            </a>
-          </div>
-        </aside>
-
-        <main className={`main-content${isSidebarVisible ? '' : ' sidebar-hidden'}`}>
-          <div className="topbar">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <button className="mobile-menu-btn" onClick={() => { setIsSidebarVisible(true); setSidebarOpen(true); }} aria-label="Toggle menu">
-                <MenuIcon />
-              </button>
+          <button
+            type="button"
+            onClick={handleOpenProfileDetails}
+            className="profile-avatar-wrap bg-transparent border-0 cursor-pointer"
+            aria-label="Open profile details"
+            title="Open profile"
+          >
+            <div className="avatar-initials" style={{ width: 40, height: 40, fontSize: 14 }}>
+              {data.label.slice(0, 2).toUpperCase()}
             </div>
-            <div className="topbar-right">
-              <div style={{ position: 'relative' }}>
-                <NotificationBell
-                  role={role}
-                  onBellClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                />
-                <NotificationDropdown
-                  role={role}
-                  isOpen={isNotificationOpen}
-                  onClose={() => setIsNotificationOpen(false)}
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleOpenProfileDetails}
-                className="profile-avatar-wrap bg-transparent border-0 cursor-pointer"
-                aria-label="Open profile details"
-                title="Open profile"
-              >
-                <div className="avatar-initials" style={{ width: 40, height: 40, fontSize: 14 }}>
-                  {data.label.slice(0, 2).toUpperCase()}
-                </div>
-                <span className="avatar-status" />
-              </button>
-            </div>
-          </div>
+            <span className="avatar-status" />
+          </button>
+        </div>
+      </div>
 
-          {ActivePage && <ActivePage noLayout />}
-          {!ActivePage && (
-            <>
               {/* Profile Header */}
               <div className="bg-white rounded-lg shadow p-6 mb-8">
                 <div className="flex items-start justify-between">
@@ -335,10 +160,6 @@ export default function DashboardPage() {
                   ))}
                 </div>
               </div>
-            </>
-          )}
-        </main>
-      </div>
-    </>
+    </Layout>
   );
 }

@@ -1,11 +1,12 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line,
   PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis,
 } from 'recharts';
-import { cmsRoles, getValidRole, roleMenuGroups } from '../data/roleConfig';
+import { cmsRoles, getValidRole } from '../data/roleConfig';
+import Layout from '../components/Layout';
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
 const Ico = {
@@ -1439,38 +1440,13 @@ function FacultyView({activeMonths,rangeLabel,department,semester}){
 // MAIN PAGE
 // ══════════════════════════════════════════════════════════════════════════════
 export default function AnalyticsPage({role:propRole}){
-  const navigate       = useNavigate();
-  const location       = useLocation();
   const [searchParams] = useSearchParams();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [calOpen,     setCalOpen]     = useState(false);
   const calRef = useRef(null);
 
   const storedRole = localStorage.getItem('cmsRole')||'student';
   const role       = getValidRole(propRole||searchParams.get('role')||storedRole);
   const data       = cmsRoles[role];
-  const menuGroups = roleMenuGroups[role]||roleMenuGroups.student;
-  const routeMap = {
-    Dashboard: '/dashboard',
-    Students: '/students',
-    Faculty: '/faculty',
-    Department: '/department',
-    Exams: '/exams',
-    Timetable: '/timetable',
-    Attendance: '/attendance',
-    Placement: '/placement',
-    Facility: '/facility',
-    Fees: role === 'admin' ? '/admin-fees' : '/fees',
-    Reports: '/reports',
-    Admission: '/admission',
-    Payroll: '/payroll',
-    Invoices: role === 'admin' ? '/admin-invoices' : '/invoices',
-    Analytics: '/analytics',
-    Notifications: '/notifications',
-    Settings: '/settings',
-    'My Courses': '/my-courses',
-  };
 
   const [startMY,    setStartMY]    = useState({month:0,year:2026});
   const [endMY,      setEndMY]      = useState({month:2,year:2026});
@@ -1497,8 +1473,6 @@ export default function AnalyticsPage({role:propRole}){
   const triggerLabel = myToKey(startMY)===myToKey(endMY)?myLabel(startMY):`${myLabel(startMY)} \u2192 ${myLabel(endMY)}`;
 
   useEffect(()=>{document.title=`MIT Connect \u2013 ${data.label} Analytics`;localStorage.setItem('cmsRole',role);},[data.label,role]);
-  function handleLogout(){localStorage.removeItem('cmsRole');localStorage.removeItem('cmsUserId');navigate('/');}
-
   function FilterBar(){
     return(
       <div className="content-card" style={{marginBottom:24,padding:'16px 20px'}}>
@@ -1555,94 +1529,23 @@ export default function AnalyticsPage({role:propRole}){
   }
 
   return(
-    <>
-      {!isSidebarVisible && (
-        <button
-          type="button"
-          className="sidebar-desktop-toggle"
-          onClick={()=>setIsSidebarVisible(true)}
-          aria-label="Show sidebar"
-          title="Show sidebar"
-        >
-          <Ico.Menu/>
-        </button>
-      )}
-
-      <div className={`sidebar-overlay${sidebarOpen?' active':''}`} onClick={()=>setSidebarOpen(false)} aria-hidden="true"/>
-      <div className="dashboard-wrapper role-layout">
-        <aside className={`sidebar${sidebarOpen?' open':''}${isSidebarVisible ? '' : ' hidden-desktop'}`} id="sidebar">
-          <div className="sidebar-logo">
-            <div className="logo-mark"><Ico.Grad/></div>
-            <div className="logo-text-wrap"><div className="logo-title">MIT Connect</div><div className="logo-sub">{data.label} Portal</div></div>
-            <button
-              type="button"
-              className="sidebar-toggle-btn"
-              onClick={()=>setIsSidebarVisible(false)}
-              aria-label="Hide sidebar"
-              title="Hide sidebar"
-            >
-              <Ico.Menu/>
-            </button>
-          </div>
-          <nav className="sidebar-nav">
-            {menuGroups.map((group)=>(
-              <div key={group.title}>
-                <div className="nav-section-label">{group.title}</div>
-                <ul>
-                  {group.items.map((item) => {
-                    const route = routeMap[item] || '/dashboard';
-                    const isActive =
-                      location.pathname === route ||
-                      (route !== '/dashboard' && location.pathname.startsWith(route));
-
-                    return (
-                      <li key={item}>
-                        <a
-                          href="#"
-                          className={isActive ? 'active' : ''}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setSidebarOpen(false);
-                            navigate(`${route}?role=${encodeURIComponent(role)}`);
-                          }}
-                        >
-                          {item}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
-          </nav>
-          <div className="sidebar-footer"><a href="#" onClick={e=>{e.preventDefault();handleLogout();}}><Ico.Logout/> Logout</a></div>
-        </aside>
-
-        <main className={`main-content${isSidebarVisible ? '' : ' sidebar-hidden'}`}>
-          <div className="topbar">
-            <div style={{display:'flex',alignItems:'center',gap:12}}>
-              <button className="mobile-menu-btn" onClick={()=>{setIsSidebarVisible(true);setSidebarOpen(true);}} aria-label="Toggle menu"><Ico.Menu/></button>
-              <button type="button" onClick={()=>navigate(-1)} style={{display:'flex',alignItems:'center',gap:6,background:'#fff',border:'1px solid #e5e7eb',borderRadius:8,padding:'0 12px',height:36,fontSize:13,fontWeight:500,color:'#6b7280',cursor:'pointer'}}>
-                <Ico.Back/> Back
-              </button>
-              <div className="topbar-left">
-                <h2>Reports &amp; Analytics</h2>
-                <p>{role==='admin'&&'College-wide statistics \u2014 Students, Faculty, Finance'}{role==='faculty'&&'Class performance, attendance & exam analytics'}{role==='finance'&&'Fee collection, expenses & scholarship analytics'}{role==='student'&&'Your personal performance overview'}</p>
-              </div>
-            </div>
-            <div className="topbar-right" style={{display:'flex',alignItems:'center',gap:10}}>
-              <span style={{fontSize:11,color:'#9ca3af',fontWeight:500}}>Updated {new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
-            </div>
-          </div>
-
-          <FilterBar/>
-
-          {role==='admin'   && <AdminView   activeMonths={activeMonths} rangeLabel={rangeLabel} department={department} semester={semester}/>}
-          {role==='finance' && <FinanceView activeMonths={activeMonths} rangeLabel={rangeLabel} department={department} semester={semester}/>}
-          {role==='faculty' && <FacultyView activeMonths={activeMonths} rangeLabel={rangeLabel} department={department} semester={semester}/>}
-          {role==='student' && <div style={{textAlign:'center',padding:'60px 0',color:'#9ca3af',fontSize:14}}>Student analytics coming soon</div>}
-        </main>
+    <Layout title="Reports & Analytics">
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+        <p style={{color:'#64748b',fontSize:13,margin:0}}>
+          {role==='admin'&&'College-wide statistics - Students, Faculty, Finance'}
+          {role==='faculty'&&'Class performance, attendance and exam analytics'}
+          {role==='finance'&&'Fee collection, expenses and scholarship analytics'}
+          {role==='student'&&'Your personal performance overview'}
+        </p>
+        <span style={{fontSize:11,color:'#9ca3af',fontWeight:500}}>Updated {new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
       </div>
-    </>
+
+      <FilterBar/>
+
+      {role==='admin'   && <AdminView   activeMonths={activeMonths} rangeLabel={rangeLabel} department={department} semester={semester}/>}
+      {role==='finance' && <FinanceView activeMonths={activeMonths} rangeLabel={rangeLabel} department={department} semester={semester}/>}
+      {role==='faculty' && <FacultyView activeMonths={activeMonths} rangeLabel={rangeLabel} department={department} semester={semester}/>}
+      {role==='student' && <div style={{textAlign:'center',padding:'60px 0',color:'#9ca3af',fontSize:14}}>Student analytics coming soon</div>}
+    </Layout>
   );
 }

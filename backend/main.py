@@ -20,6 +20,7 @@ from backend.routes.academics.exams import router as exams_router
 from backend.routes.academics.facility import router as facility_router
 from backend.routes.academics.placement import router as placement_router
 from backend.routes.academics.timetable import router as timetable_router
+from backend.routes.analytics import router as analytics_router
 from backend.routes.notifications import router as notifications_router
 from backend.routes.payroll import router as payroll_router
 from backend.routes.settings import router as settings_router
@@ -63,6 +64,7 @@ async def serve_frontend():
 
 app.include_router(staff_router)
 app.include_router(payroll_router)
+app.include_router(analytics_router)
 app.include_router(exams_router)
 app.include_router(timetable_router)
 app.include_router(attendance_router)
@@ -86,4 +88,4 @@ async def serve_react_app(full_path: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend.main:app", host="127.0.0.1", port=5000)
+    uvicorn.run("main:app", host="127.0.0.1", port=5000)

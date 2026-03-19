@@ -24,6 +24,17 @@ export default function FeesPage() {
     localStorage.setItem('fee_assignments', JSON.stringify(feeAssignments));
   }, [feeAssignments]);
 
+  // Listen for fee assignment updates from admin side
+  React.useEffect(() => {
+    const handleFeeUpdate = () => {
+      const updatedFees = JSON.parse(localStorage.getItem('fee_assignments') || '[]');
+      setFeeAssignments(updatedFees);
+    };
+
+    window.addEventListener('feeAssignmentUpdated', handleFeeUpdate);
+    return () => window.removeEventListener('feeAssignmentUpdated', handleFeeUpdate);
+  }, []);
+
   // Filter fees for current student
   const studentFees = useMemo(() => {
     let fees = feeAssignments;
@@ -60,63 +71,64 @@ export default function FeesPage() {
     setShowPaymentModal(false);
     setShowProcessing(true);
 
-    // Simulate payment processing
+    // Simulate payment processing with 90% success rate
+    const paymentSuccess = Math.random() > 0.1; // 90% success
+
     setTimeout(() => {
       setShowProcessing(false);
-      setShowSuccess(true);
 
-      // Generate transaction ID
-      const txnId = `TXN${Math.random().toString().slice(2, 8)}`;
-      setTransactionId(txnId);
+      if (paymentSuccess) {
+        // Generate transaction ID
+        const txnId = `TXN${Math.random().toString().slice(2, 8)}`;
+        setTransactionId(txnId);
 
-      // Update fee status
-      setFeeAssignments(
-        feeAssignments.map((fee) =>
+        // Get formatted payment method name
+        const methodMap = {
+          debitCard: 'Debit Card',
+          creditCard: 'Credit Card',
+          upi: 'UPI',
+          netBanking: 'Net Banking',
+        };
+        const methodName = methodMap[paymentMethod] || paymentMethod;
+
+        // 1️⃣ Update fee_assignments status
+        const updatedFeeAssignments = feeAssignments.map((fee) =>
           fee.id === selectedFee.id
             ? {
                 ...fee,
                 paymentStatus: 'paid',
                 paidDate: new Date().toISOString().split('T')[0],
                 transactionId: txnId,
-                paymentMethod,
+                paymentMethod: methodName,
               }
             : fee
-        )
-      );
+        );
+        setFeeAssignments(updatedFeeAssignments);
 
-      // Auto-generate invoice
-      const invoice = {
-        id: `BILL${Date.now()}`,
-        studentId: selectedFee.studentId,
-        studentName: selectedFee.studentName,
-        applicationId: selectedFee.applicationId,
-        semester: selectedFee.semester,
-        course: selectedFee.course,
-        items: [
-          { description: 'Semester Fee', amount: selectedFee.semesterFee },
-          { description: 'Book Fee', amount: selectedFee.bookFee },
-          { description: 'Exam Fee', amount: selectedFee.examFee },
-        ],
-        total: selectedFee.totalFee,
-        generatedDate: new Date().toISOString().split('T')[0],
-        status: 'Paid',
-        paymentStatus: 'Paid',
-        paidDate: new Date().toISOString().split('T')[0],
-        paymentMethod,
-        transactionId: txnId,
-        generatedFrom: selectedFee.id,
-      };
+        // 2️⃣ CRITICAL: Update corresponding invoice in admin_invoices
+        const invoices = JSON.parse(localStorage.getItem('admin_invoices') || '[]');
+        const existingInvoice = invoices.find((inv) => inv.generatedFrom === selectedFee.id);
 
-      if (selectedFee.hostelFee > 0) {
-        invoice.items.push({ description: 'Hostel Fee', amount: selectedFee.hostelFee });
+        if (existingInvoice) {
+          // Update status to Paid (capital P)
+          existingInvoice.paymentStatus = 'Paid';
+          existingInvoice.status = 'Paid';
+          existingInvoice.paidDate = new Date().toISOString().split('T')[0];
+          existingInvoice.paymentMethod = methodName;
+          existingInvoice.transactionId = txnId;
+        }
+
+        localStorage.setItem('admin_invoices', JSON.stringify(invoices));
+
+        // Dispatch custom event for real-time updates in other components
+        window.dispatchEvent(new CustomEvent('invoiceUpdated', { detail: invoices }));
+
+        setShowSuccess(true);
+      } else {
+        // Payment failed
+        alert('Payment failed. Please try again.');
+        setSelectedFee(null);
       }
-      if (selectedFee.miscFee > 0) {
-        invoice.items.push({ description: 'Misc Fee', amount: selectedFee.miscFee });
-      }
-
-      const invoices = JSON.parse(localStorage.getItem('admin_invoices') || '[]');
-      invoices.push(invoice);
-      localStorage.setItem('admin_invoices', JSON.stringify(invoices));
     }, 2000);
   };
 

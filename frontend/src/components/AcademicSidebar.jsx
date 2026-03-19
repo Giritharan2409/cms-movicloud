@@ -1,16 +1,29 @@
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { destroyUserSession, getUserSession } from '../auth/sessionController'
+﻿import { NavLink, useNavigate } from 'react-router-dom'
+import { getUserSession, destroyUserSession } from '../auth/sessionController'
 import { cmsRoles, roleMenuGroups } from '../data/roleConfig'
 
-function GraduationIcon() {
-  return (
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 2.26L19.02 9 12 12.74 4.98 9 12 5.26zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
-    </svg>
-  )
+const iconMap = {
+  Dashboard: 'dashboard',
+  Students: 'group',
+  Faculty: 'person',
+  Department: 'domain',
+  Exams: 'school',
+  Timetable: 'calendar_today',
+  Attendance: 'rule',
+  Placement: 'work',
+  Facility: 'apartment',
+  Fees: 'payments',
+  Reports: 'assessment',
+  Admission: 'person_add',
+  Payroll: 'receipt_long',
+  Invoices: 'description',
+  Analytics: 'query_stats',
+  Notifications: 'notifications',
+  Settings: 'settings',
+  'My Courses': 'menu_book',
 }
 
-const getRouteMap = (role) => ({
+const routeMap = {
   Dashboard: '/dashboard',
   Students: '/students',
   Faculty: '/faculty',
@@ -20,25 +33,37 @@ const getRouteMap = (role) => ({
   Attendance: '/attendance',
   Placement: '/placement',
   Facility: '/facility',
-  Fees: role === 'admin' ? '/admin-fees' : '/fees',
+  Fees: '/fees',
   Reports: '/reports',
   Admission: '/admission',
   Payroll: '/payroll',
-  Invoices: role === 'admin' ? '/admin-invoices' : '/invoices',
+  Invoices: '/invoices',
   Analytics: '/analytics',
   Notifications: '/notifications',
   Settings: '/settings',
   'My Courses': '/my-courses',
-})
+}
 
 export default function AcademicSidebar({ isSidebarVisible = true, onToggleSidebar }) {
   const navigate = useNavigate()
-  const location = useLocation()
   const session = getUserSession()
   const role = session?.role || 'student'
-  const roleLabel = cmsRoles[role]?.label || 'Student'
-  const routeMap = getRouteMap(role)
-  const menuGroups = roleMenuGroups[role] || roleMenuGroups.student
+  const roleMeta = cmsRoles[role] || cmsRoles.student
+  const menuGroups = roleMenuGroups[role] || []
+
+  function getRoute(item) {
+    if (item === 'Fees') {
+      return role === 'admin' ? '/admin-fees' : '/fees'
+    }
+    if (item === 'Invoices') {
+      return role === 'admin' ? '/admin-invoices' : '/invoices'
+    }
+    return routeMap[item] || '/dashboard'
+  }
+
+  function withRoleQuery(pathname) {
+    return `${pathname}?role=${encodeURIComponent(role)}`
+  }
 
   function handleLogout() {
     destroyUserSession()
@@ -46,27 +71,23 @@ export default function AcademicSidebar({ isSidebarVisible = true, onToggleSideb
   }
 
   return (
-    <aside
-      className={`w-64 border-r border-slate-200 bg-white flex flex-col fixed h-full overflow-y-auto z-20 transition-transform duration-300 ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'}`}
-      id="sidebar"
-    >
-      <div className="sidebar-logo">
-        <div className="logo-mark">
-          <GraduationIcon />
-        </div>
-        <div className="logo-text-wrap">
-          <div className="logo-title">MIT Connect</div>
-          <div className="logo-sub">{roleLabel} Portal</div>
-        </div>
+    <aside className={`w-64 border-r border-slate-200 bg-white flex flex-col fixed h-full overflow-y-auto z-50 transition-transform duration-300 ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className="p-6 flex items-center gap-3 relative">
         <button
-          type="button"
           onClick={onToggleSidebar}
-          className="w-8 h-8 mt-0.5 shrink-0 rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors"
-          aria-label="Hide sidebar"
-          title="Hide sidebar"
+          className="mr-3 p-2 rounded-full border border-slate-300 bg-white shadow hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          title="Toggle sidebar"
+          style={{ zIndex: 2 }}
         >
-          <span className="material-symbols-outlined text-[20px] leading-none">menu</span>
+          <span className="material-symbols-outlined text-3xl">menu</span>
         </button>
+        <div className="bg-[#2563eb] w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100">
+          <span className="material-symbols-outlined text-2xl font-bold">school</span>
+        </div>
+        <div>
+          <h1 className="font-extrabold text-[#1e293b] text-xl tracking-tight leading-none">MIT Connect</h1>
+          <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-[0.1em] mt-1">{roleMeta.label} Portal</p>
+        </div>
       </div>
 
       <nav className="flex-1 px-4 space-y-6 overflow-y-auto">
@@ -77,23 +98,15 @@ export default function AcademicSidebar({ isSidebarVisible = true, onToggleSideb
             </p>
             <div className="space-y-1">
               {group.items.map((item) => {
-                const route = routeMap[item] || '/dashboard'
-                const to = `${route}?role=${encodeURIComponent(role)}`
-                const isActive =
-                  location.pathname === route ||
-                  (route !== '/dashboard' && location.pathname.startsWith(route))
+                const route = getRoute(item)
+                const to = withRoleQuery(route)
                 return (
                   <NavLink
                     key={item}
                     to={to}
-                    className={() =>
-                      `flex items-center h-11 px-3 rounded-lg text-[15px] transition-all duration-200 ${
-                        isActive
-                          ? 'bg-gradient-to-r from-[#2563eb] to-[#06b6d4] text-white font-medium shadow-[0_8px_18px_rgba(37,99,235,0.18)]'
-                          : 'text-slate-500 hover:bg-slate-100 hover:text-[#1f2937] font-medium'
-                      }`
-                    }
+                    className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-200 relative z-10 w-full text-left ${isActive ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}`}
                   >
+                    <span className="material-symbols-outlined text-[22px]">{iconMap[item] || 'circle'}</span>
                     <span>{item}</span>
                   </NavLink>
                 )
@@ -106,8 +119,9 @@ export default function AcademicSidebar({ isSidebarVisible = true, onToggleSideb
       <div className="p-4 border-t border-slate-100 mt-auto">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center px-4 py-3 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-xl text-sm font-medium transition-all duration-200"
+          className="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-xl text-sm font-medium transition-all duration-200"
         >
+          <span className="material-symbols-outlined text-[22px]">logout</span>
           <span>Logout</span>
         </button>
       </div>

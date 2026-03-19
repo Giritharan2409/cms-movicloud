@@ -21,9 +21,11 @@ export default function AdminFeesPage() {
     isAcHostel: false,
   });
 
-  // Save to localStorage whenever feeAssignments changes
+  // Save to localStorage whenever feeAssignments changes and notify listeners
   React.useEffect(() => {
     localStorage.setItem('fee_assignments', JSON.stringify(feeAssignments));
+    // Dispatch event to notify student pages of fee updates
+    window.dispatchEvent(new CustomEvent('feeAssignmentUpdated', { detail: feeAssignments }));
   }, [feeAssignments]);
 
   const studentsWithoutFees = useMemo(() => {
@@ -145,6 +147,9 @@ export default function AdminFeesPage() {
     const invoices = JSON.parse(localStorage.getItem('admin_invoices') || '[]');
     invoices.push(invoice);
     localStorage.setItem('admin_invoices', JSON.stringify(invoices));
+
+    // Dispatch custom event for real-time updates
+    window.dispatchEvent(new CustomEvent('invoiceUpdated', { detail: invoices }));
 
     alert(`Invoice ${invoice.id} generated successfully!`);
   };

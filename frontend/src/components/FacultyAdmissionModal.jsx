@@ -40,6 +40,42 @@ export default function FacultyAdmissionModal({ isOpen, onClose }) {
   });
 
   const [paymentDone, setPaymentDone] = useState(false);
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState({
+    cardHolderName: '',
+    cardNumber: '',
+    expiryDate: '',
+    cvv: '',
+    upiId: '',
+  });
+
+  const handlePaymentDetailsChange = (e) => {
+    const { name, value } = e.target;
+    setPaymentDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAutoFillDemo = () => {
+    setFormData({
+      fullName: 'Dr. Rajesh Kumar',
+      email: 'rajesh.kumar@faculty.edu',
+      phone: '9876543211',
+      dateOfBirth: '1985-03-20',
+      gender: 'Male',
+      role: 'Associate Professor',
+      department: 'Computer Science',
+      yearsOfExperience: '12',
+      highestQualification: 'Ph.D.',
+      specialization: 'Artificial Intelligence',
+      university: 'Delhi University',
+      resume: new File(['demo'], 'resume.pdf', { type: 'application/pdf' }),
+      certifications: new File(['demo'], 'certifications.pdf', { type: 'application/pdf' }),
+      employmentType: 'Full-Time',
+      paymentMethod: '',
+    });
+  };
 
   if (!isOpen) return null;
 
@@ -68,10 +104,43 @@ export default function FacultyAdmissionModal({ isOpen, onClose }) {
   };
 
   const handlePayment = () => {
+    if (!formData.paymentMethod) {
+      alert('Please select a payment method');
+      return;
+    }
+    setShowPaymentDetails(true);
+  };
+
+  const handleCompletePayment = () => {
+    // Validate payment details based on payment method
+    if (formData.paymentMethod === 'Credit Card' || formData.paymentMethod === 'Debit Card') {
+      if (!paymentDetails.cardHolderName || !paymentDetails.cardNumber || !paymentDetails.expiryDate || !paymentDetails.cvv) {
+        alert('Please fill all card details');
+        return;
+      }
+    } else if (formData.paymentMethod === 'UPI') {
+      if (!paymentDetails.upiId) {
+        alert('Please enter UPI ID');
+        return;
+      }
+    }
+
+    setShowPaymentDetails(false);
     setPaymentDone(true);
     setTimeout(() => {
       handleNext();
     }, 2000);
+  };
+
+  const handleCancelPayment = () => {
+    setShowPaymentDetails(false);
+    setPaymentDetails({
+      cardHolderName: '',
+      cardNumber: '',
+      expiryDate: '',
+      cvv: '',
+      upiId: '',
+    });
   };
 
   const handleSubmit = () => {
@@ -122,6 +191,12 @@ export default function FacultyAdmissionModal({ isOpen, onClose }) {
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-6 relative">
           <h1 className="text-2xl font-bold">Faculty Admission Form</h1>
           <p className="text-blue-100">Complete all steps to submit your application</p>
+          <button
+            onClick={handleAutoFillDemo}
+            className="absolute top-6 right-16 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition text-sm"
+          >
+            🔄 Auto Fill Demo
+          </button>
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-white hover:bg-blue-400 p-2 rounded-full"
@@ -314,20 +389,36 @@ export default function FacultyAdmissionModal({ isOpen, onClose }) {
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Upload Documents</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Resume/CV</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Resume/CV *
+                    </label>
                     <input
                       type="file"
                       onChange={(e) => handleFileChange(e, 'resume')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                      className={`w-full px-4 py-2 border rounded-lg ${formData.resume ? 'border-green-500 bg-green-50' : 'border-red-300 bg-red-50'}`}
                     />
+                    {formData.resume && (
+                      <p className="text-xs text-green-600 mt-1">✓ {formData.resume.name}</p>
+                    )}
+                    {!formData.resume && (
+                      <p className="text-xs text-red-600 mt-1">This field is required</p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Certifications</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Certifications *
+                    </label>
                     <input
                       type="file"
                       onChange={(e) => handleFileChange(e, 'certifications')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                      className={`w-full px-4 py-2 border rounded-lg ${formData.certifications ? 'border-green-500 bg-green-50' : 'border-red-300 bg-red-50'}`}
                     />
+                    {formData.certifications && (
+                      <p className="text-xs text-green-600 mt-1">✓ {formData.certifications.name}</p>
+                    )}
+                    {!formData.certifications && (
+                      <p className="text-xs text-red-600 mt-1">This field is required</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -388,7 +479,6 @@ export default function FacultyAdmissionModal({ isOpen, onClose }) {
                     <option value="Debit Card">Debit Card</option>
                     <option value="Credit Card">Credit Card</option>
                     <option value="UPI">UPI</option>
-                    <option value="Net Banking">Net Banking</option>
                   </select>
                 </div>
               </div>
@@ -463,6 +553,133 @@ export default function FacultyAdmissionModal({ isOpen, onClose }) {
             )}
           </div>
 
+          {/* Payment Details Modal */}
+          {showPaymentDetails && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl">
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">Complete Payment</h2>
+
+                {/* Payment Info */}
+                <div className="bg-gray-100 rounded-lg p-4 mb-6">
+                  <p className="text-sm text-gray-600">Amount: <span className="font-bold text-lg">₹1000</span></p>
+                  <p className="text-sm text-gray-600">Application ID: FAC386</p>
+                </div>
+
+                {/* Payment Method Display */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+                  <select
+                    value={formData.paymentMethod}
+                    onChange={handleInputChange}
+                    name="paymentMethod"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select payment method</option>
+                    <option value="Debit Card">Debit Card</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="UPI">UPI</option>
+                  </select>
+                </div>
+
+                {/* Card Payment Details */}
+                {(formData.paymentMethod === 'Credit Card' || formData.paymentMethod === 'Debit Card') && (
+                  <div className="space-y-4 mb-6">
+                    <h3 className="font-semibold text-gray-800">Payment Details</h3>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Card Holder Name *</label>
+                      <input
+                        type="text"
+                        name="cardHolderName"
+                        value={paymentDetails.cardHolderName}
+                        onChange={handlePaymentDetailsChange}
+                        placeholder="John Doe"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Card Number *</label>
+                      <input
+                        type="text"
+                        name="cardNumber"
+                        value={paymentDetails.cardNumber}
+                        onChange={handlePaymentDetailsChange}
+                        placeholder="1234 5678 9012 3456"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Expiry Date *</label>
+                        <input
+                          type="text"
+                          name="expiryDate"
+                          value={paymentDetails.expiryDate}
+                          onChange={handlePaymentDetailsChange}
+                          placeholder="MM/YY"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">CVV *</label>
+                        <input
+                          type="text"
+                          name="cvv"
+                          value={paymentDetails.cvv}
+                          onChange={handlePaymentDetailsChange}
+                          placeholder="123"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* UPI Payment Details */}
+                {formData.paymentMethod === 'UPI' && (
+                  <div className="space-y-4 mb-6">
+                    <h3 className="font-semibold text-gray-800">UPI Payment</h3>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">UPI ID / Mobile Number *</label>
+                      <input
+                        type="text"
+                        name="upiId"
+                        value={paymentDetails.upiId}
+                        onChange={handlePaymentDetailsChange}
+                        placeholder="username@upi or 9876543210"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="bg-blue-50 p-4 rounded-lg text-center">
+                      <p className="text-sm text-blue-800 mb-3">Quick Response Code (QR)</p>
+                      <div className="bg-white p-4 rounded border-2 border-blue-200 flex items-center justify-center h-40">
+                        <div className="text-gray-400 text-sm">
+                          📲 QR Code<br/>
+                          (Scan for UPI Payment)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleCancelPayment}
+                    className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCompletePayment}
+                    className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition"
+                  >
+                    Pay Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Navigation Buttons */}
           <div className="flex gap-4 mt-8 pt-4 border-t">
             <button
@@ -482,7 +699,12 @@ export default function FacultyAdmissionModal({ isOpen, onClose }) {
             {currentStep < 6 ? (
               <button
                 onClick={handleNext}
-                className="px-6 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition"
+                disabled={currentStep === 4 && (!formData.resume || !formData.certifications)}
+                className={`px-6 py-2 rounded-lg font-medium transition ${
+                  currentStep === 4 && (!formData.resume || !formData.certifications)
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                }`}
               >
                 Next →
               </button>
