@@ -76,6 +76,8 @@ const FALLBACK_STAFF = [
 
 const STAFF_MARK_HOURS = ['Hour 1', 'Hour 2', 'Hour 3', 'Hour 4', 'Hour 5', 'Hour 6', 'Hour 7', 'Hour 8']
 const MARK_ATTENDANCE_STORAGE_KEY = 'cms:attendance:hourly'
+const STUDENT_OD_STORAGE_KEY = 'cms:attendance:student-od-requests'
+const LEAVE_DAYS_STORAGE_KEY = 'cms:academic:leave-days'
 const STUDENT_DAILY_LOOKBACK_DAYS = 15
 const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
 const HOUR_SLOT_TIMINGS = {
@@ -97,6 +99,22 @@ function shiftISODate(isoDate, daysToShift) {
   const base = new Date(`${isoDate}T12:00:00`)
   base.setDate(base.getDate() + daysToShift)
   return base.toISOString().slice(0, 10)
+}
+
+function listISODateRange(fromDate, toDate) {
+  if (!fromDate || !toDate) return []
+
+  const start = new Date(`${fromDate}T12:00:00`)
+  const end = new Date(`${toDate}T12:00:00`)
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start > end) return []
+
+  const result = []
+  const cursor = new Date(start)
+  while (cursor <= end) {
+    result.push(cursor.toISOString().slice(0, 10))
+    cursor.setDate(cursor.getDate() + 1)
+  }
+  return result
 }
 
 function formatGridDateLabel(isoDate) {
@@ -189,6 +207,45 @@ function writeMarkAttendanceStorage(payload) {
   } catch (err) {
     console.error('Failed to persist hour-wise attendance:', err)
   }
+}
+
+function readStudentOdStorage() {
+  try {
+    const raw = localStorage.getItem(STUDENT_OD_STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+function writeStudentOdStorage(payload) {
+  try {
+    localStorage.setItem(STUDENT_OD_STORAGE_KEY, JSON.stringify(payload))
+  } catch (err) {
+    console.error('Failed to persist student OD requests:', err)
+  }
+}
+
+function readLeaveDaysStorage() {
+  try {
+    const raw = localStorage.getItem(LEAVE_DAYS_STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+function isWeekendDate(isoDate) {
+  const day = new Date(`${isoDate}T12:00:00`).getDay()
+  return day === 0 || day === 6
+}
+
+function isLeaveDate(isoDate, configuredLeaveDateSet) {
+  return configuredLeaveDateSet.has(isoDate) || isWeekendDate(isoDate)
 }
 
 function normalizeAttendanceRecord(r) {
@@ -309,6 +366,7 @@ export default function AttendancePage({ noLayout = false }) {
   const [filterOpen,              setFilterOpen]              = useState(false)
   const [searchQuery,             setSearchQuery]             = useState('')
   const filterRef = useRef(null)
+  const odProofInputRef = useRef(null)
 
   const [studentData,      setStudentData]      = useState(FALLBACK_STUDENTS)
   const [staffData,        setStaffData]        = useState(FALLBACK_STAFF)
@@ -324,6 +382,16 @@ export default function AttendancePage({ noLayout = false }) {
   const [studentDailyDate, setStudentDailyDate] = useState(getTodayISODate())
   const [studentClassProfile, setStudentClassProfile] = useState(null)
   const [studentTimetableRecord, setStudentTimetableRecord] = useState(null)
+  const [studentOdRequests, setStudentOdRequests] = useState([])
+  const [odApplyFromDate, setOdApplyFromDate] = useState('')
+  const [odApplyToDate, setOdApplyToDate] = useState('')
+  const [odApplyReason, setOdApplyReason] = useState('')
+  const [odApplyType, setOdApplyType] = useState('specific')
+  const [odApplyHours, setOdApplyHours] = useState([STAFF_MARK_HOURS[0]])
+  const [odProofFileData, setOdProofFileData] = useState('')
+  const [odProofFileName, setOdProofFileName] = useState('')
+  const [odNotice, setOdNotice] = useState('')
+  const [odEditingRequestId, setOdEditingRequestId] = useState('')
 
   useEffect(() => {
     async function fetchAttendance() {
@@ -451,6 +519,14 @@ export default function AttendancePage({ noLayout = false }) {
   }, [isStudent, studentClassProfile])
 
   useEffect(() => {
+    if (!isStudent) return
+
+    const allRequests = readStudentOdStorage()
+    const scoped = allRequests.filter((request) => normalizeId(request?.studentId) === normalizeId(sessionUserId))
+    setStudentOdRequests(scoped)
+  }, [isStudent, sessionUserId])
+
+  useEffect(() => {
     if (!isFaculty || staffViewTab !== 'mark') return
 
     const studentsForClass = classStudentsMap[selectedClassId] || []
@@ -509,6 +585,7 @@ export default function AttendancePage({ noLayout = false }) {
   ]
 
   const showStudentDailyView = isStudent && studentViewTab === 'daily'
+  const showStudentOdApplyView = isStudent && studentViewTab === 'od'
   const showStaffMarkingView = isFaculty && staffViewTab === 'mark'
 
   const selectedClassLabel =
@@ -516,6 +593,24 @@ export default function AttendancePage({ noLayout = false }) {
 
   const presentCount = markRows.filter((row) => row.status === 'Present').length
   const absentCount = markRows.filter((row) => row.status === 'Absent').length
+
+  const approvedOdKeySet = (() => {
+    if (!isStudent) return new Set()
+    const approved = studentOdRequests.filter((request) => request?.status === 'Approved')
+    const keys = []
+    approved.forEach((request) => {
+      const fromDate = request?.fromDate || request?.date
+      const toDate = request?.toDate || request?.date
+      const dates = listISODateRange(fromDate, toDate)
+      const hours = Array.isArray(request?.hours) ? request.hours : []
+      dates.forEach((date) => {
+        hours.forEach((hour) => {
+          keys.push(`${date}::${hour}`)
+        })
+      })
+    })
+    return new Set(keys)
+  })()
 
   const studentDailyGridRows = (() => {
     if (!isStudent) return []
@@ -545,7 +640,11 @@ export default function AttendancePage({ noLayout = false }) {
     return Array.from({ length: STUDENT_DAILY_LOOKBACK_DAYS }, (_, index) => {
       const date = shiftISODate(studentDailyDate, -index)
       const hours = STAFF_MARK_HOURS.map((hour) => {
-        const status = statusMap[`${date}::${hour}`] || 'Not Marked'
+        const cellKey = `${date}::${hour}`
+        const isApprovedOd = approvedOdKeySet.has(cellKey)
+        const baseStatus = statusMap[cellKey] || 'Not Marked'
+        // Approved OD has highest priority in student view, irrespective of faculty mark.
+        const status = isApprovedOd ? 'On Duty' : baseStatus
         return { hour, status }
       })
       return {
@@ -555,6 +654,24 @@ export default function AttendancePage({ noLayout = false }) {
         hours,
       }
     })
+  })()
+
+  const approvedOdCountForSummary = (() => {
+    if (!isStudent) return 0
+    const my = scopedStudents[0]
+    if (!my || !my.total) return 0
+
+    // OD should not reduce attendance: treat approved OD as present.
+    return Math.max(0, Math.min(my.total, approvedOdKeySet.size))
+  })()
+
+  const myEffectiveAttendance = (() => {
+    const my = scopedStudents[0]
+    if (!my) return { present: 0, total: 0 }
+    return {
+      present: Math.min(my.total, my.present + approvedOdCountForSummary),
+      total: my.total,
+    }
   })()
 
   function getTimetableSubjectForCell(dateIso, hourLabel) {
@@ -614,6 +731,199 @@ export default function AttendancePage({ noLayout = false }) {
 
     writeMarkAttendanceStorage(storage)
     setMarkNotice(`Saved attendance for ${selectedClassLabel} on ${attendanceDate} (${attendanceHour}).`)
+  }
+
+  function toggleOdHour(hour) {
+    setOdApplyHours((prev) => {
+      if (prev.includes(hour)) {
+        if (prev.length === 1) return prev
+        return prev.filter((item) => item !== hour)
+      }
+      return [...prev, hour]
+    })
+    setOdNotice('')
+  }
+
+  function resetOdForm() {
+    setOdApplyFromDate('')
+    setOdApplyToDate('')
+    setOdApplyReason('')
+    setOdApplyType('specific')
+    setOdApplyHours([STAFF_MARK_HOURS[0]])
+    setOdProofFileData('')
+    setOdProofFileName('')
+    setOdEditingRequestId('')
+    if (odProofInputRef.current) {
+      odProofInputRef.current.value = ''
+    }
+  }
+
+  function persistAndSyncStudentOd(nextRequests) {
+    writeStudentOdStorage(nextRequests)
+    setStudentOdRequests(nextRequests.filter((request) => normalizeId(request?.studentId) === normalizeId(sessionUserId)))
+  }
+
+  function startOdEdit(request) {
+    if (!request || request.status === 'Approved') return
+    const requestHours = Array.isArray(request.hours) ? request.hours : []
+    const isFullDay = requestHours.length === STAFF_MARK_HOURS.length && STAFF_MARK_HOURS.every((hour) => requestHours.includes(hour))
+    const fromDate = request.fromDate || request.date || ''
+    const toDate = request.toDate || request.date || ''
+
+    setOdEditingRequestId(request.id)
+    setOdApplyFromDate(fromDate)
+    setOdApplyToDate(toDate)
+    setOdApplyReason(request.reason || '')
+    setOdApplyType(isFullDay ? 'full_day' : 'specific')
+    setOdApplyHours(requestHours.length > 0 ? requestHours : [STAFF_MARK_HOURS[0]])
+    setOdProofFileData(request.proofImageData || '')
+    setOdProofFileName(request.proofImageName || '')
+    setOdNotice('Editing pending OD request.')
+  }
+
+  function deleteOdRequest(request) {
+    if (!request || request.status === 'Approved') return
+    const allRequests = readStudentOdStorage()
+    const next = allRequests.filter((item) => item?.id !== request.id)
+    persistAndSyncStudentOd(next)
+
+    if (odEditingRequestId === request.id) {
+      resetOdForm()
+    }
+    setOdNotice('Pending OD request deleted.')
+  }
+
+  function handleOdProofChange(event) {
+    const file = event.target.files?.[0]
+    if (!file) {
+      setOdProofFileData('')
+      setOdProofFileName('')
+      return
+    }
+
+    if (!String(file.type || '').startsWith('image/')) {
+      setOdNotice('Only image proof files are allowed (jpg, jpeg, png, webp).')
+      setOdProofFileData('')
+      setOdProofFileName('')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = String(reader.result || '')
+      setOdProofFileData(result)
+      setOdProofFileName(file.name)
+      setOdNotice('')
+    }
+    reader.onerror = () => {
+      setOdNotice('Failed to read OD proof image. Try again.')
+      setOdProofFileData('')
+      setOdProofFileName('')
+    }
+    reader.readAsDataURL(file)
+  }
+
+  function submitOdRequest() {
+    const trimmedReason = odApplyReason.trim()
+    if (!odApplyFromDate || !odApplyToDate) {
+      setOdNotice('Select OD from date and to date.')
+      return
+    }
+    if (odApplyFromDate > odApplyToDate) {
+      setOdNotice('To date should be same as or after from date.')
+      return
+    }
+    if (odApplyType === 'specific' && odApplyHours.length === 0) {
+      setOdNotice('Select at least one hour for OD request.')
+      return
+    }
+    if (!trimmedReason) {
+      setOdNotice('Enter OD reason before submitting.')
+      return
+    }
+    if (!odProofFileData) {
+      setOdNotice('Upload OD proof in image format before submitting.')
+      return
+    }
+
+    const allRequests = readStudentOdStorage()
+    const selectedDates = listISODateRange(odApplyFromDate, odApplyToDate)
+    if (selectedDates.length === 0) {
+      setOdNotice('Invalid OD date range. Select valid from/to dates.')
+      return
+    }
+
+    const configuredLeaveDates = new Set(
+      readLeaveDaysStorage().map((value) => String(value || '').trim()).filter(Boolean)
+    )
+    const leaveDaysInRange = selectedDates.filter((date) => isLeaveDate(date, configuredLeaveDates))
+    if (selectedDates.length === 1 && leaveDaysInRange.length > 0) {
+      const joined = leaveDaysInRange.join(', ')
+      setOdNotice(`Single-day OD cannot be applied on leave day (${joined}).`)
+      return
+    }
+
+    const selectedHours = odApplyType === 'full_day' ? [...STAFF_MARK_HOURS] : [...odApplyHours]
+    const sortedHours = selectedHours.sort((a, b) => STAFF_MARK_HOURS.indexOf(a) - STAFF_MARK_HOURS.indexOf(b))
+
+    const hasDuplicateHour = allRequests.some((request) => {
+      if (normalizeId(request?.studentId) !== normalizeId(sessionUserId)) return false
+      if (request?.id === odEditingRequestId) return false
+      const requestFromDate = request?.fromDate || request?.date
+      const requestToDate = request?.toDate || request?.date
+      const requestDates = listISODateRange(requestFromDate, requestToDate)
+      const hasOverlapDate = requestDates.some((date) => selectedDates.includes(date))
+      if (!hasOverlapDate) return false
+      const requestHours = Array.isArray(request?.hours) ? request.hours : []
+      return requestHours.some((hour) => sortedHours.includes(hour))
+    })
+
+    if (hasDuplicateHour) {
+      setOdNotice('OD already exists for one or more selected hours on this date. Duplicate OD is not allowed.')
+      return
+    }
+
+    if (odEditingRequestId) {
+      const next = allRequests.map((request) => {
+        if (request?.id !== odEditingRequestId) return request
+        if (request?.status === 'Approved') return request
+        return {
+          ...request,
+          date: odApplyFromDate,
+          fromDate: odApplyFromDate,
+          toDate: odApplyToDate,
+          hours: sortedHours,
+          reason: trimmedReason,
+          proofImageData: odProofFileData,
+          proofImageName: odProofFileName,
+          updatedAt: new Date().toISOString(),
+        }
+      })
+      persistAndSyncStudentOd(next)
+      resetOdForm()
+      setOdNotice('Pending OD request updated successfully.')
+      return
+    }
+
+    const requestId = `od-${Date.now()}`
+    const nextRequest = {
+      id: requestId,
+      studentId: sessionUserId,
+      date: odApplyFromDate,
+      fromDate: odApplyFromDate,
+      toDate: odApplyToDate,
+      hours: sortedHours,
+      reason: trimmedReason,
+      proofImageData: odProofFileData,
+      proofImageName: odProofFileName,
+      status: 'Pending',
+      createdAt: new Date().toISOString(),
+    }
+
+    const next = [nextRequest, ...allRequests]
+    persistAndSyncStudentOd(next)
+    resetOdForm()
+    setOdNotice('OD submitted successfully. You can edit or delete it until faculty approval.')
   }
 
   function toggleFilterValue(value, setter) {
@@ -676,8 +986,8 @@ export default function AttendancePage({ noLayout = false }) {
         if (isStudent) {
           const my = scopedStudents[0]
           if (!my) return null
-          const pct      = calcPct(my.present, my.total)
-          const canMiss  = safeClasses(my.present, my.total)
+          const pct      = calcPct(myEffectiveAttendance.present, myEffectiveAttendance.total)
+          const canMiss  = safeClasses(myEffectiveAttendance.present, myEffectiveAttendance.total)
           return (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex items-center gap-4">
@@ -686,7 +996,7 @@ export default function AttendancePage({ noLayout = false }) {
                 </div>
                 <div>
                   <p className="text-xs text-slate-500 font-medium">Total Classes</p>
-                  <p className="text-2xl font-bold text-slate-900">{my.total}</p>
+                  <p className="text-2xl font-bold text-slate-900">{myEffectiveAttendance.total}</p>
                 </div>
               </div>
               <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex items-center gap-4">
@@ -784,7 +1094,7 @@ export default function AttendancePage({ noLayout = false }) {
         if (isStudent) {
           const my  = scopedStudents[0]
           if (!my) return null
-          const pct = calcPct(my.present, my.total)
+          const pct = calcPct(myEffectiveAttendance.present, myEffectiveAttendance.total)
           return pct < 75 ? (
             <div className="flex items-start gap-3 p-4 bg-orange-50 border border-orange-200 rounded-xl mb-6">
               <span className="material-symbols-outlined text-orange-500 mt-0.5">warning</span>
@@ -906,6 +1216,14 @@ export default function AttendancePage({ noLayout = false }) {
               }`}
             >
               <span className="material-symbols-outlined text-base">calendar_month</span>Daily Attendance
+            </button>
+            <button
+              onClick={() => setStudentViewTab('od')}
+              className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
+                studentViewTab === 'od' ? 'bg-white text-[#1162d4] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <span className="material-symbols-outlined text-base">event_upcoming</span>Apply OD
             </button>
           </div>
         ) : (
@@ -1218,6 +1536,8 @@ export default function AttendancePage({ noLayout = false }) {
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border cursor-help ${
                           cell.status === 'Present'
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : cell.status === 'On Duty'
+                              ? 'bg-sky-50 text-sky-700 border-sky-200'
                             : cell.status === 'Absent'
                               ? 'bg-red-50 text-red-700 border-red-200'
                               : 'bg-slate-100 text-slate-600 border-slate-200'
@@ -1231,6 +1551,237 @@ export default function AttendancePage({ noLayout = false }) {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      ) : showStudentOdApplyView ? (
+        <div className="space-y-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-700">Apply On Duty (OD)</p>
+                <p className="text-xs text-slate-500">Approved OD is treated as present and does not reduce your attendance percentage.</p>
+              </div>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
+                Approved OD: {approvedOdCountForSummary}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">From Date</label>
+                <input
+                  type="date"
+                  value={odApplyFromDate}
+                  onChange={(e) => { setOdApplyFromDate(e.target.value); setOdNotice('') }}
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">To Date</label>
+                <input
+                  type="date"
+                  value={odApplyToDate}
+                  onChange={(e) => { setOdApplyToDate(e.target.value); setOdNotice('') }}
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Reason</label>
+                <input
+                  type="text"
+                  value={odApplyReason}
+                  onChange={(e) => { setOdApplyReason(e.target.value); setOdNotice('') }}
+                  placeholder="Ex: Inter-college event, workshop, placement drive"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+                />
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">OD Type</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <button
+                  onClick={() => { setOdApplyType('full_day'); setOdNotice('') }}
+                  className={`inline-flex items-center justify-between gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                    odApplyType === 'full_day'
+                      ? 'bg-sky-50 text-sky-700 border-sky-200'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  <span>Full Day OD</span>
+                  {odApplyType === 'full_day' && <span className="material-symbols-outlined text-base">check</span>}
+                </button>
+                <button
+                  onClick={() => { setOdApplyType('specific'); setOdNotice('') }}
+                  className={`inline-flex items-center justify-between gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                    odApplyType === 'specific'
+                      ? 'bg-sky-50 text-sky-700 border-sky-200'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  <span>Specific Hour</span>
+                  {odApplyType === 'specific' && <span className="material-symbols-outlined text-base">check</span>}
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">OD Proof (Image)</label>
+              <input
+                ref={odProofInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleOdProofChange}
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm file:mr-3 file:px-3 file:py-1.5 file:rounded-md file:border-0 file:bg-slate-100 file:text-slate-700"
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                {odProofFileName ? `Selected: ${odProofFileName}` : 'Upload proof image (required).'}
+              </p>
+            </div>
+
+            {odApplyType === 'specific' ? (
+              <div className="mt-4">
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Hours</label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {STAFF_MARK_HOURS.map((hour) => {
+                    const checked = odApplyHours.includes(hour)
+                    return (
+                      <button
+                        key={hour}
+                        onClick={() => toggleOdHour(hour)}
+                        className={`inline-flex items-center justify-between gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                          checked
+                            ? 'bg-sky-50 text-sky-700 border-sky-200'
+                            : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                        }`}
+                      >
+                        <span>{hour}</span>
+                        {checked && <span className="material-symbols-outlined text-base">check</span>}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className="mt-4 rounded-lg border border-sky-200 bg-sky-50 px-3.5 py-2.5 text-sm font-medium text-sky-700">
+                Full Day OD selected. Request will be applied for Hour 1 to Hour 8.
+              </div>
+            )}
+
+            <div className="mt-4 flex items-center justify-end">
+              <button
+                onClick={submitOdRequest}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#1162d4] text-white rounded-lg text-sm font-semibold hover:bg-[#1162d4]/90 transition-all"
+              >
+                <span className="material-symbols-outlined text-base">{odEditingRequestId ? 'save' : 'send'}</span>
+                {odEditingRequestId ? 'Update OD Request' : 'Submit OD Request'}
+              </button>
+              {odEditingRequestId && (
+                <button
+                  onClick={() => { resetOdForm(); setOdNotice('Edit cancelled.') }}
+                  className="inline-flex items-center gap-1.5 ml-2 px-3.5 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-all"
+                >
+                  <span className="material-symbols-outlined text-base">close</span>
+                  Cancel
+                </button>
+              )}
+            </div>
+
+            {odNotice && (
+              <div className="mt-3 px-3.5 py-2.5 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                {odNotice}
+              </div>
+            )}
+            <p className="mt-2 text-xs text-slate-500">Note: Single-day OD is not allowed on leave day. Date-range OD can include leave days.</p>
+          </div>
+
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <p className="text-sm font-semibold text-slate-700">My OD Requests</p>
+            </div>
+            <div className="overflow-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="bg-slate-50 text-slate-500 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+                    <th className="px-6 py-4">Date Range</th>
+                    <th className="px-6 py-4">Hours</th>
+                    <th className="px-6 py-4">Reason</th>
+                    <th className="px-6 py-4">Proof</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {studentOdRequests.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-10 text-center text-slate-400 text-sm">No OD requests submitted</td>
+                    </tr>
+                  )}
+
+                  {studentOdRequests.map((request) => (
+                    <tr key={request.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4 text-sm text-slate-700 font-medium">
+                        {(() => {
+                          const fromDate = request.fromDate || request.date || '-'
+                          const toDate = request.toDate || request.date || '-'
+                          return fromDate === toDate ? fromDate : `${fromDate} to ${toDate}`
+                        })()}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{Array.isArray(request.hours) ? request.hours.join(', ') : '-'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{request.reason || '-'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-600">
+                        {request.proofImageData ? (
+                          <a
+                            href={request.proofImageData}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-[#1162d4] font-semibold hover:underline"
+                          >
+                            <span className="material-symbols-outlined text-sm">image</span>
+                            View
+                          </a>
+                        ) : '-'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          request.status === 'Approved'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                            : request.status === 'Rejected'
+                              ? 'bg-red-50 text-red-700 border border-red-200'
+                              : 'bg-amber-50 text-amber-700 border border-amber-200'
+                        }`}>
+                          {request.status || 'Pending'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        {request.status === 'Pending' ? (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => startOdEdit(request)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-md border border-slate-200 text-slate-700 hover:bg-slate-50"
+                            >
+                              <span className="material-symbols-outlined text-sm">edit</span>
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => deleteOdRequest(request)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-md border border-red-200 text-red-600 hover:bg-red-50"
+                            >
+                              <span className="material-symbols-outlined text-sm">delete</span>
+                              Delete
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-xs font-medium text-slate-400">Locked after approval</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       ) : (
