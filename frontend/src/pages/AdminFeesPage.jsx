@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import Layout from '../components/Layout';
+import StatCard from '../components/StatCard';
 import { useAdmission } from '../context/AdmissionContext';
 import { getUserSession } from '../auth/sessionController';
 
@@ -188,9 +189,47 @@ export default function AdminFeesPage() {
     alert(`Invoice ${invoice.id} generated successfully!`);
   };
 
+  const stats = useMemo(() => {
+    const totalAssigned = feeAssignments.length;
+    const paidCount = feeAssignments.filter((fee) => fee.paymentStatus?.toLowerCase() === 'paid').length;
+    const pendingCount = feeAssignments.filter((fee) => fee.paymentStatus?.toLowerCase() === 'pending').length;
+    const totalRevenue = feeAssignments
+      .filter((fee) => fee.paymentStatus?.toLowerCase() === 'paid')
+      .reduce((sum, fee) => sum + (fee.totalFee || 0), 0);
+
+    return { totalAssigned, paidCount, pendingCount, totalRevenue };
+  }, [feeAssignments]);
+
   return (
     <Layout title="Fee Management">
       <div className="space-y-8">
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <StatCard
+            icon="assign"
+            label="Total Assigned"
+            value={stats.totalAssigned}
+            color="blue"
+          />
+          <StatCard
+            icon="check_circle"
+            label="Paid Fees"
+            value={stats.paidCount}
+            color="green"
+          />
+          <StatCard
+            icon="schedule"
+            label="Pending Fees"
+            value={stats.pendingCount}
+            color="orange"
+          />
+          <StatCard
+            icon="trending_up"
+            label="Total Revenue"
+            value={`₹${stats.totalRevenue.toLocaleString()}`}
+            color="purple"
+          />
+        </div>
         {/* All Fee Assignments Cards */}
         <div>
           <div className="mb-6">

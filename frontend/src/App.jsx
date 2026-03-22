@@ -20,6 +20,7 @@ import AdminFeesPage from './pages/AdminFeesPage';
 import AdminInvoicePage from './pages/AdminInvoicePage';
 import FeesPage from './pages/FeesPage';
 import InvoicePage from './pages/InvoicePage';
+import AdminAdministrationDashboard from './pages/AdminAdministrationDashboard';
 import FinanceInvoicePage from './pages/FinanceInvoicePage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import FacultyPage from './pages/FacultyPage';
@@ -81,6 +82,7 @@ export default function App() {
         <Route path="/admission" element={<ProtectedRoute><AdmissionPage /></ProtectedRoute>} />
         <Route path="/fees" element={<ProtectedRoute><FeesPage /></ProtectedRoute>} />
         <Route path="/admin-fees" element={<ProtectedRoute><AdminFeesPage /></ProtectedRoute>} />
+        <Route path="/admin-administration" element={<ProtectedRoute allowedRoles={['admin']}><AdminAdministrationDashboard /></ProtectedRoute>} />
         <Route path="/invoices" element={<ProtectedRoute><InvoicePage /></ProtectedRoute>} />
         <Route path="/admin-invoices" element={<ProtectedRoute><AdminInvoicePage /></ProtectedRoute>} />
         <Route path="/finance-invoices" element={<ProtectedRoute allowedRoles={['finance']}><FinanceInvoicePage /></ProtectedRoute>} />

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import Layout from '../components/Layout';
+import StatCard from '../components/StatCard';
 import { useAdmission } from '../context/AdmissionContext';
 import { getUserSession } from '../auth/sessionController';
 import AddMemberModal from '../components/AddMemberModal';
@@ -103,48 +104,36 @@ export default function AdmissionPage() {
       <div className="space-y-8">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg shadow p-6 border-t-4 border-teal-500">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm font-medium">Total Student Adm</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{studentApps.length}</p>
-              </div>
-              <span className="material-symbols-outlined text-4xl text-teal-500">group</span>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6 border-t-4 border-teal-500">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm font-medium">Total Faculty</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{facultyApps.length}</p>
-              </div>
-              <span className="material-symbols-outlined text-4xl text-teal-500">person</span>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6 border-t-4 border-teal-500">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm font-medium">Approved</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">
-                  {studentApps.filter((a) => a.status === 'Approved').length +
-                    facultyApps.filter((a) => a.status === 'Approved').length}
-                </p>
-              </div>
-              <span className="material-symbols-outlined text-4xl text-teal-500">done</span>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6 border-t-4 border-teal-500">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm font-medium">Rejected</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">
-                  {studentApps.filter((a) => a.status === 'Rejected').length +
-                    facultyApps.filter((a) => a.status === 'Rejected').length}
-                </p>
-              </div>
-              <span className="material-symbols-outlined text-4xl text-teal-500">close</span>
-            </div>
-          </div>
+          <StatCard
+            icon="group"
+            label="Total Student Adm"
+            value={studentApps.length}
+            color="blue"
+          />
+          <StatCard
+            icon="person"
+            label="Total Faculty"
+            value={facultyApps.length}
+            color="green"
+          />
+          <StatCard
+            icon="check_circle"
+            label="Approved"
+            value={
+              studentApps.filter((a) => a.status === 'Approved').length +
+              facultyApps.filter((a) => a.status === 'Approved').length
+            }
+            color="emerald"
+          />
+          <StatCard
+            icon="cancel"
+            label="Rejected"
+            value={
+              studentApps.filter((a) => a.status === 'Rejected').length +
+              facultyApps.filter((a) => a.status === 'Rejected').length
+            }
+            color="red"
+          />
         </div>
 
         {/* Tabs and Search */}

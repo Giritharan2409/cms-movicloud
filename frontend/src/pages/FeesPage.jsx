@@ -10,8 +10,6 @@ export default function FeesPage() {
   const [feeAssignments, setFeeAssignments] = useState(
     JSON.parse(localStorage.getItem('fee_assignments') || '[]')
   );
-  const [searchName, setSearchName] = useState('');
-  const [searchDept, setSearchDept] = useState('');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showProcessing, setShowProcessing] = useState(false);
@@ -66,22 +64,8 @@ export default function FeesPage() {
       fees = fees.filter((fee) => fee.studentId === studentId);
     }
 
-    // Filter by name
-    if (searchName) {
-      fees = fees.filter((fee) =>
-        fee.studentName?.toLowerCase().includes(searchName.toLowerCase())
-      );
-    }
-
-    // Filter by course
-    if (searchDept) {
-      fees = fees.filter((fee) =>
-        fee.course?.toLowerCase().includes(searchDept.toLowerCase())
-      );
-    }
-
     return fees;
-  }, [feeAssignments, studentId, searchName, searchDept]);
+  }, [feeAssignments, studentId]);
 
   const handlePayClick = (fee) => {
     setSelectedFee(fee);
@@ -344,47 +328,6 @@ export default function FeesPage() {
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-8 rounded-lg shadow-lg">
           <h1 className="text-3xl font-bold mb-2">Fee Management</h1>
           <p className="text-blue-100">Track and pay semester fees</p>
-        </div>
-
-        {/* Search Section */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Search by Student Name
-              </label>
-              <input
-                type="text"
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter name..."
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Search by Course
-              </label>
-              <input
-                type="text"
-                value={searchDept}
-                onChange={(e) => setSearchDept(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter course..."
-              />
-            </div>
-            <div className="flex items-end">
-              <button
-                onClick={() => {
-                  setSearchName('');
-                  setSearchDept('');
-                }}
-                className="w-full px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
-              >
-                Clear
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Fee Cards Grid */}
