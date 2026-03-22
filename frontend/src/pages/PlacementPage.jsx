@@ -1,49 +1,58 @@
-import { useState, useRef, useEffect } from 'react'
+﻿import { useState, useRef, useEffect } from 'react'
 import Layout from '../components/Layout'
 import Modal from '../components/Modal'
 import { getUserSession } from '../auth/sessionController'
-import { cmsRoles } from '../data/roleConfig'
+import { fetchPlacements, createPlacement } from '../api/placementApi'
+import { fetchStudentById } from '../api/studentsApi'
 
 const emptyForm = { name: '', company: '', role: '', package: '', status: 'Selected', date: '' }
 
 export default function PlacementPage({ noLayout = false }) {
   const session = getUserSession()
   const role = session?.role || 'student'
+  const userId = session?.userId || null
   const isAdmin = role === 'admin'
+  const isFaculty = role === 'faculty'
   const isStudent = role === 'student'
-  const sessionUserId = session?.userId || ''
-  const studentDefaultName = cmsRoles.student.name
 
   const [entries, setEntries] = useState([])
-  const [editingEntry, setEditingEntry] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [form, setForm] = useState(emptyForm)
+  const [studentName, setStudentName] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('All')
   const [filterOpen, setFilterOpen] = useState(false)
+  const [apiNotice, setApiNotice] = useState('')
+  const [refreshing, setRefreshing] = useState(false)
   const filterRef = useRef(null)
 
-  const loadPlacements = async (overrides = {}) => {
+  async function loadPlacements({ silent = false } = {}) {
+    if (!silent) setLoading(true)
+    setApiNotice('')
     try {
-      const params = new URLSearchParams()
-      const effectiveStatus = overrides.statusFilter ?? statusFilter
-      const effectiveSearch = overrides.searchQuery ?? searchQuery
-
-      if (isStudent && sessionUserId) params.set('person_id', sessionUserId)
-      if (effectiveStatus && effectiveStatus !== 'All') params.set('status', effectiveStatus)
-      if (effectiveSearch?.trim()) params.set('search', effectiveSearch.trim())
-
-      const query = params.toString()
-      const res = await fetch(`/api/academics/placement${query ? `?${query}` : ''}`)
-      const json = await res.json().catch(() => null)
-      if (json?.success && Array.isArray(json.data)) {
-        setEntries(json.data)
-      }
-    } catch (err) {
-      console.error('Failed to fetch placements:', err)
+      const data = await fetchPlacements({
+        status: statusFilter,
+        search: searchQuery,
+        personId: isStudent ? userId : undefined,
+      })
+      setEntries(data)
+    } catch (error) {
+      console.error('Failed to fetch placements:', error)
+      setEntries([])
+      setApiNotice('Failed to load placement records from backend API.')
+    } finally {
+      if (!silent) setLoading(false)
+      setRefreshing(false)
     }
   }
 
+  // Fetch placements on mount and when filters change
+  useEffect(() => {
+    loadPlacements()
+  }, [statusFilter, searchQuery, isStudent, userId])
+
+  // Handle click outside filter dropdown
   useEffect(() => {
     function handleClickOutside(e) {
       if (filterRef.current && !filterRef.current.contains(e.target)) setFilterOpen(false)
@@ -53,41 +62,24 @@ export default function PlacementPage({ noLayout = false }) {
   }, [])
 
   useEffect(() => {
-    loadPlacements({ statusFilter: 'All', searchQuery: '' })
-  }, [isStudent, sessionUserId])
+    if (!isStudent || !userId) return
+    let isActive = true
 
-  useEffect(() => {
-    const debounce = setTimeout(() => {
-      loadPlacements()
-    }, 250)
+    async function loadStudent() {
+      try {
+        const student = await fetchStudentById(userId)
+        if (isActive) setStudentName(student?.name || '')
+      } catch (error) {
+        if (isActive) setStudentName('')
+        console.error('Failed to load student profile:', error)
+      }
+    }
 
-    return () => clearTimeout(debounce)
-  }, [statusFilter, searchQuery, isStudent, sessionUserId])
-
-  const visibleEntries = isStudent
-    ? entries.filter((p) => p.ownerId === sessionUserId)
-    : entries
-
-  const filteredEntries = visibleEntries.filter(p => {
-    const matchStatus = statusFilter === 'All' || p.status === statusFilter
-    const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        p.company.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchStatus && matchSearch
-  })
-
-  const hasStudentEntry = isStudent && visibleEntries.length > 0
-
-  function openAddModal() {
-    setEditingEntry(null)
-    setForm(isStudent ? { ...emptyForm, name: studentDefaultName } : emptyForm)
-    setShowModal(true)
-  }
-
-  function openEditModal(entry) {
-    setEditingEntry(entry)
-    setForm({ name: entry.name, company: entry.company, role: entry.role, package: entry.package, status: entry.status, date: entry.date })
-    setShowModal(true)
-  }
+    loadStudent()
+    return () => {
+      isActive = false
+    }
+  }, [isStudent, userId])
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -95,84 +87,93 @@ export default function PlacementPage({ noLayout = false }) {
 
   async function handleSubmit(e) {
     if (e) e.preventDefault()
-    const payload = isStudent
-      ? { ...form, name: studentDefaultName, ownerId: sessionUserId }
-      : form
+    if (isFaculty) return
+    setApiNotice('')
     try {
-      if (editingEntry) {
-        const id = editingEntry.id || editingEntry._id
-        const res = await fetch(`/api/academics/placement/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        const json = await res.json().catch(() => null)
-        if (json?.success) await loadPlacements()
-      } else {
-        const res = await fetch('/api/academics/placement', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        const json = await res.json().catch(() => null)
-        if (json?.success) await loadPlacements()
+      const submitData = { ...form };
+      if (!isAdmin && userId) {
+        submitData.ownerId = userId;
+        submitData.name = studentName || form.name;
       }
-    } catch (err) {
-      console.error('Failed to save placement:', err)
-    }
-    setEditingEntry(null)
-    setForm(emptyForm)
-    setShowModal(false)
-  }
-
-  async function handleDelete(entry) {
-    const id = entry.id || entry._id
-    if (!window.confirm('Delete this placement record?')) return
-    try {
-      const res = await fetch(`/api/academics/placement/${id}`, { method: 'DELETE' })
-      const json = await res.json().catch(() => null)
-      if (json?.success) await loadPlacements()
-    } catch (err) {
-      console.error('Failed to delete placement:', err)
+      const newEntry = await createPlacement(submitData)
+      setEntries(prev => [newEntry, ...prev])
+      setForm(emptyForm)
+      setShowModal(false)
+      setApiNotice('Placement record saved to backend successfully.')
+    } catch (error) {
+      console.error('Failed to create placement:', error)
+      setApiNotice('Failed to save placement to backend API.')
     }
   }
 
   const inputClasses = "w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1162d4]/10 focus:border-[#1162d4] outline-none transition-all text-sm text-slate-700 bg-white";
   const labelClasses = "block text-sm font-semibold text-slate-700 mb-1.5 ml-0.5";
 
+  function parsePackageValue(value) {
+    if (!value) return null
+    const numeric = String(value).replace(/[^0-9.]/g, '')
+    const amount = Number.parseFloat(numeric)
+    return Number.isFinite(amount) ? amount : null
+  }
+
+  function formatPackageValue(amount) {
+    if (!Number.isFinite(amount)) return '—'
+    if (amount >= 1000) return `$${(amount / 1000).toFixed(1)}k`
+    return `$${amount.toFixed(0)}`
+  }
+
+  const avgPackage = (() => {
+    const values = entries
+      .map((entry) => parsePackageValue(entry.package))
+      .filter((value) => value !== null)
+    if (values.length === 0) return '—'
+    const total = values.reduce((sum, value) => sum + value, 0)
+    return formatPackageValue(total / values.length)
+  })()
+
+  const addButton = (
+    <button
+      onClick={() => setShowModal(true)}
+      className="flex items-center gap-2 px-4 py-2 bg-[#1162d4] text-white rounded-lg text-sm font-semibold hover:bg-[#1162d4]/90 transition-all shadow-sm active:scale-95 w-fit"
+    >
+      <span className="material-symbols-outlined text-lg">add</span>Add Placement
+    </button>
+  );
+
+  const visibleEntries = isFaculty
+    ? entries.filter((entry) => Boolean(entry?.ownerId))
+    : entries
+  const showStudentColumn = isAdmin || isFaculty
+
   const inner = (
     <>
-      {(isAdmin || (isStudent && hasStudentEntry)) && (
+      {isAdmin && (
         <div className="mb-6">
-          <button
-            onClick={openAddModal}
-            className="flex items-center gap-2 px-4 py-2 bg-[#1162d4] text-white rounded-lg text-sm font-semibold hover:bg-[#1162d4]/90 transition-all shadow-sm active:scale-95 w-fit"
-          >
-            <span className="material-symbols-outlined text-lg">add</span>Add Placement Record
-          </button>
+          {addButton}
         </div>
       )}
-
-      {isStudent && !hasStudentEntry && (
-        <div className="mb-6 bg-white rounded-xl border border-dashed border-slate-300 p-10 shadow-sm text-center">
-          <p className="text-slate-600 text-sm mb-4">You have not added any placement record yet.</p>
-          <button
-            onClick={openAddModal}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#1162d4] text-white rounded-lg text-sm font-semibold hover:bg-[#1162d4]/90 transition-all shadow-sm active:scale-95"
-          >
-            <span className="material-symbols-outlined text-lg">add</span>Add Placement Record
-          </button>
+      
+      {isStudent && entries.length > 0 && (
+        <div className="mb-6">
+          {addButton}
         </div>
       )}
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        {[
-          { icon: 'emoji_events', label: isStudent ? 'My Selections' : 'Students Placed', value: visibleEntries.filter(e => e.status === 'Selected').length, color: 'text-[#1162d4] bg-[#1162d4]/10' },
-          { icon: 'business',    label: isStudent ? 'Companies Applied' : 'Companies Visited', value: new Set(visibleEntries.map(e => e.company)).size, color: 'text-purple-600 bg-purple-100' },
-          { icon: 'attach_money',label: 'Avg. Package',       value: '$10.2k',                                                color: 'text-emerald-600 bg-emerald-100' },
-        ].map((s) => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex items-center gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        {(isAdmin
+          ? [
+              { icon: 'emoji_events', label: 'Students Placed',   value: entries.filter(e => e.status === 'Selected').length,     color: 'text-[#1162d4] bg-[#1162d4]/10' },
+              { icon: 'business',    label: 'Companies Visited',  value: new Set(entries.map(e => e.company)).size,               color: 'text-purple-600 bg-purple-100' },
+              { icon: 'attach_money',label: 'Avg. Package',       value: avgPackage,                                              color: 'text-emerald-600 bg-emerald-100' },
+            ]
+          : [
+              { icon: 'emoji_events', label: 'Placements',        value: visibleEntries.length,                                   color: 'text-[#1162d4] bg-[#1162d4]/10' },
+              { icon: 'assignment_turned_in', label: 'Selected',   value: visibleEntries.filter(e => e.status === 'Selected').length,    color: 'text-emerald-600 bg-emerald-100' },
+              { icon: 'schedule',     label: 'In Process',        value: visibleEntries.filter(e => e.status === 'Process').length,     color: 'text-orange-600 bg-orange-100' },
+            ])
+        .map((s, idx) => (
+          <div key={`${s.label}-${idx}`} className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex items-center gap-4">
             <div className={`p-3 rounded-xl ${s.color}`}>
               <span className="material-symbols-outlined">{s.icon}</span>
             </div>
@@ -185,12 +186,23 @@ export default function PlacementPage({ noLayout = false }) {
       </div>
 
       {/* Search & Filter */}
-      <div className="flex items-center justify-end gap-3 mb-4">
+      <div className="flex items-center justify-end gap-3 mb-6">
+        <button
+          onClick={() => {
+            setRefreshing(true)
+            loadPlacements({ silent: true })
+          }}
+          disabled={loading || refreshing}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium border bg-white text-slate-600 border-slate-200 hover:border-slate-300 shadow-sm disabled:opacity-60"
+        >
+          <span className="material-symbols-outlined text-lg">refresh</span>
+          {refreshing ? 'Refreshing...' : 'Refresh'}
+        </button>
         <div className="relative">
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
           <input
             type="text"
-            placeholder={isStudent ? 'Search company...' : 'Search student or company...'}
+            placeholder={isAdmin ? "Search student or company..." : "Search company..."}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 pr-4 py-2 w-full bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4] transition-all duration-200"
@@ -232,29 +244,56 @@ export default function PlacementPage({ noLayout = false }) {
         </div>
       </div>
 
+      {apiNotice && (
+        <div className={`mb-4 px-4 py-2.5 rounded-lg text-xs font-semibold border ${
+          apiNotice.toLowerCase().includes('failed')
+            ? 'bg-red-50 text-red-700 border-red-200'
+            : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+        }`}>
+          {apiNotice}
+        </div>
+      )}
+
       {/* Placement Table */}
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
         <table className="w-full text-left">
           <thead>
             <tr className="bg-slate-50 text-slate-500 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
-              <th className="px-6 py-4">{isStudent ? 'Candidate' : 'Student'}</th>
+              {showStudentColumn && <th className="px-6 py-4">Student</th>}
               <th className="px-6 py-4">Company</th>
               <th className="px-6 py-4">Role</th>
               <th className="px-6 py-4">Package</th>
               <th className="px-6 py-4">Date</th>
               <th className="px-6 py-4">Status</th>
-              {(isAdmin || isStudent) && <th className="px-6 py-4 text-right">Actions</th>}
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {filteredEntries.length === 0 && (
+            {loading && (
               <tr>
-                <td colSpan={(isAdmin || isStudent) ? 7 : 6} className="px-6 py-10 text-center text-slate-400 text-sm">No records found</td>
+                <td colSpan={showStudentColumn ? 6 : 5} className="px-6 py-10 text-center text-slate-400 text-sm">Loading...</td>
               </tr>
             )}
-            {filteredEntries.map((p, i) => (
-              <tr key={p.id || p._id || i} className="hover:bg-slate-50 transition-colors">
-                <td className="px-6 py-4 text-sm font-semibold text-slate-900">{p.name}</td>
+            {!loading && visibleEntries.length === 0 && (
+              <tr>
+                <td colSpan={showStudentColumn ? 6 : 5}>
+                  <div className="px-6 py-10 flex flex-col items-center justify-center text-center">
+                    {isStudent && (
+                      <>
+                        <span className="material-symbols-outlined text-5xl text-slate-300 mb-3">work_outline</span>
+                        <p className="text-slate-500 font-medium mb-4">No placements yet</p>
+                        {addButton}
+                      </>
+                    )}
+                    {(isAdmin || isFaculty) && (
+                      <p className="text-slate-400 text-sm">No records found</p>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            )}
+            {!loading && visibleEntries.map((p, i) => (
+              <tr key={i} className="hover:bg-slate-50 transition-colors">
+                {showStudentColumn && <td className="px-6 py-4 text-sm font-semibold text-slate-900">{p.name || p.ownerId || '-'}</td>}
                 <td className="px-6 py-4 text-sm text-slate-600 font-medium">{p.company}</td>
                 <td className="px-6 py-4 text-sm text-slate-600">{p.role}</td>
                 <td className="px-6 py-4 text-sm font-bold text-slate-900">{p.package}</td>
@@ -264,18 +303,6 @@ export default function PlacementPage({ noLayout = false }) {
                     p.status === 'Selected' ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'
                   }`}>{p.status}</span>
                 </td>
-                {(isAdmin || isStudent) && (
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => openEditModal(p)} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-[#1162d4] transition-colors" title="Edit">
-                        <span className="material-symbols-outlined text-base">edit</span>
-                      </button>
-                      <button onClick={() => handleDelete(p)} className="p-1.5 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-500 transition-colors" title="Delete">
-                        <span className="material-symbols-outlined text-base">delete</span>
-                      </button>
-                    </div>
-                  </td>
-                )}
               </tr>
             ))}
           </tbody>
@@ -284,14 +311,14 @@ export default function PlacementPage({ noLayout = false }) {
 
       <Modal
         isOpen={showModal}
-        onClose={() => { setShowModal(false); setEditingEntry(null) }}
-        title={editingEntry ? 'Edit Placement Record' : 'Add Placement Record'}
+        onClose={() => setShowModal(false)}
+        title={isAdmin ? "Add Placement Entry" : "Add Your Placement"}
         icon="work"
         maxWidth="max-w-2xl"
         footer={
           <div className="flex items-center justify-end gap-3 w-full">
             <button
-              onClick={() => { setShowModal(false); setEditingEntry(null) }}
+              onClick={() => setShowModal(false)}
               className="px-6 py-2 text-sm font-semibold text-slate-400 hover:text-slate-600"
             >
               Cancel
@@ -300,19 +327,21 @@ export default function PlacementPage({ noLayout = false }) {
               onClick={handleSubmit}
               className="px-6 py-2 bg-[#1162d4] text-white rounded-lg text-sm font-semibold hover:bg-[#1162d4]/90 transition-all shadow-sm active:scale-95"
             >
-              {editingEntry ? 'Save Changes' : 'Add Entry'}
+              Add Entry
             </button>
           </div>
         }
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-1.5">
-            <label className={labelClasses}>Student Name *</label>
-            <input
-              type="text" name="name" value={form.name} onChange={handleChange} required disabled={isStudent}
-              placeholder="e.g., John Doe" className={inputClasses}
-            />
-          </div>
+          {isAdmin && (
+            <div className="space-y-1.5">
+              <label className={labelClasses}>Student Name *</label>
+              <input
+                type="text" name="name" value={form.name} onChange={handleChange} required
+                placeholder="e.g., John Doe" className={inputClasses}
+              />
+            </div>
+          )}
           <div className="space-y-1.5">
             <label className={labelClasses}>Company *</label>
             <input

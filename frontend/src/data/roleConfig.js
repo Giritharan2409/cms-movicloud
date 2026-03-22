@@ -1,4 +1,4 @@
-export const demoUsers = {
+﻿export const demoUsers = {
   student: { userId: 'STU-2024-1547', password: 'student123' },
   admin: { userId: 'ADM-0001', password: 'admin123' },
   faculty: { userId: 'FAC-204', password: 'faculty123' },

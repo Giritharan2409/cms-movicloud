@@ -20,10 +20,12 @@ from backend.routes.academics.exams import router as exams_router
 from backend.routes.academics.facility import router as facility_router
 from backend.routes.academics.placement import router as placement_router
 from backend.routes.academics.timetable import router as timetable_router
+from backend.routes.analytics import router as analytics_router
 from backend.routes.notifications import router as notifications_router
 from backend.routes.payroll import router as payroll_router
 from backend.routes.settings import router as settings_router
 from backend.routes.staff import router as staff_router
+from backend.routes.faculty import router as faculty_router
 from backend.routes.students import router as students_router
 from backend.routes.administration.admissions import router as admissions_router
 from backend.routes.administration.fees import router as fees_router
@@ -32,10 +34,25 @@ PORT = int(os.getenv("PORT", 5000))
 
 app = FastAPI(title="CMS API", lifespan=lifespan)
 
+
+def _parse_origins(value: str | None):
+    if not value:
+        return []
+    return [origin.strip() for origin in value.split(",") if origin.strip()]
+
+
+configured_origins = _parse_origins(os.getenv("CORS_ORIGINS"))
+default_origins = [
+    "https://cms1-weof.onrender.com",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+allowed_origins = configured_origins or default_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=allowed_origins,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -62,7 +79,9 @@ async def serve_frontend():
     }
 
 app.include_router(staff_router)
+app.include_router(faculty_router)
 app.include_router(payroll_router)
+app.include_router(analytics_router)
 app.include_router(exams_router)
 app.include_router(timetable_router)
 app.include_router(attendance_router)
@@ -86,4 +105,4 @@ async def serve_react_app(full_path: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend.main:app", host="127.0.0.1", port=5000)
+    uvicorn.run("main:app", host="127.0.0.1", port=5000)
