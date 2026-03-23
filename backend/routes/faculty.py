@@ -788,6 +788,19 @@ async def create_faculty(faculty: Faculty):
     created_doc = await collection.find_one({"_id": result.inserted_id})
     return serialize_doc(created_doc)
 
+
+@router.post("/admission/submit")
+async def submit_faculty_admission(faculty_data: dict = Body(...)):
+    """Submit faculty admission from modal form"""
+    collection = await get_faculty_collection()
+    
+    # Allow duplicate submissions (no uniqueness check)
+    result = await collection.insert_one(faculty_data)
+    
+    created_doc = await collection.find_one({"_id": result.inserted_id})
+    return serialize_doc(created_doc)
+
+
 @router.get("/{faculty_id}")
 async def get_faculty(faculty_id: str = Path(...)):
     collection = await get_faculty_collection()
