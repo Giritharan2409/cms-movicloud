@@ -164,9 +164,7 @@ export default function FacultyPage() {
         <SearchFilter 
           searchQuery={searchQuery}
           onSearchChange={handleSearch}
-          onAddClick={handleAddFaculty}
           placeholder="Search faculty by name, ID, or email..."
-          addButtonLabel="Add Faculty"
         />
       </div>
 
