@@ -44,6 +44,17 @@ function CloseIcon() {
     );
 }
 
+function DeleteIcon() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+        </svg>
+    );
+}
+
 
 export default function PayrollPage({ noLayout = false }) {
     const [payrollData, setPayrollData] = useState([]);
@@ -91,6 +102,20 @@ export default function PayrollPage({ noLayout = false }) {
     const [viewingRecord, setViewingRecord] = useState(null);
     const [editingRecord, setEditingRecord] = useState(null);
 
+    // Run Payroll States
+    const [isRunPayrollModalOpen, setIsRunPayrollModalOpen] = useState(false);
+    const [selectedDesignations, setSelectedDesignations] = useState([]);
+    const [runPayrollMonth, setRunPayrollMonth] = useState(new Date().toLocaleString('default', { month: 'long' }));
+    const [runPayrollYear, setRunPayrollYear] = useState(new Date().getFullYear().toString());
+    
+    const DESIGNATIONS = ['Professor', 'Associate Professor', 'Assistant Professor', 'Lecturer'];
+    const SALARY_MAP = {
+        'Professor': 55000,
+        'Associate Professor': 45000,
+        'Assistant Professor': 40000,
+        'Lecturer': 35000
+    };
+
     // Wizard State
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [wizardStep, setWizardStep] = useState(1);
@@ -128,6 +153,14 @@ export default function PayrollPage({ noLayout = false }) {
             return matchMonth && matchStatus;
         });
     }, [filterMonth, filterStatus, payrollData]);
+
+    const availablePeriods = useMemo(() => {
+        const periods = new Set(['All Periods', 'Current Month', 'Last Month']);
+        payrollData.forEach(r => {
+            if (r.payPeriodDetailed) periods.add(r.payPeriodDetailed);
+        });
+        return Array.from(periods);
+    }, [payrollData]);
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -252,6 +285,21 @@ export default function PayrollPage({ noLayout = false }) {
         setIsWizardOpen(false);
     };
 
+    const handleDeletePayroll = async (record) => {
+        if (!window.confirm(`Are you sure you want to delete the payroll record for ${record.staffName}?`)) return;
+        
+        try {
+            const res = await fetch(`${API_BASE}/payroll/${record.id || record._id}`, {
+                method: 'DELETE',
+            });
+            if (!res.ok) throw new Error('Failed to delete record');
+            await fetchPayroll();
+            alert('Record deleted successfully');
+        } catch (err) {
+            alert('Error: ' + err.message);
+        }
+    };
+
     const handleWizardNext = () => {
         if (wizardStep === 1 && !wizardData.staffId) {
             alert('Please select a staff member first.');
@@ -265,13 +313,22 @@ export default function PayrollPage({ noLayout = false }) {
     };
 
     const selectWizardStaff = (staff) => {
+        const baseSalary = SALARY_MAP[staff.designation || staff.role] || 0;
+        const expYears = Number(staff.experience_years || staff.experience || 0);
+        const totalSalary = baseSalary + (expYears * 4000);
+
         setWizardData(prev => ({
             ...prev,
             staffId: staff.staffId || staff.staff_id || staff.id || '',
             staffName: staff.staffName || staff.name || '',
             designation: staff.designation || staff.role || '',
             department: staff.department || '',
-            category: staff.category || ''
+            category: staff.category || '',
+            basicSalary: totalSalary,
+            hra: Number(staff.hra || 0),
+            allowance: Number(staff.allowance || 0),
+            pf: Number(staff.pf || 0),
+            tax: Number(staff.tax || 0)
         }));
     };
 
@@ -344,19 +401,34 @@ export default function PayrollPage({ noLayout = false }) {
         }
     };
 
-    const handleRunPayroll = async () => {
-        const now = new Date();
-        const currentPeriod = now.toLocaleString('default', { month: 'long' }) + ' ' + now.getFullYear();
+    const handleRunPayroll = () => {
+        setSelectedDesignations([...DESIGNATIONS]); // Default select all
+        setRunPayrollMonth(new Date().toLocaleString('default', { month: 'long' }));
+        setRunPayrollYear(new Date().getFullYear().toString());
+        setIsRunPayrollModalOpen(true);
+    };
+
+    const executeRunPayroll = async () => {
+        const currentPeriod = `${runPayrollMonth} ${runPayrollYear}`;
         const newRecords = [];
 
         staffList.forEach(staff => {
-            // Normalize field names from the DB (may vary)
+            const role = staff.designation || staff.role || '';
+            if (!selectedDesignations.includes(role)) return;
+
             const id = staff.staffId || staff.staff_id || staff.id || '';
             const name = staff.staffName || staff.name || '';
-            const role = staff.designation || staff.role || '';
             const dept = staff.department || '';
             const cat = staff.category || '';
-            const basic = Number(staff.basicSalary || staff.basic_salary || 0);
+            
+            // Automatic Salary Assignment
+            const baseSalary = SALARY_MAP[role] || 0;
+            // Robust experience lookup: try experience_years, experience, or 0
+            const expYears = Number(staff.experience_years || staff.experience || 0);
+            const expBonus = expYears * 4000;
+            const totalBasic = baseSalary + expBonus;
+
+            // Default values
             const hra = Number(staff.hra || 0);
             const allowance = Number(staff.allowance || 0);
             const pf = Number(staff.pf || 0);
@@ -364,7 +436,7 @@ export default function PayrollPage({ noLayout = false }) {
 
             const exists = payrollData.some(r => (r.staffId === id) && r.payPeriodDetailed === currentPeriod);
             if (!exists) {
-                const gross = basic + hra + allowance;
+                const gross = totalBasic + hra + allowance;
                 const deds = pf + tax;
                 newRecords.push({
                     staffName: name,
@@ -372,13 +444,16 @@ export default function PayrollPage({ noLayout = false }) {
                     designation: role,
                     department: dept,
                     category: cat,
-                    payMonth: 'Current Month',
+                    payMonth: runPayrollMonth,
                     payPeriodDetailed: currentPeriod,
                     grossPay: gross,
                     deductions: deds,
                     netPay: gross - deds,
                     status: 'Draft',
-                    basicSalary: basic,
+                    basicSalary: totalBasic,
+                    baseSalary: baseSalary,
+                    experienceBonus: expBonus,
+                    experienceYears: expYears,
                     hra, allowance, bonus: 0, pf, tax
                 });
             }
@@ -393,12 +468,14 @@ export default function PayrollPage({ noLayout = false }) {
                 });
                 if (!res.ok) throw new Error('Failed to run payroll');
                 await fetchPayroll();
-                alert('Payroll successfully generated for ' + currentPeriod + '.');
+                alert(`Payroll successfully generated for ${newRecords.length} staff members for ${currentPeriod}.`);
+                setIsRunPayrollModalOpen(false);
             } catch (err) {
                 alert('Error: ' + err.message);
             }
         } else {
-            alert('Payroll records already exist for all staff this month.');
+            alert(`No new payroll records to generate for ${currentPeriod} with selected designations.`);
+            setIsRunPayrollModalOpen(false);
         }
     };
 
@@ -424,11 +501,9 @@ export default function PayrollPage({ noLayout = false }) {
                             onChange={(e) => { setFilterMonth(e.target.value); setCurrentPage(1); }}
                             style={{ height: 40, borderRadius: 8, padding: '0 12px', border: '1px solid #e5e7eb', outline: 'none', background: '#fff', fontSize: 14, minWidth: 160 }}
                         >
-                            <option value="All Periods">All Periods</option>
-                            <option value="Current Month">Current Month</option>
-                            <option value="Last Month">Last Month</option>
-                            <option value="March 2024">March 2024</option>
-                            <option value="February 2024">February 2024</option>
+                             {availablePeriods.map(p => (
+                                <option key={p} value={p}>{p}</option>
+                             ))}
                         </select>
                     </div>
                     <div className="input-wrap">
@@ -487,6 +562,11 @@ export default function PayrollPage({ noLayout = false }) {
                                                     <span style={{ color: '#d1d5db' }}>|</span>
                                                     <span>{displayRole}</span>
                                                 </div>
+                                                {(record.experienceYears > 0 || record.experienceBonus > 0) && (
+                                                    <div style={{ fontSize: 11, color: '#059669', marginTop: 4, fontWeight: 500 }}>
+                                                        Exp: {record.experienceYears || (record.experienceBonus / 4000)} yrs (+{formatCurrency(record.experienceBonus || (record.experienceYears * 4000))})
+                                                    </div>
+                                                )}
                                             </td>
                                             <td style={{ padding: '16px 20px', fontSize: 14, color: '#374151' }}>{record.payPeriodDetailed || record.payMonth || '—'}</td>
                                             <td style={{ padding: '16px 20px', fontSize: 14, color: '#374151', fontWeight: 500 }}>{hasPayroll ? formatCurrency(record.grossPay) : '—'}</td>
@@ -517,6 +597,10 @@ export default function PayrollPage({ noLayout = false }) {
                                                             <button onClick={() => handleGeneratePayslip(record)} title="Print Report"
                                                                 style={{ display: 'inline-flex', alignItems: 'center', background: 'transparent', border: 'none', cursor: 'pointer', color: '#6b7280', padding: 4, borderRadius: 4 }}>
                                                                 <DocumentIcon />
+                                                            </button>
+                                                            <button onClick={() => handleDeletePayroll(record)} title="Delete Payroll"
+                                                                style={{ display: 'inline-flex', alignItems: 'center', background: 'transparent', border: 'none', cursor: 'pointer', color: '#ef4444', padding: 4, borderRadius: 4 }}>
+                                                                <DeleteIcon />
                                                             </button>
                                                         </>
                                                     )}
@@ -919,6 +1003,16 @@ export default function PayrollPage({ noLayout = false }) {
                                     <span style={{ fontWeight: 500, color: '#1f2937', fontSize: 14 }}>{viewingRecord.payPeriodDetailed || viewingRecord.payMonth}</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
+                                    <span style={{ color: '#6b7280', fontSize: 14 }}>Base Salary ({viewingRecord.designation})</span>
+                                    <span style={{ fontWeight: 500, color: '#1f2937', fontSize: 14 }}>{formatCurrency(viewingRecord.baseSalary || SALARY_MAP[viewingRecord.designation] || (viewingRecord.basicSalary - (viewingRecord.experienceBonus || 0)))}</span>
+                                </div>
+                                {(viewingRecord.experienceYears > 0 || (viewingRecord.experienceBonus > 0)) && (
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
+                                        <span style={{ color: '#6b7280', fontSize: 14 }}>Exp. Bonus ({viewingRecord.experienceYears || (viewingRecord.experienceBonus / 4000)} yrs)</span>
+                                        <span style={{ fontWeight: 500, color: '#059669', fontSize: 14 }}>+ {formatCurrency(viewingRecord.experienceBonus || 0)}</span>
+                                    </div>
+                                )}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
                                     <span style={{ color: '#6b7280', fontSize: 14 }}>Gross Pay</span>
                                     <span style={{ fontWeight: 500, color: '#1f2937', fontSize: 14 }}>{formatCurrency(viewingRecord.grossPay)}</span>
                                 </div>
@@ -936,6 +1030,78 @@ export default function PayrollPage({ noLayout = false }) {
                             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
                                 <button type="button" className="btn-secondary-sm" onClick={() => setViewingRecord(null)}>Close</button>
                                 <button type="button" className="btn-primary-sm" onClick={() => handleGeneratePayslip(viewingRecord)}>Print Report</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Run Payroll Filter Modal */}
+            {isRunPayrollModalOpen && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, padding: 20 }}>
+                    <div style={{ background: '#fff', borderRadius: 16, width: '100%', maxWidth: 450, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', animation: 'slideUp 0.3s ease-out' }}>
+                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h3 style={{ margin: 0, fontSize: 18, color: '#1f2937', fontWeight: 600 }}>Designation Wise Run Payroll</h3>
+                            <button onClick={() => setIsRunPayrollModalOpen(false)} style={{ background: 'transparent', border: 'none', color: '#9ca3af', cursor: 'pointer' }}>
+                                <CloseIcon />
+                            </button>
+                        </div>
+                        <div style={{ padding: '24px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#374151', marginBottom: 6 }}>Pay Month</label>
+                                    <select
+                                        value={runPayrollMonth}
+                                        onChange={(e) => setRunPayrollMonth(e.target.value)}
+                                        style={{ width: '100%', height: 40, borderRadius: 8, border: '1px solid #d1d5db', padding: '0 12px', fontSize: 14 }}
+                                    >
+                                        {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(m => (
+                                            <option key={m} value={m}>{m}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#374151', marginBottom: 6 }}>Pay Year</label>
+                                    <select
+                                        value={runPayrollYear}
+                                        onChange={(e) => setRunPayrollYear(e.target.value)}
+                                        style={{ width: '100%', height: 40, borderRadius: 8, border: '1px solid #d1d5db', padding: '0 12px', fontSize: 14 }}
+                                    >
+                                        {['2024', '2025', '2026'].map(y => (
+                                            <option key={y} value={y}>{y}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <p style={{ fontSize: 14, color: '#6b7280', marginBottom: 16 }}>Select designations to generate payroll automatically:</p>
+                            
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
+                                {DESIGNATIONS.map(designation => (
+                                    <label key={designation} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', border: '1px solid #e5e7eb', borderRadius: 10, cursor: 'pointer', background: selectedDesignations.includes(designation) ? '#f0f7ff' : '#fff', borderColor: selectedDesignations.includes(designation) ? '#3b82f6' : '#e5e7eb', transition: 'all 0.2s' }}>
+                                        <input 
+                                            type="checkbox" 
+                                            checked={selectedDesignations.includes(designation)}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectedDesignations([...selectedDesignations, designation]);
+                                                } else {
+                                                    setSelectedDesignations(selectedDesignations.filter(d => d !== designation));
+                                                }
+                                            }}
+                                            style={{ width: 18, height: 18, cursor: 'pointer' }}
+                                        />
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ fontSize: 15, fontWeight: 600, color: '#1f2937' }}>{designation}</div>
+                                            <div style={{ fontSize: 12, color: '#6b7280' }}>Base: {formatCurrency(SALARY_MAP[designation])} + ₹4,000 /yr exp</div>
+                                        </div>
+                                    </label>
+                                ))}
+                            </div>
+
+                            <div style={{ display: 'flex', gap: 12 }}>
+                                <button type="button" className="btn-secondary-sm" style={{ flex: 1 }} onClick={() => setIsRunPayrollModalOpen(false)}>Cancel</button>
+                                <button type="button" className="btn-primary-sm" style={{ flex: 1, background: '#2563eb' }} onClick={executeRunPayroll}>Confirm & Run</button>
                             </div>
                         </div>
                     </div>
