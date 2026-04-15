@@ -1,7 +1,9 @@
 import { getUserSession } from '../auth/sessionController'
 import { cmsRoles } from '../data/roleConfig'
+import { useState } from 'react'
 
 export default function TopBar({ title, isSidebarVisible = true }) {
+  const [globalSearch, setGlobalSearch] = useState('')
   const session = getUserSession()
   const role = session?.role || 'student'
   const user = cmsRoles[role] || cmsRoles.student
@@ -13,6 +15,24 @@ export default function TopBar({ title, isSidebarVisible = true }) {
           <h2 className="text-[20px] font-bold text-[#2563eb] tracking-tight">MIT Connect</h2>
           <p className="text-xs text-slate-500">{title || 'Dashboard'}</p>
         </div>
+      </div>
+      <div className="relative hidden md:flex items-center gap-2">
+        <span className="material-symbols-outlined text-slate-400 text-[20px]">search</span>
+        <input
+          type="text"
+          placeholder="Global search..."
+          value={globalSearch}
+          onChange={(e) => setGlobalSearch(e.target.value)}
+          className="w-48 px-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-slate-50 hover:bg-white"
+        />
+        {globalSearch && (
+          <button
+            onClick={() => setGlobalSearch('')}
+            className="text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            <span className="material-symbols-outlined text-[18px]">close</span>
+          </button>
+        )}
       </div>
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import Layout from '../components/Layout';
-import StatCard from '../components/StatCard';
+import { PageContainer, StatsSection, StatusBadge } from '../components/common';
 import { jsPDF } from 'jspdf';
 import { getUserSession } from '../auth/sessionController';
 
@@ -277,34 +277,14 @@ export default function AdminInvoicePage() {
 
   return (
     <Layout title="Invoice Management">
-      <div className="space-y-8">
+      <PageContainer>
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <StatCard
-            icon="description"
-            label="Total Invoices"
-            value={stats.totalInvoices}
-            color="blue"
-          />
-          <StatCard
-            icon="check_circle"
-            label="Paid Invoices"
-            value={stats.paidInvoices}
-            color="green"
-          />
-          <StatCard
-            icon="schedule"
-            label="Pending Invoices"
-            value={stats.pendingInvoices}
-            color="orange"
-          />
-          <StatCard
-            icon="trending_up"
-            label="Total Revenue"
-            value={`₹${stats.totalRevenue.toLocaleString()}`}
-            color="purple"
-          />
-        </div>
+        <StatsSection stats={[
+          { value: stats.totalInvoices, label: 'Total Invoices', icon: 'description' },
+          { value: stats.paidInvoices, label: 'Paid Invoices', icon: 'check_circle' },
+          { value: stats.pendingInvoices, label: 'Pending Invoices', icon: 'schedule' },
+          { value: `₹${stats.totalRevenue.toLocaleString()}`, label: 'Total Revenue', icon: 'trending_up' },
+        ]} />
 
         {/* Main Table */}
         <div className="bg-white rounded-lg shadow p-6">
@@ -425,7 +405,7 @@ export default function AdminInvoicePage() {
             </div>
           )}
         </div>
-      </div>
+      </PageContainer>
 
       {/* Detail Modal */}
       {showDetailModal && selectedInvoice && (

@@ -1,23 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import Layout from '../components/Layout';
-import StatCard from '../components/StatCard';
 import { useAdmission } from '../context/AdmissionContext';
-import { getUserSession } from '../auth/sessionController';
 import AddMemberModal from '../components/AddMemberModal';
 import AdmissionDetailsModal from '../components/AdmissionDetailsModal';
-
-const statusColors = {
-  Approved: 'bg-green-100 text-green-800',
-  Rejected: 'bg-red-100 text-red-800',
-  Pending: 'bg-orange-100 text-orange-800',
-};
+import { PageContainer, StatsSection, StatusBadge, ActionButtons } from '../components/common';
 
 export default function AdmissionPage() {
-  const session = getUserSession();
   const {
     studentApps,
     facultyApps,
-    approvedStudents,
     updateStudentStatus,
     updateFacultyStatus,
     deleteStudentApp,
@@ -31,10 +22,10 @@ export default function AdmissionPage() {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   const filteredApps = useMemo(() => {
-    const apps = activeTab === 'students' ? studentApps : facultyApps;
+    let apps = activeTab === 'students' ? studentApps : facultyApps;
+    
     return apps.map(app => {
-      // Map backend faculty fields to frontend expected fields
-      if (activeTab === 'faculty') {
+      if (activeTab === 'faculty' || app.designation) {
         return {
           ...app,
           role: app.designation || app.role,
@@ -50,16 +41,8 @@ export default function AdmissionPage() {
   }, [activeTab, studentApps, facultyApps, searchName]);
 
   const stats = [
-    {
-      value: studentApps.length,
-      label: 'Total Student Adm',
-      icon: 'group',
-    },
-    {
-      value: facultyApps.length,
-      label: 'Total Faculty',
-      icon: 'person',
-    },
+    { value: studentApps.length, label: 'Total Student Adm', icon: 'group' },
+    { value: facultyApps.length, label: 'Total Faculty', icon: 'person' },
     {
       value:
         studentApps.filter((a) => a.status === 'Approved').length +
@@ -110,44 +93,21 @@ export default function AdmissionPage() {
     setShowDetailsModal(true);
   };
 
+  const getValue = (field) => {
+    if (typeof field === 'string') return field;
+    if (typeof field === 'object' && field !== null) {
+      return field.course || field.name || field.value || JSON.stringify(field);
+    }
+    return '';
+  };
+
   return (
     <Layout title="Admission Management">
-      <div className="space-y-8">
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <StatCard
-            icon="group"
-            label="Total Student Adm"
-            value={studentApps.length}
-            color="blue"
-          />
-          <StatCard
-            icon="person"
-            label="Total Faculty"
-            value={facultyApps.length}
-            color="green"
-          />
-          <StatCard
-            icon="check_circle"
-            label="Approved"
-            value={
-              studentApps.filter((a) => a.status === 'Approved').length +
-              facultyApps.filter((a) => a.status === 'Approved').length
-            }
-            color="emerald"
-          />
-          <StatCard
-            icon="cancel"
-            label="Rejected"
-            value={
-              studentApps.filter((a) => a.status === 'Rejected').length +
-              facultyApps.filter((a) => a.status === 'Rejected').length
-            }
-            color="red"
-          />
-        </div>
+      <PageContainer>
+        {/* Stats Section */}
+        <StatsSection stats={stats} />
 
-        {/* Tabs and Search */}
+        {/* Tabs and Table Section */}
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div className="flex gap-2">
@@ -200,35 +160,18 @@ export default function AdmissionPage() {
                     {activeTab === 'students' ? 'Course' : 'Role'}
                   </th>
                   {activeTab === 'faculty' && (
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      Department
-                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Department</th>
                   )}
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                    Payment Status
-                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Payment Status</th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredApps.map((app) => {
-                  // Helper function to safely extract string values from objects
-                  const getValue = (field) => {
-                    if (typeof field === 'string') return field;
-                    if (typeof field === 'object' && field !== null) {
-                      // If it's an object, try to return the course or name property
-                      return field.course || field.name || field.value || JSON.stringify(field);
-                    }
-                    return '';
-                  };
-
-                  return (
+                {filteredApps.map((app) => (
                   <tr key={app.id} className="border-b border-gray-100 hover:bg-gray-50">
                     <td className="py-3 px-4 text-gray-700">{app.id}</td>
-                    <td className="py-3 px-4 text-gray-700">
-                      {app.name || app.fullName}
-                    </td>
+                    <td className="py-3 px-4 text-gray-700">{app.name || app.fullName}</td>
                     <td className="py-3 px-4 text-gray-700">
                       {activeTab === 'students' ? getValue(app.course) : getValue(app.role)}
                     </td>
@@ -236,64 +179,31 @@ export default function AdmissionPage() {
                       <td className="py-3 px-4 text-gray-700">{getValue(app.department)}</td>
                     )}
                     <td className="py-3 px-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[app.status]}`}>
-                        {app.status}
-                      </span>
+                      <StatusBadge status={app.status} />
                     </td>
                     <td className="py-3 px-4">
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800">
-                        Pending
-                      </span>
+                      <StatusBadge status="Pending" />
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex gap-2">
-                        <button
-                          onClick={() => handleView(app)}
-                          className="p-2 hover:bg-blue-100 text-blue-600 rounded transition"
-                          title="View details"
-                        >
-                          <span className="material-symbols-outlined text-lg">visibility</span>
-                        </button>
-                        {app.status === 'Pending' && (
-                          <>
-                            <button
-                              onClick={() => handleApprove(app.id)}
-                              className="p-2 hover:bg-green-100 text-green-600 rounded transition"
-                              title="Approve"
-                            >
-                              <span className="material-symbols-outlined text-lg">check_circle</span>
-                            </button>
-                            <button
-                              onClick={() => handleReject(app.id)}
-                              className="p-2 hover:bg-red-100 text-red-600 rounded transition"
-                              title="Reject"
-                            >
-                              <span className="material-symbols-outlined text-lg">cancel</span>
-                            </button>
-                          </>
-                        )}
-                        <button
-                          onClick={() => handleDelete(app.id)}
-                          className="p-2 hover:bg-red-100 text-red-600 rounded transition"
-                          title="Delete"
-                        >
-                          <span className="material-symbols-outlined text-lg">delete</span>
-                        </button>
+                        <ActionButtons
+                          onView={() => handleView(app)}
+                          onApprove={app.status === 'Pending' ? () => handleApprove(app.id) : null}
+                          onReject={app.status === 'Pending' ? () => handleReject(app.id) : null}
+                          onDelete={() => handleDelete(app.id)}
+                        />
                       </div>
                     </td>
                   </tr>
-                  );
-                })}
+                ))}
               </tbody>
             </table>
             {filteredApps.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                No applications found
-              </div>
+              <div className="text-center py-8 text-gray-500">No applications found</div>
             )}
           </div>
         </div>
-      </div>
+      </PageContainer>
 
       {/* Modals */}
       {showAddModal && (

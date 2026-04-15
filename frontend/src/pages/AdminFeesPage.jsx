@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import Layout from '../components/Layout';
-import StatCard from '../components/StatCard';
+import { PageContainer, StatsSection } from '../components/common';
 import { useAdmission } from '../context/AdmissionContext';
 import { getUserSession } from '../auth/sessionController';
 
@@ -202,34 +202,15 @@ export default function AdminFeesPage() {
 
   return (
     <Layout title="Fee Management">
-      <div className="space-y-8">
+      <PageContainer>
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <StatCard
-            icon="assign"
-            label="Total Assigned"
-            value={stats.totalAssigned}
-            color="blue"
-          />
-          <StatCard
-            icon="check_circle"
-            label="Paid Fees"
-            value={stats.paidCount}
-            color="green"
-          />
-          <StatCard
-            icon="schedule"
-            label="Pending Fees"
-            value={stats.pendingCount}
-            color="orange"
-          />
-          <StatCard
-            icon="trending_up"
-            label="Total Revenue"
-            value={`₹${stats.totalRevenue.toLocaleString()}`}
-            color="purple"
-          />
-        </div>
+        <StatsSection stats={[
+          { value: stats.totalAssigned, label: 'Total Assigned', icon: 'assign' },
+          { value: stats.paidCount, label: 'Paid Fees', icon: 'check_circle' },
+          { value: stats.pendingCount, label: 'Pending Fees', icon: 'schedule' },
+          { value: `₹${stats.totalRevenue.toLocaleString()}`, label: 'Total Revenue', icon: 'trending_up' },
+        ]} />
+
         {/* All Fee Assignments Cards */}
         <div>
           <div className="mb-6">
@@ -367,7 +348,7 @@ export default function AdminFeesPage() {
             </div>
           </div>
         )}
-      </div>
+      </PageContainer>
 
       {/* Assign Fee Modal */}
       {showAssignModal && selectedStudent && (

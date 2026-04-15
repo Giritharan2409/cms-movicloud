@@ -37,7 +37,7 @@ export default function DashboardPage() {
     if (role === 'faculty') {
       navigate(`/attendance${roleQuery}`);
     } else if (role === 'admin') {
-      navigate(`/admissions${roleQuery}`);
+      navigate(`/admin-fees${roleQuery}`);
     } else if (role === 'finance') {
       navigate(`/invoices${roleQuery}`);
     } else if (role === 'student') {

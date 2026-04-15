@@ -35,22 +35,20 @@ export const cmsRoles = {
     name: 'Nisha Verma',
     team: 'Campus Administration',
     focus: 'Operations',
-    primaryAction: 'Approve Admissions',
+    primaryAction: 'View Fees',
     secondaryAction: 'Manage Department',
-    subtitle: 'Manage students, faculty, admissions, and departments.',
+    subtitle: 'Manage students, faculty, and departments.',
     stats: [
       { value: '1840', label: 'Total Students', sub: 'Across all departments' },
       { value: '128', label: 'Faculty Members', sub: 'Active this semester' },
-      { value: '76', label: 'New Admissions', sub: 'Awaiting review' },
+      { value: '45', label: 'Active Events', sub: 'This month' },
       { value: '12', label: 'Dept Requests', sub: 'Need action today' },
     ],
     tasks: [
-      { title: 'Approve 24 admission applications', desc: 'Priority: Merit scholarship batch' },
       { title: 'Publish department circular', desc: 'Academic calendar for next term' },
       { title: 'Assign new faculty to sections', desc: '6 classes still unassigned' },
     ],
     alerts: [
-      { title: 'Document mismatch found', desc: '8 admission forms require verification' },
       { title: 'Department budget exceeded', desc: 'Civil Engineering crossed monthly cap' },
     ],
   },
@@ -130,7 +128,7 @@ export const roleMenuGroups = {
     },
     {
       title: 'Administration',
-      items: ['Admin Dashboard', 'Admission', 'Fees', 'Invoices'],
+      items: ['Admission', 'Fees', 'Invoices'],
     },
     {
       title: 'Intelligence',

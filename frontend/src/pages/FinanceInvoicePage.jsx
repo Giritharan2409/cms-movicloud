@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Layout from '../components/Layout';
+import { PageContainer, StatsSection } from '../components/common';
 import { API_BASE } from '../api/apiBase';
 
 export default function FinanceInvoicePage() {
@@ -84,46 +85,17 @@ export default function FinanceInvoicePage() {
 
     return (
         <Layout title="Payroll Invoices">
-            <div className="space-y-6">
-                {/* Stats Header */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <div className="flex items-center gap-4">
-                            <div className="bg-blue-50 p-3 rounded-xl text-blue-600">
-                                <span className="material-symbols-outlined text-2xl">description</span>
-                            </div>
-                            <div>
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Invoices</p>
-                                <p className="text-2xl font-bold text-slate-800">{stats.total}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <div className="flex items-center gap-4">
-                            <div className="bg-amber-50 p-3 rounded-xl text-amber-600">
-                                <span className="material-symbols-outlined text-2xl">pending_actions</span>
-                            </div>
-                            <div>
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending Action</p>
-                                <p className="text-2xl font-bold text-slate-800">{stats.pending}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <div className="flex items-center gap-4">
-                            <div className="bg-emerald-50 p-3 rounded-xl text-emerald-600">
-                                <span className="material-symbols-outlined text-2xl">check_circle</span>
-                            </div>
-                            <div>
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Paid</p>
-                                <p className="text-2xl font-bold text-slate-800">{stats.paid}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <PageContainer>
+                {/* Stats Section */}
+                <StatsSection stats={[
+                    { value: stats.total, label: 'Total Invoices', icon: 'description' },
+                    { value: stats.pending, label: 'Pending Action', icon: 'pending_actions' },
+                    { value: stats.paid, label: 'Total Paid', icon: 'check_circle' },
+                    { value: filteredInvoices.length, label: 'Filtered Results', icon: 'filter_alt' },
+                ]} />
 
                 {/* Filters & Search */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div className="bg-white p-6 rounded-lg shadow border border-slate-100">
                     <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
                         <div className="relative w-full md:w-96">
                             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
@@ -240,7 +212,7 @@ export default function FinanceInvoicePage() {
                         </table>
                     </div>
                 </div>
-            </div>
+            </PageContainer>
         </Layout>
     );
 }
