@@ -97,7 +97,7 @@ export default function AddResearchProjectModal({ isOpen, onClose, onSuccess, le
                   onChange={handleChange}
                   required
                   placeholder="e.g. AI-driven Personalized Learning"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                 />
               </div>
 
@@ -108,7 +108,7 @@ export default function AddResearchProjectModal({ isOpen, onClose, onSuccess, le
                   value={formData.description}
                   onChange={handleChange}
                   rows="2"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                   placeholder="Brief summary of the research goals..."
                 ></textarea>
               </div>
@@ -121,7 +121,7 @@ export default function AddResearchProjectModal({ isOpen, onClose, onSuccess, le
                   value={formData.collaboratorIds}
                   onChange={handleChange}
                   placeholder="e.g. FAC-1001, FAC-1002"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                 />
               </div>
 
@@ -132,7 +132,7 @@ export default function AddResearchProjectModal({ isOpen, onClose, onSuccess, le
                   name="fundingAmount"
                   value={formData.fundingAmount}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                   placeholder="e.g. 50000"
                 />
               </div>
@@ -144,7 +144,7 @@ export default function AddResearchProjectModal({ isOpen, onClose, onSuccess, le
                   name="fundingSource"
                   value={formData.fundingSource}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                   placeholder="e.g. NSF Grant"
                 />
               </div>
@@ -156,7 +156,7 @@ export default function AddResearchProjectModal({ isOpen, onClose, onSuccess, le
                   name="start_date"
                   value={formData.start_date}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                 />
               </div>
               
@@ -166,7 +166,7 @@ export default function AddResearchProjectModal({ isOpen, onClose, onSuccess, le
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all bg-white"
                 >
                   <option value="Proposed">Proposed</option>
                   <option value="Ongoing">Ongoing</option>
@@ -191,7 +191,7 @@ export default function AddResearchProjectModal({ isOpen, onClose, onSuccess, le
             type="submit" 
             form="researchProjectForm"
             disabled={loading}
-            className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-sm disabled:opacity-50"
+            className="px-6 py-2.5 text-sm font-bold text-white bg-green-700 rounded-xl hover:bg-green-800 active:scale-95 transition-all shadow-sm disabled:opacity-50"
           >
             {loading ? 'Saving...' : 'Add Project'}
           </button>

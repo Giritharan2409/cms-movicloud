@@ -292,7 +292,7 @@ export default function AdminInvoicePage() {
             icon="description"
             label="Total Invoices"
             value={stats.totalInvoices}
-            colorScheme="blue"
+            colorScheme="green"
           />
           <KpiCard
             icon="check_circle"
@@ -304,7 +304,7 @@ export default function AdminInvoicePage() {
             icon="sync"
             label="Processing"
             value={stats.processingInvoices}
-            colorScheme="cyan"
+            colorScheme="emerald"
           />
           <KpiCard
             icon="schedule"
@@ -333,7 +333,7 @@ export default function AdminInvoicePage() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 placeholder="Search by name, ID, or invoice..."
               />
             </div>
@@ -341,7 +341,7 @@ export default function AdminInvoicePage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
               >
                 <option value="all">All Status</option>
                 <option value="paid">Paid</option>
@@ -352,7 +352,7 @@ export default function AdminInvoicePage() {
               <select
                 value={courseFilter}
                 onChange={(e) => setCourseFilter(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
               >
                 <option value="all">All Courses</option>
                 {allCourses.map((course) => (
@@ -396,7 +396,7 @@ export default function AdminInvoicePage() {
                           invoice.paymentStatus?.toLowerCase() === 'paid'
                             ? 'bg-green-100 text-green-800'
                             : invoice.paymentStatus?.toLowerCase() === 'processing'
-                              ? 'bg-blue-100 text-blue-800'
+                              ? 'bg-green-100 text-green-800'
                               : 'bg-orange-100 text-orange-800'
                         }`}>
                           {invoice.paymentStatus}
@@ -406,7 +406,7 @@ export default function AdminInvoicePage() {
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleView(invoice)}
-                            className="p-2 hover:bg-blue-100 text-blue-600 rounded transition"
+                            className="p-2 hover:bg-green-100 text-green-600 rounded transition"
                             title="View details"
                           >
                             <span className="material-symbols-outlined text-lg">visibility</span>
@@ -563,7 +563,7 @@ export default function AdminInvoicePage() {
             <div className="flex gap-3">
               <button
                 onClick={() => handleDownloadPDF(selectedInvoice)}
-                className="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition flex items-center justify-center gap-2"
+                className="flex-1 bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined">download</span>
                 Download PDF

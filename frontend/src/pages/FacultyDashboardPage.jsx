@@ -119,7 +119,7 @@ function AttendanceModal({ isOpen, onClose, onSubmit }) {
             onClick={handleSubmit}
             style={{
               padding: '8px 16px',
-              background: '#2563eb',
+              background: '#276221',
               color: 'white',
               border: 'none',
               borderRadius: '6px',
@@ -128,8 +128,8 @@ function AttendanceModal({ isOpen, onClose, onSubmit }) {
               cursor: 'pointer',
               transition: 'all 0.2s'
             }}
-            onMouseEnter={(e) => e.target.style.background = '#1d4ed8'}
-            onMouseLeave={(e) => e.target.style.background = '#2563eb'}
+            onMouseEnter={(e) => e.target.style.background = '#1e4618'}
+            onMouseLeave={(e) => e.target.style.background = '#276221'}
           >
             Submit
           </button>
@@ -268,7 +268,7 @@ function PublishMarksModal({ isOpen, onClose, onSubmit }) {
             onClick={handleSubmit}
             style={{
               padding: '8px 16px',
-              background: '#2563eb',
+              background: '#276221',
               color: 'white',
               border: 'none',
               borderRadius: '6px',
@@ -277,8 +277,8 @@ function PublishMarksModal({ isOpen, onClose, onSubmit }) {
               cursor: 'pointer',
               transition: 'all 0.2s'
             }}
-            onMouseEnter={(e) => e.target.style.background = '#1d4ed8'}
-            onMouseLeave={(e) => e.target.style.background = '#2563eb'}
+            onMouseEnter={(e) => e.target.style.background = '#1e4618'}
+            onMouseLeave={(e) => e.target.style.background = '#276221'}
           >
             Publish
           </button>
@@ -326,10 +326,10 @@ export default function FacultyDashboardPage() {
   }, [data.label, location.search, navigate, sessionRole, sessionUserId]);
 
   const statColors = [
-    { bg: '#eff6ff', border: '#bfdbfe', text: '#2563eb', number: '#1d4ed8' },
+    { bg: '#e8f1eb', border: '#9ccf89', text: '#276221', number: '#1e4618' },
     { bg: '#f0fdf4', border: '#bbf7d0', text: '#16a34a', number: '#15803d' },
     { bg: '#fdf2f8', border: '#fbcfe8', text: '#ec4899', number: '#be185d' },
-    { bg: '#ecf5ff', border: '#a5f3fc', text: '#0891b2', number: '#0369a1' }
+    { bg: '#e8f1eb', border: '#bfe6c7', text: '#3d8b30', number: '#1e4618' }
   ];
 
   return (
@@ -352,7 +352,7 @@ export default function FacultyDashboardPage() {
               width: '64px',
               height: '64px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #2563eb 0%, #0891b2 100%)',
+              background: 'linear-gradient(135deg, #276221 0%, #3d8b30 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -381,7 +381,7 @@ export default function FacultyDashboardPage() {
               onClick={() => setIsAttendanceModalOpen(true)}
               style={{
               padding: '10px 20px',
-              background: '#2563eb',
+              background: '#276221',
               color: 'white',
               border: 'none',
               borderRadius: '8px',
@@ -391,8 +391,8 @@ export default function FacultyDashboardPage() {
               transition: 'all 0.2s',
               boxShadow: '0 1px 2px rgba(37, 99, 235, 0.3)'
             }}
-            onMouseEnter={(e) => e.target.style.background = '#1d4ed8'}
-            onMouseLeave={(e) => e.target.style.background = '#2563eb'}
+            onMouseEnter={(e) => e.target.style.background = '#1e4618'}
+            onMouseLeave={(e) => e.target.style.background = '#276221'}
             >
               {data.primaryAction}
             </button>

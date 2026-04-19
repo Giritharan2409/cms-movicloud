@@ -19,10 +19,10 @@ export default function KpiCard({
   // Consistent color scheme across all KPI cards
   const colorSchemes = {
     blue: {
-      bg: 'bg-blue-50',
-      border: 'border-blue-200',
-      text: 'text-blue-600',
-      icon: 'bg-blue-100'
+      bg: 'bg-green-50',
+      border: 'border-green-200',
+      text: 'text-green-700',
+      icon: 'bg-green-100'
     },
     green: {
       bg: 'bg-green-50',

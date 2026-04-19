@@ -331,7 +331,7 @@ function AttendanceTable({ data, type, isAdmin }) {
                   <div className="flex items-center gap-3">
                     <div className="w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-[#1162d4] transition-all duration-700 ease-out"
+                        className="h-full rounded-full bg-[#276221] transition-all duration-700 ease-out"
                         style={{ width: `${Math.min(pct, 100)}%` }}
                       />
                     </div>
@@ -1242,7 +1242,7 @@ export default function AttendancePage({ noLayout = false }) {
         <div className="flex justify-start mb-6">
           <button
             onClick={exportAttendanceReport}
-            className="flex items-center gap-2 px-4 py-2 bg-[#1162d4] text-white rounded-lg text-sm font-semibold hover:bg-[#1162d4]/90"
+            className="flex items-center gap-2 px-4 py-2 bg-[#276221] text-white rounded-lg text-sm font-semibold hover:bg-[#276221]/90"
           >
             <span className="material-symbols-outlined text-lg">download</span>Export Report
           </button>
@@ -1279,13 +1279,13 @@ export default function AttendancePage({ noLayout = false }) {
                     <p className="text-2xl font-bold text-red-900">{dailySummaryCounts.absent}</p>
                   </div>
                 </div>
-                <div className="bg-blue-50 rounded-xl border border-blue-200 p-5 shadow-sm flex items-center gap-4">
-                  <div className="p-3 rounded-xl text-blue-700 bg-blue-100">
+                <div className="bg-green-50 rounded-xl border border-green-200 p-5 shadow-sm flex items-center gap-4">
+                  <div className="p-3 rounded-xl text-green-700 bg-green-100">
                     <span className="material-symbols-outlined">event_available</span>
                   </div>
                   <div>
-                    <p className="text-xs text-blue-700 font-medium">OD (Selected Date)</p>
-                    <p className="text-2xl font-bold text-blue-900">{dailySummaryCounts.od}</p>
+                    <p className="text-xs text-green-700 font-medium">OD (Selected Date)</p>
+                    <p className="text-2xl font-bold text-green-900">{dailySummaryCounts.od}</p>
                   </div>
                 </div>
               </div>
@@ -1295,13 +1295,13 @@ export default function AttendancePage({ noLayout = false }) {
           if (showStudentOdApplyView) {
             return (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-blue-50 rounded-xl border border-blue-200 p-5 shadow-sm flex items-center gap-4">
-                  <div className="p-3 rounded-xl text-blue-700 bg-blue-100">
+                <div className="bg-green-50 rounded-xl border border-green-200 p-5 shadow-sm flex items-center gap-4">
+                  <div className="p-3 rounded-xl text-green-700 bg-green-100">
                     <span className="material-symbols-outlined">assignment</span>
                   </div>
                   <div>
-                    <p className="text-xs text-blue-700 font-medium">OD Applied</p>
-                    <p className="text-2xl font-bold text-blue-900">{odSummaryCounts.applied}</p>
+                    <p className="text-xs text-green-700 font-medium">OD Applied</p>
+                    <p className="text-2xl font-bold text-green-900">{odSummaryCounts.applied}</p>
                   </div>
                 </div>
                 <div className="bg-green-50 rounded-xl border border-green-200 p-5 shadow-sm flex items-center gap-4">
@@ -1328,13 +1328,13 @@ export default function AttendancePage({ noLayout = false }) {
 
           return (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="bg-blue-50 rounded-xl border border-blue-200 p-5 shadow-sm flex items-center gap-4">
-                <div className="p-3 rounded-xl text-blue-700 bg-blue-100">
+              <div className="bg-green-50 rounded-xl border border-green-200 p-5 shadow-sm flex items-center gap-4">
+                <div className="p-3 rounded-xl text-green-700 bg-green-100">
                   <span className="material-symbols-outlined">calendar_today</span>
                 </div>
                 <div>
-                  <p className="text-xs text-blue-700 font-medium">Total Classes</p>
-                  <p className="text-2xl font-bold text-blue-900">{myEffectiveAttendance.total}</p>
+                  <p className="text-xs text-green-700 font-medium">Total Classes</p>
+                  <p className="text-2xl font-bold text-green-900">{myEffectiveAttendance.total}</p>
                 </div>
               </div>
               <div className={`rounded-xl border p-5 shadow-sm flex items-center gap-4 ${attendanceTone.card}`}>
@@ -1369,7 +1369,7 @@ export default function AttendancePage({ noLayout = false }) {
         return (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex items-center gap-4">
-              <div className="p-3 rounded-xl text-[#1162d4] bg-[#1162d4]/10">
+              <div className="p-3 rounded-xl text-[#276221] bg-[#276221]/10">
                 <span className="material-symbols-outlined">{isStudentSummary ? 'school' : 'badge'}</span>
               </div>
               <div>
@@ -1461,16 +1461,16 @@ export default function AttendancePage({ noLayout = false }) {
                 <>
                   <Bar dataKey="present" name="Present" fill="#16a34a" radius={[6, 6, 0, 0]} />
                   <Bar dataKey="absent" name="Absent" fill="#dc2626" radius={[6, 6, 0, 0]} />
-                  <Bar dataKey="od" name="On Duty" fill="#2563eb" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="od" name="On Duty" fill="#276221" radius={[6, 6, 0, 0]} />
                 </>
               ) : isStudent && showStudentOdApplyView ? (
                 <>
-                  <Bar dataKey="applied" name="OD Applied" fill="#2563eb" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="applied" name="OD Applied" fill="#276221" radius={[6, 6, 0, 0]} />
                   <Bar dataKey="approved" name="OD Approved" fill="#16a34a" radius={[6, 6, 0, 0]} />
                   <Bar dataKey="pending" name="OD Pending" fill="#d97706" radius={[6, 6, 0, 0]} />
                 </>
               ) : (
-                <Bar dataKey="attendance" name="Attendance" fill="#1162d4" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="attendance" name="Attendance" fill="#276221" radius={[6, 6, 0, 0]} />
               )}
             </BarChart>
           </ResponsiveContainer>
@@ -1554,7 +1554,7 @@ export default function AttendancePage({ noLayout = false }) {
             <button
               onClick={() => setActiveTab('students')}
               className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                activeTab === 'students' ? 'bg-white text-[#1162d4] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                activeTab === 'students' ? 'bg-white text-[#276221] shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               <span className="material-symbols-outlined text-base">school</span>Students
@@ -1562,7 +1562,7 @@ export default function AttendancePage({ noLayout = false }) {
             <button
               onClick={() => setActiveTab('staff')}
               className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                activeTab === 'staff' ? 'bg-white text-[#1162d4] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                activeTab === 'staff' ? 'bg-white text-[#276221] shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               <span className="material-symbols-outlined text-base">badge</span>Staff
@@ -1573,7 +1573,7 @@ export default function AttendancePage({ noLayout = false }) {
             <button
               onClick={() => setStaffViewTab('my')}
               className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                staffViewTab === 'my' ? 'bg-white text-[#1162d4] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                staffViewTab === 'my' ? 'bg-white text-[#276221] shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               <span className="material-symbols-outlined text-base">person</span>My Attendance
@@ -1581,7 +1581,7 @@ export default function AttendancePage({ noLayout = false }) {
             <button
               onClick={() => setStaffViewTab('mark')}
               className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                staffViewTab === 'mark' ? 'bg-white text-[#1162d4] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                staffViewTab === 'mark' ? 'bg-white text-[#276221] shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               <span className="material-symbols-outlined text-base">checklist</span>Mark Attendance
@@ -1589,7 +1589,7 @@ export default function AttendancePage({ noLayout = false }) {
             <button
               onClick={() => { setStaffViewTab('od'); setFacultyOdNotice(''); refreshFacultyOdRequests() }}
               className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                staffViewTab === 'od' ? 'bg-white text-[#1162d4] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                staffViewTab === 'od' ? 'bg-white text-[#276221] shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               <span className="material-symbols-outlined text-base">approval</span>
@@ -1606,7 +1606,7 @@ export default function AttendancePage({ noLayout = false }) {
             <button
               onClick={() => setStudentViewTab('my')}
               className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                studentViewTab === 'my' ? 'bg-white text-[#1162d4] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                studentViewTab === 'my' ? 'bg-white text-[#276221] shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               <span className="material-symbols-outlined text-base">person</span>My Attendance
@@ -1614,7 +1614,7 @@ export default function AttendancePage({ noLayout = false }) {
             <button
               onClick={() => setStudentViewTab('daily')}
               className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                studentViewTab === 'daily' ? 'bg-white text-[#1162d4] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                studentViewTab === 'daily' ? 'bg-white text-[#276221] shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               <span className="material-symbols-outlined text-base">calendar_month</span>Daily Attendance
@@ -1622,7 +1622,7 @@ export default function AttendancePage({ noLayout = false }) {
             <button
               onClick={() => setStudentViewTab('od')}
               className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                studentViewTab === 'od' ? 'bg-white text-[#1162d4] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                studentViewTab === 'od' ? 'bg-white text-[#276221] shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               <span className="material-symbols-outlined text-base">event_upcoming</span>Apply OD
@@ -1644,7 +1644,7 @@ export default function AttendancePage({ noLayout = false }) {
                 placeholder="Search by name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 py-2 w-56 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4] transition-all duration-200"
+                className="pl-9 pr-4 py-2 w-56 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#276221]/30 focus:border-[#276221] transition-all duration-200"
               />
             </div>
 
@@ -1654,7 +1654,7 @@ export default function AttendancePage({ noLayout = false }) {
                 onClick={() => setFilterOpen(prev => !prev)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium border transition-all duration-200 ${
                   activeFilterCount > 0
-                    ? 'bg-[#1162d4] text-white border-[#1162d4] shadow-sm'
+                    ? 'bg-[#276221] text-white border-[#276221] shadow-sm'
                     : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 shadow-sm'
                 }`}
               >
@@ -1672,7 +1672,7 @@ export default function AttendancePage({ noLayout = false }) {
                           onClick={() => setActiveFilterTab(tab.id)}
                           className={`px-2 py-2 text-xs font-semibold rounded-t-lg transition-colors ${
                             activeFilterTab === tab.id
-                              ? 'text-[#1162d4] border-b-2 border-[#1162d4]'
+                              ? 'text-[#276221] border-b-2 border-[#276221]'
                               : 'text-slate-500 hover:text-slate-700'
                           }`}
                         >
@@ -1692,7 +1692,7 @@ export default function AttendancePage({ noLayout = false }) {
                               key={opt}
                               onClick={() => toggleFilterValue(opt, setSelectedStatuses)}
                               className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                                checked ? 'bg-[#1162d4]/10 text-[#1162d4] font-semibold' : 'text-slate-600 hover:bg-slate-50'
+                                checked ? 'bg-[#276221]/10 text-[#276221] font-semibold' : 'text-slate-600 hover:bg-slate-50'
                               }`}
                             >
                               <span className="flex items-center gap-2">
@@ -1718,7 +1718,7 @@ export default function AttendancePage({ noLayout = false }) {
                               key={range.id}
                               onClick={() => toggleFilterValue(range.id, setSelectedAttendanceRange)}
                               className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                                checked ? 'bg-[#1162d4]/10 text-[#1162d4] font-semibold' : 'text-slate-600 hover:bg-slate-50'
+                                checked ? 'bg-[#276221]/10 text-[#276221] font-semibold' : 'text-slate-600 hover:bg-slate-50'
                               }`}
                             >
                               <span>{range.label}</span>
@@ -1741,7 +1741,7 @@ export default function AttendancePage({ noLayout = false }) {
                               key={course}
                               onClick={() => toggleFilterValue(course, setSelectedCourses)}
                               className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                                checked ? 'bg-[#1162d4]/10 text-[#1162d4] font-semibold' : 'text-slate-600 hover:bg-slate-50'
+                                checked ? 'bg-[#276221]/10 text-[#276221] font-semibold' : 'text-slate-600 hover:bg-slate-50'
                               }`}
                             >
                               <span className="truncate text-left">{course}</span>
@@ -1780,7 +1780,7 @@ export default function AttendancePage({ noLayout = false }) {
                 <select
                   value={selectedClassId}
                   onChange={(e) => { setSelectedClassId(e.target.value); setMarkNotice('') }}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#276221]/30 focus:border-[#276221]"
                 >
                   {classOptions.length === 0 && <option value="">No classes available</option>}
                   {classOptions.map((option) => (
@@ -1794,7 +1794,7 @@ export default function AttendancePage({ noLayout = false }) {
                   type="date"
                   value={attendanceDate}
                   onChange={(e) => { setAttendanceDate(e.target.value); setMarkNotice('') }}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#276221]/30 focus:border-[#276221]"
                 />
               </div>
               <div>
@@ -1802,7 +1802,7 @@ export default function AttendancePage({ noLayout = false }) {
                 <select
                   value={attendanceHour}
                   onChange={(e) => { setAttendanceHour(e.target.value); setMarkNotice('') }}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#276221]/30 focus:border-[#276221]"
                 >
                   {STAFF_MARK_HOURS.map((hour) => (
                     <option key={hour} value={hour}>{hour}</option>
@@ -1827,7 +1827,7 @@ export default function AttendancePage({ noLayout = false }) {
                 </span>
                 <button
                   onClick={saveMarkedAttendance}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#1162d4] text-white rounded-lg text-sm font-semibold hover:bg-[#1162d4]/90 transition-all"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#276221] text-white rounded-lg text-sm font-semibold hover:bg-[#276221]/90 transition-all"
                 >
                   <span className="material-symbols-outlined text-base">save</span>
                   Save
@@ -1965,7 +1965,7 @@ export default function AttendancePage({ noLayout = false }) {
                             href={request.proofImageData}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-1 text-[#1162d4] font-semibold hover:underline"
+                            className="inline-flex items-center gap-1 text-[#276221] font-semibold hover:underline"
                           >
                             <span className="material-symbols-outlined text-sm">image</span>
                             View
@@ -2023,7 +2023,7 @@ export default function AttendancePage({ noLayout = false }) {
               type="date"
               value={studentDailyDate}
               onChange={(e) => setStudentDailyDate(e.target.value)}
-              className="px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+              className="px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#276221]/30 focus:border-[#276221]"
             />
           </div>
 
@@ -2049,7 +2049,7 @@ export default function AttendancePage({ noLayout = false }) {
                       <div className="flex flex-col items-center gap-1">
                         <span>{row.label}</span>
                         {row.isToday && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#1162d4]/10 text-[#1162d4]">Today</span>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#276221]/10 text-[#276221]">Today</span>
                         )}
                       </div>
                     </td>
@@ -2106,7 +2106,7 @@ export default function AttendancePage({ noLayout = false }) {
                   type="date"
                   value={odApplyFromDate}
                   onChange={(e) => { setOdApplyFromDate(e.target.value); setOdNotice('') }}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#276221]/30 focus:border-[#276221]"
                 />
               </div>
 
@@ -2116,7 +2116,7 @@ export default function AttendancePage({ noLayout = false }) {
                   type="date"
                   value={odApplyToDate}
                   onChange={(e) => { setOdApplyToDate(e.target.value); setOdNotice('') }}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#276221]/30 focus:border-[#276221]"
                 />
               </div>
 
@@ -2127,7 +2127,7 @@ export default function AttendancePage({ noLayout = false }) {
                   value={odApplyReason}
                   onChange={(e) => { setOdApplyReason(e.target.value); setOdNotice('') }}
                   placeholder="Ex: Inter-college event, workshop, placement drive"
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1162d4]/30 focus:border-[#1162d4]"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#276221]/30 focus:border-[#276221]"
                 />
               </div>
             </div>
@@ -2210,7 +2210,7 @@ export default function AttendancePage({ noLayout = false }) {
             <div className="mt-4 flex items-center justify-end">
               <button
                 onClick={submitOdRequest}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#1162d4] text-white rounded-lg text-sm font-semibold hover:bg-[#1162d4]/90 transition-all"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#276221] text-white rounded-lg text-sm font-semibold hover:bg-[#1e4618] transition-all"
               >
                 <span className="material-symbols-outlined text-base">{odEditingRequestId ? 'save' : 'send'}</span>
                 {odEditingRequestId ? 'Update OD Request' : 'Submit OD Request'}
@@ -2274,7 +2274,7 @@ export default function AttendancePage({ noLayout = false }) {
                             href={request.proofImageData}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-1 text-[#1162d4] font-semibold hover:underline"
+                            className="inline-flex items-center gap-1 text-[#276221] font-semibold hover:underline"
                           >
                             <span className="material-symbols-outlined text-sm">image</span>
                             View

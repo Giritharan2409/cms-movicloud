@@ -128,7 +128,7 @@ export default function WorkloadDashboard({ facultyId, semester, academicYear })
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
           <h4 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
-            <Zap size={18} className="text-blue-600" />
+            <Zap size={18} className="text-green-600" />
             Teaching Load
           </h4>
           <div className="space-y-2 text-sm">
@@ -188,9 +188,9 @@ export default function WorkloadDashboard({ facultyId, semester, academicYear })
       )}
 
       {workload.status === 'Underloaded' && (
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">ℹ️ Workload Opportunity</h4>
-          <p className="text-sm text-blue-800">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+          <h4 className="font-semibold text-green-900 mb-2">ℹ️ Workload Opportunity</h4>
+          <p className="text-sm text-green-800">
             Your workload is below the recommended level. Consider taking up additional courses, research projects, or committee roles.
           </p>
         </div>

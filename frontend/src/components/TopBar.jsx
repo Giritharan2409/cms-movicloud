@@ -20,7 +20,7 @@ export default function TopBar({
     <header className={`h-20 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-10 backdrop-blur-md bg-white/80 transition-all duration-300 ${isSidebarVisible ? 'px-10' : 'pl-24 pr-10'}`}>
       <div className="flex items-center gap-4 flex-1">
         <div>
-          <h2 className="text-[20px] font-bold text-[#2563eb] tracking-tight">MIT Connect</h2>
+          <h2 className="text-[20px] font-bold text-[#276221] tracking-tight">MIT Connect</h2>
           <p className="text-xs text-slate-500">{title || 'Dashboard'}</p>
         </div>
       </div>
@@ -31,7 +31,7 @@ export default function TopBar({
           placeholder="Global search..."
           value={globalSearch}
           onChange={(e) => setGlobalSearch(e.target.value)}
-          className="w-48 px-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-slate-50 hover:bg-white"
+          className="w-48 px-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500 focus:border-transparent transition-all bg-slate-50 hover:bg-white"
         />
         {globalSearch && (
           <button

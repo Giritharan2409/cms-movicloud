@@ -27,7 +27,7 @@ export default class ErrorBoundary extends React.Component {
                 localStorage.clear();
                 window.location.reload();
               }}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded"
             >
               Clear Data & Reload
             </button>

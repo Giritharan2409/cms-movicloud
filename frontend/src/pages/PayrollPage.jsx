@@ -527,7 +527,7 @@ export default function PayrollPage({ noLayout = false }) {
                         icon="sync"
                         label="Processing"
                         value={stats.processingCount}
-                        colorScheme="blue"
+                        colorScheme="green"
                     />
                     <KpiCard
                         icon="edit_note"
@@ -714,7 +714,7 @@ export default function PayrollPage({ noLayout = false }) {
                                     <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, position: 'relative' }}>
                                         <div style={{
                                             width: 32, height: 32, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 600,
-                                            background: isActive || isPassed ? '#2563eb' : '#e5e7eb',
+                                            background: isActive || isPassed ? '#276221' : '#e5e7eb',
                                             color: isActive || isPassed ? '#fff' : '#6b7280',
                                             marginBottom: 8, zIndex: 2
                                         }}>
@@ -722,7 +722,7 @@ export default function PayrollPage({ noLayout = false }) {
                                         </div>
                                         <div style={{ fontSize: 12, fontWeight: isActive ? 600 : 500, color: isActive ? '#1f2937' : '#6b7280' }}>{label}</div>
                                         {idx < 2 && (
-                                            <div style={{ position: 'absolute', top: 16, left: '50%', width: '100%', height: 2, background: isPassed ? '#2563eb' : '#e5e7eb', zIndex: 1 }} />
+                                            <div style={{ position: 'absolute', top: 16, left: '50%', width: '100%', height: 2, background: isPassed ? '#276221' : '#e5e7eb', zIndex: 1 }} />
                                         )}
                                     </div>
                                 );
@@ -831,7 +831,7 @@ export default function PayrollPage({ noLayout = false }) {
                                                             Email: {faculty.email || '—'} • Phone: {faculty.phone || '—'}
                                                         </div>
                                                     </div>
-                                                    {isSelected && <div style={{ color: '#2563eb', fontWeight: 600 }}>Selected</div>}
+                                                    {isSelected && <div style={{ color: '#276221', fontWeight: 600 }}>Selected</div>}
                                                 </div>
                                             );
                                         })}
@@ -916,7 +916,7 @@ export default function PayrollPage({ noLayout = false }) {
                                             {/* Net Pay Highlight */}
                                             <div style={{ background: '#eff6ff', padding: '16px', borderTop: '1px solid #bfdbfe', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <span style={{ fontSize: 15, fontWeight: 700, color: '#1e3a8a' }}>NET PAY</span>
-                                                <span style={{ fontSize: 20, fontWeight: 800, color: '#2563eb' }}>{formatCurrency(calculateNet())}</span>
+                                                <span style={{ fontSize: 20, fontWeight: 800, color: '#276221' }}>{formatCurrency(calculateNet())}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -938,7 +938,7 @@ export default function PayrollPage({ noLayout = false }) {
                                                 <div><span style={{ color: '#6b7280', fontSize: 13 }}>Category:</span> <span style={{ fontWeight: 500, fontSize: 14 }}>{wizardData.category}</span></div>
                                                 <div><span style={{ color: '#6b7280', fontSize: 13 }}>Designation:</span> <span style={{ fontWeight: 500, fontSize: 14 }}>{wizardData.designation}</span></div>
                                                 <div><span style={{ color: '#6b7280', fontSize: 13 }}>Department:</span> <span style={{ fontWeight: 500, fontSize: 14 }}>{wizardData.department}</span></div>
-                                                <div><span style={{ color: '#6b7280', fontSize: 13 }}>Pay Period:</span> <span style={{ fontWeight: 600, fontSize: 14, color: '#2563eb' }}>{wizardData.payMonth} {wizardData.payYear}</span></div>
+                                                <div><span style={{ color: '#6b7280', fontSize: 13 }}>Pay Period:</span> <span style={{ fontWeight: 600, fontSize: 14, color: '#276221' }}>{wizardData.payMonth} {wizardData.payYear}</span></div>
                                             </div>
                                         </div>
 
@@ -1068,7 +1068,7 @@ export default function PayrollPage({ noLayout = false }) {
                                 <div style={{ height: 1, background: '#e5e7eb', margin: '12px 0' }} />
                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <span style={{ color: '#1f2937', fontSize: 16, fontWeight: 600 }}>Net Pay</span>
-                                    <span style={{ fontWeight: 700, color: '#2563eb', fontSize: 18 }}>{formatCurrency(viewingRecord.netPay)}</span>
+                                    <span style={{ fontWeight: 700, color: '#276221', fontSize: 18 }}>{formatCurrency(viewingRecord.netPay)}</span>
                                 </div>
                             </div>
 
@@ -1146,7 +1146,7 @@ export default function PayrollPage({ noLayout = false }) {
 
                             <div style={{ display: 'flex', gap: 12 }}>
                                 <button type="button" className="btn-secondary-sm" style={{ flex: 1 }} onClick={() => setIsRunPayrollModalOpen(false)}>Cancel</button>
-                                <button type="button" className="btn-primary-sm" style={{ flex: 1, background: '#2563eb' }} onClick={executeRunPayroll}>Confirm & Run</button>
+                                <button type="button" className="btn-primary-sm" style={{ flex: 1, background: '#276221' }} onClick={executeRunPayroll}>Confirm & Run</button>
                             </div>
                         </div>
                     </div>
@@ -1261,7 +1261,7 @@ export default function PayrollPage({ noLayout = false }) {
 
                             <div style={{ padding: '16px 24px', borderTop: '1px solid #e5e7eb', display: 'flex', justifyContent: 'flex-end', gap: 12, background: '#fff', borderRadius: '0 0 16px 16px' }}>
                                 <button type="button" className="btn-secondary-sm" onClick={() => setEditingRecord(null)}>Cancel</button>
-                                <button type="submit" className="btn-primary-sm" style={{ background: '#2563eb', color: '#fff' }}>Save Changes</button>
+                                <button type="submit" className="btn-primary-sm" style={{ background: '#276221', color: '#fff' }}>Save Changes</button>
                             </div>
                         </form>
                     </div>

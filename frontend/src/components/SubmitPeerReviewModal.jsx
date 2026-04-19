@@ -90,7 +90,7 @@ export default function SubmitPeerReviewModal({ isOpen, onClose, onSuccess, revi
                   onChange={handleChange}
                   required
                   placeholder="e.g. FAC-1234"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 transition-all"
                 />
               </div>
 
@@ -105,7 +105,7 @@ export default function SubmitPeerReviewModal({ isOpen, onClose, onSuccess, revi
                   value={formData.rating}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 transition-all"
                 />
               </div>
 
@@ -117,7 +117,7 @@ export default function SubmitPeerReviewModal({ isOpen, onClose, onSuccess, revi
                   onChange={handleChange}
                   required
                   rows="3"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 transition-all"
                   placeholder="Provide overall constructive feedback..."
                 ></textarea>
               </div>
@@ -129,7 +129,7 @@ export default function SubmitPeerReviewModal({ isOpen, onClose, onSuccess, revi
                   value={formData.strengths}
                   onChange={handleChange}
                   rows="2"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 transition-all"
                   placeholder="What does this faculty member do well?"
                 ></textarea>
               </div>
@@ -141,7 +141,7 @@ export default function SubmitPeerReviewModal({ isOpen, onClose, onSuccess, revi
                   value={formData.areas_for_improvement}
                   onChange={handleChange}
                   rows="2"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 transition-all"
                   placeholder="Where can this faculty member improve?"
                 ></textarea>
               </div>
@@ -161,7 +161,7 @@ export default function SubmitPeerReviewModal({ isOpen, onClose, onSuccess, revi
             type="submit" 
             form="peerReviewForm"
             disabled={loading}
-            className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-sm disabled:opacity-50"
+            className="px-6 py-2.5 text-sm font-bold text-white bg-green-600 rounded-xl hover:bg-green-700 active:scale-95 transition-all shadow-sm disabled:opacity-50"
           >
             {loading ? 'Submitting...' : 'Submit Review'}
           </button>

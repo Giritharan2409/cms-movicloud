@@ -79,7 +79,7 @@ export default function AdminAdministrationDashboard() {
         {/* Admission Management Section */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-2xl text-blue-600">person_add</span>
+            <span className="material-symbols-outlined text-2xl text-green-700">person_add</span>
             Admission Management
           </h2>
           <KpiGrid className="md:grid-cols-3">
@@ -87,7 +87,7 @@ export default function AdminAdministrationDashboard() {
               icon="group"
               label="Total Applications"
               value={stats.admission.totalAdmissions}
-              colorScheme="blue"
+              colorScheme="green"
             />
             <KpiCard
               icon="check_circle"
@@ -115,7 +115,7 @@ export default function AdminAdministrationDashboard() {
               icon="assign"
               label="Total Assigned"
               value={stats.fees.totalFeesAssigned}
-              colorScheme="blue"
+              colorScheme="green"
             />
             <KpiCard
               icon="check_circle"
@@ -149,7 +149,7 @@ export default function AdminAdministrationDashboard() {
               icon="assignment"
               label="Total Payroll Records"
               value={stats.payroll.totalPayrollRecords}
-              colorScheme="blue"
+              colorScheme="green"
             />
             <KpiCard
               icon="money"

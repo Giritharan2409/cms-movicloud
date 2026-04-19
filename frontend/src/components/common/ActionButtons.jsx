@@ -4,7 +4,7 @@ export default function ActionButtons({ onView, onEdit, onDelete, onApprove, onR
       {onView && (
         <button
           onClick={onView}
-          className="p-2 hover:bg-blue-100 text-blue-600 rounded transition"
+          className="p-2 hover:bg-green-100 text-green-700 rounded transition"
           title="View details"
         >
           <span className="material-symbols-outlined text-lg">visibility</span>

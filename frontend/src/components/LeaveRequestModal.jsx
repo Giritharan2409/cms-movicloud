@@ -75,7 +75,7 @@ export default function LeaveRequestModal({ isOpen, onClose, onSuccess, facultyI
                 value={formData.leave_type}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-white"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 transition-all bg-white"
               >
                 <option value="Casual">Casual Leave</option>
                 <option value="Sick">Sick Leave</option>
@@ -94,7 +94,7 @@ export default function LeaveRequestModal({ isOpen, onClose, onSuccess, facultyI
                   value={formData.start_date}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 transition-all"
                 />
               </div>
 
@@ -106,7 +106,7 @@ export default function LeaveRequestModal({ isOpen, onClose, onSuccess, facultyI
                   value={formData.end_date}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 transition-all"
                 />
               </div>
             </div>
@@ -119,7 +119,7 @@ export default function LeaveRequestModal({ isOpen, onClose, onSuccess, facultyI
                 onChange={handleChange}
                 required
                 rows="4"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 transition-all resize-none"
                 placeholder="Provide reason for leave..."
               />
             </div>
@@ -138,7 +138,7 @@ export default function LeaveRequestModal({ isOpen, onClose, onSuccess, facultyI
             type="submit" 
             form="leaveForm"
             disabled={loading}
-            className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 active:scale-95 transition-all disabled:opacity-50"
+            className="px-6 py-2.5 text-sm font-bold text-white bg-green-600 rounded-xl hover:bg-green-700 active:scale-95 transition-all disabled:opacity-50"
           >
             {loading ? 'Submitting...' : 'Submit Request'}
           </button>

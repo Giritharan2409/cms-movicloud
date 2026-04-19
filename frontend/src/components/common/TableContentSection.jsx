@@ -26,7 +26,7 @@ export default function TableContentSection({
               onClick={() => onTabChange(tab.id)}
               className={`px-4 py-2 font-medium rounded-lg transition-all ${
                 activeTab === tab.id
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-green-700 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -41,12 +41,12 @@ export default function TableContentSection({
             placeholder={searchPlaceholder}
             value={searchValue}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="flex-1 md:flex-none px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 md:flex-none px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
           />
           {actionLabel && (
             <button
               onClick={onActionClick}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2 whitespace-nowrap"
+              className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 flex items-center gap-2 whitespace-nowrap"
             >
               <span className="material-symbols-outlined">add</span>
               {actionLabel}

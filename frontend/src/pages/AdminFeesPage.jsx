@@ -268,7 +268,7 @@ export default function AdminFeesPage() {
                         assignment.paymentStatus?.toLowerCase() === 'paid'
                           ? 'bg-green-100 text-green-800'
                           : assignment.paymentStatus?.toLowerCase() === 'processing'
-                            ? 'bg-blue-100 text-blue-800'
+                            ? 'bg-green-100 text-green-800'
                             : 'bg-orange-100 text-orange-800'
                       }`}>
                         {assignment.paymentStatus ? assignment.paymentStatus.charAt(0).toUpperCase() + assignment.paymentStatus.slice(1) : 'Pending'}
@@ -326,7 +326,7 @@ export default function AdminFeesPage() {
               {studentsWithoutFees.map((student) => (
                 <div
                   key={student.id}
-                  className="bg-blue-50 border border-blue-200 rounded-lg p-6 hover:shadow-lg transition"
+                  className="bg-green-50 border border-green-200 rounded-lg p-6 hover:shadow-lg transition"
                 >
                   <div className="mb-4">
                     <span className="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">
@@ -343,7 +343,7 @@ export default function AdminFeesPage() {
                   </div>
                   <button
                     onClick={() => handleAssignClick(student)}
-                    className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition font-medium"
+                    className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition font-medium"
                   >
                     Assign Fee
                   </button>
@@ -362,7 +362,7 @@ export default function AdminFeesPage() {
               Assign Fee for {selectedStudent.name || selectedStudent.fullName}
             </h2>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
               <p className="text-sm text-gray-600">
                 <span className="font-semibold">Application ID:</span> {selectedStudent.id}
               </p>
@@ -411,7 +411,7 @@ export default function AdminFeesPage() {
                       semester: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 >
                   <option value="">Select Semester</option>
                   {['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5', 'Semester 6', 'Semester 7', 'Semester 8'].map(
@@ -437,7 +437,7 @@ export default function AdminFeesPage() {
                       course: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                   placeholder="Enter course name"
                 />
               </div>
@@ -528,7 +528,7 @@ export default function AdminFeesPage() {
               </button>
               <button
                 onClick={handleConfirmAssignFee}
-                className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                className="px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition"
               >
                 Confirm & Assign
               </button>

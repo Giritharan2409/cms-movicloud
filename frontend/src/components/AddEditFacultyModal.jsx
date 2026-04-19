@@ -121,7 +121,7 @@ export default function AddEditFacultyModal({ isOpen, onClose, onSuccess, editMo
                   onChange={handleChange}
                   required
                   readOnly={editMode}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all bg-slate-50"
                 />
               </div>
 
@@ -133,7 +133,7 @@ export default function AddEditFacultyModal({ isOpen, onClose, onSuccess, editMo
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                   placeholder="e.g. Dr. John Doe"
                 />
               </div>
@@ -146,7 +146,7 @@ export default function AddEditFacultyModal({ isOpen, onClose, onSuccess, editMo
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                   placeholder="john@example.com"
                 />
               </div>
@@ -158,7 +158,7 @@ export default function AddEditFacultyModal({ isOpen, onClose, onSuccess, editMo
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                   placeholder="+1 (555) 000-0000"
                 />
               </div>
@@ -170,7 +170,7 @@ export default function AddEditFacultyModal({ isOpen, onClose, onSuccess, editMo
                   value={formData.departmentId}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all bg-white"
                 >
                   <option value="">Select Department</option>
                   <option value="Computer Science">Computer Science</option>
@@ -187,7 +187,7 @@ export default function AddEditFacultyModal({ isOpen, onClose, onSuccess, editMo
                   value={formData.designation}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all bg-white"
                 >
                   <option value="">Select Designation</option>
                   <option value="Professor">Professor</option>
@@ -204,7 +204,7 @@ export default function AddEditFacultyModal({ isOpen, onClose, onSuccess, editMo
                   name="office_location"
                   value={formData.office_location}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                   placeholder="e.g. Room 402, Block A"
                 />
               </div>
@@ -215,7 +215,7 @@ export default function AddEditFacultyModal({ isOpen, onClose, onSuccess, editMo
                   name="employment_status"
                   value={formData.employment_status}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all bg-white"
                 >
                   <option value="Active">Active</option>
                   <option value="On-Leave">On Leave</option>
@@ -238,7 +238,7 @@ export default function AddEditFacultyModal({ isOpen, onClose, onSuccess, editMo
             type="submit" 
             form="facultyForm"
             disabled={loading}
-            className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
+            className="px-6 py-2.5 text-sm font-bold text-white bg-green-700 rounded-xl hover:bg-green-800 active:scale-95 transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
           >
             {loading ? 'Saving...' : 'Save Faculty'}
           </button>

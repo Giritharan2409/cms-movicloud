@@ -78,7 +78,7 @@ export default function PerformanceEvaluationModal({ isOpen, onClose, onSuccess,
           step="0.5"
           className="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer"
         />
-        <span className="w-12 text-center font-semibold text-blue-600">{value.toFixed(1)}/5</span>
+        <span className="w-12 text-center font-semibold text-green-600">{value.toFixed(1)}/5</span>
       </div>
     </div>
   );
@@ -112,7 +112,7 @@ export default function PerformanceEvaluationModal({ isOpen, onClose, onSuccess,
                   value={formData.semester}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 bg-white"
                 >
                   <option value="">Select Semester</option>
                   <option value="Fall">Fall</option>
@@ -128,7 +128,7 @@ export default function PerformanceEvaluationModal({ isOpen, onClose, onSuccess,
                   value={formData.evaluator_id}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500"
                   placeholder="Your ID"
                 />
               </div>
@@ -169,7 +169,7 @@ export default function PerformanceEvaluationModal({ isOpen, onClose, onSuccess,
                 value={formData.strengths}
                 onChange={handleChange}
                 rows="3"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 resize-none"
                 placeholder="Highlight key strengths..."
               />
             </div>
@@ -181,7 +181,7 @@ export default function PerformanceEvaluationModal({ isOpen, onClose, onSuccess,
                 value={formData.areas_for_improvement}
                 onChange={handleChange}
                 rows="3"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 resize-none"
                 placeholder="Identify areas for growth..."
               />
             </div>
@@ -193,7 +193,7 @@ export default function PerformanceEvaluationModal({ isOpen, onClose, onSuccess,
                 value={formData.recommendations}
                 onChange={handleChange}
                 rows="3"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600-500/20 focus:border-green-500 resize-none"
                 placeholder="Provide recommendations..."
               />
             </div>

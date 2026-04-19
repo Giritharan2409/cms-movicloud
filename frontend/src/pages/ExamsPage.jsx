@@ -314,7 +314,7 @@ export default function ExamsPage({ noLayout = false }) {
     return `${displayHour}:${minutes} ${ampm}`
   }
 
-  const inputClasses = "w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1162d4]/10 focus:border-[#1162d4] outline-none transition-all text-sm text-slate-700 bg-white";
+  const inputClasses = "w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#276221]/10 focus:border-[#276221] outline-none transition-all text-sm text-slate-700 bg-white";
   const labelClasses = "block text-sm font-semibold text-slate-700 mb-1.5 ml-0.5";
 
   const inner = (
@@ -324,7 +324,7 @@ export default function ExamsPage({ noLayout = false }) {
           {isStudent && (
             <button 
               onClick={handleOpenAllHallTickets}
-              className="flex items-center gap-2 px-4 py-2 bg-[#1162d4] text-white rounded-lg text-sm font-semibold hover:bg-[#1162d4]/90 transition-all shadow-sm active:scale-95"
+              className="flex items-center gap-2 px-4 py-2 bg-[#276221] text-white rounded-lg text-sm font-semibold hover:bg-[#1e4618] transition-all shadow-sm active:scale-95"
             >
               <span className="material-symbols-outlined text-lg">badge</span>
               Download Hall Tickets
@@ -341,7 +341,7 @@ export default function ExamsPage({ noLayout = false }) {
               </button>
               <button 
                 onClick={() => setShowTimetableApprovalModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-semibold hover:bg-blue-200 transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-semibold hover:bg-green-200 transition-all"
               >
                 <span className="material-symbols-outlined text-lg">verified_user</span>
                 Approve Schedules
@@ -354,7 +354,7 @@ export default function ExamsPage({ noLayout = false }) {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {[
-          { icon: 'event_upcoming', label: 'Upcoming Exams',  value: stats.upcoming, color: 'text-[#1162d4] bg-[#1162d4]/10' },
+          { icon: 'event_upcoming', label: 'Upcoming Exams',  value: stats.upcoming, color: 'text-[#276221] bg-[#276221]/10' },
           { icon: 'check_circle',   label: 'Completed',       value: stats.completed, color: 'text-emerald-600 bg-emerald-100' },
           { icon: 'pending',        label: 'Results Pending', value: stats.pending, color: 'text-orange-600 bg-orange-100' },
         ].map((s) => (
@@ -406,7 +406,7 @@ export default function ExamsPage({ noLayout = false }) {
               exams.map((exam) => (
                 <tr key={exam._id || exam.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-6 py-4">
-                    <p className="text-xs font-bold text-[#1162d4] uppercase">{exam.code}</p>
+                    <p className="text-xs font-bold text-[#276221] uppercase">{exam.code}</p>
                     <p className="text-sm font-semibold text-slate-900">{exam.name}</p>
                   </td>
                   <td className="px-6 py-4">
@@ -425,7 +425,7 @@ export default function ExamsPage({ noLayout = false }) {
                   <td className="px-6 py-4">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       exam.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 
-                      exam.status === 'Upcoming' ? 'bg-blue-50 text-[#1162d4]' : 'bg-slate-100 text-slate-600'
+                      exam.status === 'Upcoming' ? 'bg-green-50 text-[#276221]' : 'bg-slate-100 text-slate-600'
                     }`}>
                       {exam.status}
                     </span>
@@ -439,7 +439,7 @@ export default function ExamsPage({ noLayout = false }) {
                             <p className="text-lg font-bold text-slate-900">{exam.marks}/{exam.maxMarks}</p>
                             <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold ${
                               exam.grade === 'A+' || exam.grade === 'A' ? 'bg-emerald-100 text-emerald-700' :
-                              exam.grade === 'B+' || exam.grade === 'B' ? 'bg-blue-100 text-blue-700' :
+                              exam.grade === 'B+' || exam.grade === 'B' ? 'bg-green-100 text-green-700' :
                               'bg-slate-100 text-slate-700'
                             }`}>
                               Grade: {exam.grade}
@@ -453,7 +453,7 @@ export default function ExamsPage({ noLayout = false }) {
                         {exam.status === 'Upcoming' && !exam.registered ? (
                           <button
                             onClick={() => handleRegister(exam._id || exam.id)}
-                            className="px-3 py-1.5 bg-[#1162d4] text-white rounded-lg text-xs font-semibold hover:bg-[#1162d4]/90 transition-all"
+                            className="px-3 py-1.5 bg-[#276221] text-white rounded-lg text-xs font-semibold hover:bg-[#1e4618] transition-all"
                           >
                             Register
                           </button>
@@ -491,7 +491,7 @@ export default function ExamsPage({ noLayout = false }) {
                         <>
                           <button
                             onClick={() => handleOpenInternalMarks(exam)}
-                            className="p-1.5 text-slate-400 hover:text-[#1162d4] hover:bg-[#1162d4]/10 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-[#276221] hover:bg-[#276221]/10 rounded-lg transition-colors"
                             title="Internal Marks"
                           >
                             <span className="material-symbols-outlined text-lg">assignment</span>
@@ -519,7 +519,7 @@ export default function ExamsPage({ noLayout = false }) {
                           </button>
                           <button
                             onClick={() => openEditModal(exam)}
-                            className="p-1.5 text-slate-400 hover:text-[#1162d4] hover:bg-[#1162d4]/10 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-[#276221] hover:bg-[#276221]/10 rounded-lg transition-colors"
                             title="Edit"
                           >
                             <span className="material-symbols-outlined text-lg">edit</span>
@@ -553,7 +553,7 @@ export default function ExamsPage({ noLayout = false }) {
                           </button>
                           <button
                             onClick={() => openEditModal(exam)}
-                            className="p-1.5 text-slate-400 hover:text-[#1162d4] hover:bg-[#1162d4]/10 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-[#276221] hover:bg-[#276221]/10 rounded-lg transition-colors"
                             title="Edit"
                           >
                             <span className="material-symbols-outlined text-lg">edit</span>

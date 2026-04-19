@@ -114,7 +114,7 @@ export default function ExamReportModal({ isOpen, onClose, exam }) {
               icon="assignment"
               label="Registered"
               value={stats.totalRegistered}
-              colorScheme="blue"
+              colorScheme="green"
             />
             <KpiCard
               icon="done"
@@ -239,7 +239,7 @@ export default function ExamReportModal({ isOpen, onClose, exam }) {
             <button
               onClick={handlePublishResults}
               disabled={stats.pending > 0}
-              className="px-4 py-2 bg-[#1162d4] text-white rounded-lg hover:bg-[#1162d4]/90 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-[#276221] text-white rounded-lg hover:bg-[#1e4618] transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Publish Results
             </button>

@@ -1,11 +1,11 @@
 :root {
-  --user-settings-bg: #f4f7fc;
+  --user-settings-bg: #f0f5f1;
   --user-settings-card: #ffffff;
-  --user-settings-border: #d9e3f1;
+  --user-settings-border: #d9e8dc;
   --user-settings-text: #1f2937;
   --user-settings-muted: #64748b;
-  --user-settings-primary: #1d4ed8;
-  --user-settings-primary-soft: #dbeafe;
+  --user-settings-primary: #276221;
+  --user-settings-primary-soft: #e8f1eb;
   --user-settings-danger: #dc2626;
 }
 
@@ -18,7 +18,7 @@
 .user-settings-header {
   border-radius: 16px;
   padding: 20px;
-  background: linear-gradient(110deg, #0f3f93, #1d4ed8, #0ea5c9);
+  background: linear-gradient(110deg, #1e4618, #276221, #3d8b30);
   color: #ffffff;
   margin-bottom: 18px;
 }
@@ -88,13 +88,13 @@
 }
 
 .user-settings-nav-item:hover {
-  background: #f1f5fd;
-  color: #1e3a8a;
+  background: #f1f5f1;
+  color: #276221;
 }
 
 .user-settings-nav-item.active {
-  background: linear-gradient(90deg, #dbeafe, #e0f2fe);
-  color: #1d4ed8;
+  background: linear-gradient(90deg, #e8f1eb, #e0f1e8);
+  color: #276221;
   font-weight: 600;
 }
 
@@ -209,7 +209,7 @@
 }
 
 .user-settings-btn-primary {
-  background: linear-gradient(90deg, #1d4ed8, #0ea5c9);
+  background: linear-gradient(90deg, #276221, #3d8b30);
   color: #ffffff;
 }
 
@@ -242,7 +242,7 @@
   height: 16px;
   border-radius: 50%;
   border: 2px solid #bfdbfe;
-  border-top-color: #1d4ed8;
+  border-top-color: #276221;
   animation: user-settings-spin 0.9s linear infinite;
 }
 
@@ -341,7 +341,7 @@
 }
 
 .user-settings-toggle-control input:checked + .user-settings-toggle-slider {
-  background: #2563eb;
+  background: #276221;
 }
 
 .user-settings-toggle-control input:checked + .user-settings-toggle-slider::before {

@@ -295,7 +295,7 @@ function EditDepartmentModal({ isOpen, onClose, department, onSave }) {
             onClick={handleSubmit}
             style={{
               padding: '8px 16px',
-              background: '#2563eb',
+              background: '#276221',
               color: 'white',
               border: 'none',
               borderRadius: '6px',
@@ -307,8 +307,8 @@ function EditDepartmentModal({ isOpen, onClose, department, onSave }) {
               gap: '6px',
               transition: 'all 0.2s'
             }}
-            onMouseEnter={(e) => e.target.style.background = '#1d4ed8'}
-            onMouseLeave={(e) => e.target.style.background = '#2563eb'}
+            onMouseEnter={(e) => e.target.style.background = '#1e4618'}
+            onMouseLeave={(e) => e.target.style.background = '#276221'}
           >
             <Save size={16} />
             Save Changes
@@ -667,7 +667,7 @@ function AddDepartmentModal({ isOpen, onClose, onSave }) {
               gap: '6px',
               transition: 'all 0.2s'
             }}
-            onMouseEnter={(e) => e.target.style.background = '#0891b2'}
+            onMouseEnter={(e) => e.target.style.background = '#3d8b30'}
             onMouseLeave={(e) => e.target.style.background = '#06b6d4'}
           >
             <Save size={16} />
@@ -764,7 +764,7 @@ function ShareDepartmentModal({ isOpen, onClose, departmentName }) {
               onClick={handleCopyLink}
               style={{
                 padding: '6px 10px',
-                background: '#2563eb',
+                background: '#276221',
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
@@ -812,7 +812,7 @@ function ShareDepartmentModal({ isOpen, onClose, departmentName }) {
             onClick={onClose}
             style={{
               padding: '8px 16px',
-              background: '#2563eb',
+              background: '#276221',
               color: 'white',
               border: 'none',
               borderRadius: '6px',
@@ -821,8 +821,8 @@ function ShareDepartmentModal({ isOpen, onClose, departmentName }) {
               cursor: 'pointer',
               transition: 'all 0.2s'
             }}
-            onMouseEnter={(e) => e.target.style.background = '#1d4ed8'}
-            onMouseLeave={(e) => e.target.style.background = '#2563eb'}
+            onMouseEnter={(e) => e.target.style.background = '#1e4618'}
+            onMouseLeave={(e) => e.target.style.background = '#276221'}
           >
             Close
           </button>
@@ -889,7 +889,7 @@ export default function FacultyDepartmentPage() {
                 gap: '8px',
                 transition: 'all 0.2s'
               }}
-              onMouseEnter={(e) => e.target.style.background = '#0891b2'}
+              onMouseEnter={(e) => e.target.style.background = '#3d8b30'}
               onMouseLeave={(e) => e.target.style.background = '#06b6d4'}
             >
               + Add Department
@@ -902,7 +902,7 @@ export default function FacultyDepartmentPage() {
             icon="domain"
             label="Departments"
             value={stats.totalDepts.toString()}
-            colorScheme="blue"
+            colorScheme="green"
           />
           <KpiCard
             icon="person"
@@ -920,7 +920,7 @@ export default function FacultyDepartmentPage() {
             icon="school"
             label="Total Courses"
             value={stats.totalCourses.toString()}
-            colorScheme="cyan"
+            colorScheme="emerald"
           />
         </KpiGrid>
 
@@ -965,7 +965,7 @@ export default function FacultyDepartmentPage() {
                       padding: '12px 16px',
                       border: 'none',
                       background: selectedDept?.id === dept.id ? '#eff6ff' : 'transparent',
-                      borderLeft: selectedDept?.id === dept.id ? '3px solid #2563eb' : '3px solid transparent',
+                      borderLeft: selectedDept?.id === dept.id ? '3px solid #276221' : '3px solid transparent',
                       textAlign: 'left',
                       cursor: 'pointer',
                       transition: 'all 0.2s',
@@ -982,7 +982,7 @@ export default function FacultyDepartmentPage() {
                       }
                     }}
                   >
-                    <div style={{ fontSize: '13px', fontWeight: '600', color: selectedDept?.id === dept.id ? '#2563eb' : '#1f2937', marginBottom: '2px' }}>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: selectedDept?.id === dept.id ? '#276221' : '#1f2937', marginBottom: '2px' }}>
                       {dept.code}
                     </div>
                     <div style={{ fontSize: '12px', color: '#6b7280', lineHeight: '1.2' }}>
@@ -1006,7 +1006,7 @@ export default function FacultyDepartmentPage() {
               <div style={{ marginBottom: '24px', borderBottom: '1px solid #e5e7eb', paddingBottom: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '12px' }}>
                   <div>
-                    <div style={{ fontSize: '12px', fontWeight: '600', color: '#2563eb', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: '600', color: '#276221', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                       {selectedDept.code}
                     </div>
                     <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#1f2937', margin: 0 }}>
@@ -1047,7 +1047,7 @@ export default function FacultyDepartmentPage() {
                       onClick={() => setIsShareOpen(true)}
                       style={{
                         padding: '8px 16px',
-                        background: '#2563eb',
+                        background: '#276221',
                         color: 'white',
                         border: 'none',
                         borderRadius: '8px',
@@ -1059,8 +1059,8 @@ export default function FacultyDepartmentPage() {
                         alignItems: 'center',
                         gap: '6px'
                       }}
-                      onMouseEnter={(e) => e.target.style.background = '#1d4ed8'}
-                      onMouseLeave={(e) => e.target.style.background = '#2563eb'}
+                      onMouseEnter={(e) => e.target.style.background = '#1e4618'}
+                      onMouseLeave={(e) => e.target.style.background = '#276221'}
                       title="Share department information"
                     >
                       <Share2 size={14} />
@@ -1112,10 +1112,10 @@ export default function FacultyDepartmentPage() {
                   borderRadius: '10px',
                   padding: '16px'
                 }}>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#2563eb', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#276221', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                     Courses Offered
                   </div>
-                  <div style={{ fontSize: '28px', fontWeight: '700', color: '#1d4ed8' }}>
+                  <div style={{ fontSize: '28px', fontWeight: '700', color: '#1e4618' }}>
                     {selectedDept.courses}
                   </div>
                 </div>
@@ -1125,7 +1125,7 @@ export default function FacultyDepartmentPage() {
                   borderRadius: '10px',
                   padding: '16px'
                 }}>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#0891b2', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#3d8b30', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                     Head of Department
                   </div>
                   <div style={{ fontSize: '14px', fontWeight: '600', color: '#0369a1', lineHeight: '1.4' }}>
@@ -1150,25 +1150,25 @@ export default function FacultyDepartmentPage() {
                   gap: '16px'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                    <Mail size={18} style={{ color: '#2563eb', marginTop: '2px', flexShrink: 0 }} />
+                    <Mail size={18} style={{ color: '#276221', marginTop: '2px', flexShrink: 0 }} />
                     <div>
                       <div style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600', marginBottom: '2px' }}>Email</div>
-                      <a href={`mailto:${selectedDept.email}`} style={{ fontSize: '14px', color: '#2563eb', textDecoration: 'none' }}>
+                      <a href={`mailto:${selectedDept.email}`} style={{ fontSize: '14px', color: '#276221', textDecoration: 'none' }}>
                         {selectedDept.email}
                       </a>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                    <span style={{ color: '#2563eb', marginTop: '2px', flexShrink: 0, fontWeight: '600' }}>📞</span>
+                    <span style={{ color: '#276221', marginTop: '2px', flexShrink: 0, fontWeight: '600' }}>📞</span>
                     <div>
                       <div style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600', marginBottom: '2px' }}>Phone</div>
-                      <a href={`tel:${selectedDept.phone}`} style={{ fontSize: '14px', color: '#2563eb', textDecoration: 'none' }}>
+                      <a href={`tel:${selectedDept.phone}`} style={{ fontSize: '14px', color: '#276221', textDecoration: 'none' }}>
                         {selectedDept.phone}
                       </a>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', gridColumn: '1 / -1' }}>
-                    <MapPin size={18} style={{ color: '#2563eb', marginTop: '2px', flexShrink: 0 }} />
+                    <MapPin size={18} style={{ color: '#276221', marginTop: '2px', flexShrink: 0 }} />
                     <div>
                       <div style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600', marginBottom: '2px' }}>Location</div>
                       <div style={{ fontSize: '14px', color: '#374151' }}>{selectedDept.location}</div>

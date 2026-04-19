@@ -75,7 +75,7 @@ export default function AssignCourseModal({ isOpen, onClose, onSuccess, facultyI
               <label className="text-sm font-semibold text-slate-700">Course Code</label>
               <input
                 type="text" name="courseId" value={formData.courseId} onChange={handleChange} required
-                className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                 placeholder="e.g. CS101"
               />
             </div>
@@ -84,7 +84,7 @@ export default function AssignCourseModal({ isOpen, onClose, onSuccess, facultyI
               <label className="text-sm font-semibold text-slate-700">Course Name</label>
               <input
                 type="text" name="course_name" value={formData.course_name} onChange={handleChange} required
-                className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                 placeholder="e.g. Introduction to Programming"
               />
             </div>
@@ -94,7 +94,7 @@ export default function AssignCourseModal({ isOpen, onClose, onSuccess, facultyI
                 <label className="text-sm font-semibold text-slate-700">Semester</label>
                 <select
                   name="semester" value={formData.semester} onChange={handleChange} required
-                  className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-white"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all bg-white"
                 >
                   <option value="">Select...</option>
                   <option value="Fall">Fall</option>
@@ -107,7 +107,7 @@ export default function AssignCourseModal({ isOpen, onClose, onSuccess, facultyI
                 <label className="text-sm font-semibold text-slate-700">Credits</label>
                 <input
                   type="number" name="credits" min="0" max="10" value={formData.credits} onChange={handleChange} required
-                  className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
                 />
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function AssignCourseModal({ isOpen, onClose, onSuccess, facultyI
               <label className="text-sm font-semibold text-slate-700">Academic Year</label>
               <input
                 type="text" name="academic_year" value={formData.academic_year} onChange={handleChange} required
-                className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all"
               />
             </div>
           </form>
@@ -126,7 +126,7 @@ export default function AssignCourseModal({ isOpen, onClose, onSuccess, facultyI
           <button type="button" onClick={onClose} className="px-5 py-2 text-sm font-semibold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50">
             Cancel
           </button>
-          <button type="submit" form="assignCourseForm" disabled={loading} className="px-5 py-2 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 disabled:opacity-50">
+          <button type="submit" form="assignCourseForm" disabled={loading} className="px-5 py-2 text-sm font-bold text-white bg-green-700 rounded-xl hover:bg-green-800 disabled:opacity-50">
             {loading ? 'Assigning...' : 'Assign Course'}
           </button>
         </div>

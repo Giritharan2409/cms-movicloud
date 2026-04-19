@@ -62,19 +62,19 @@ export default function PayrollIntegrationPanel({ facultyId, semester, academicY
   return (
     <div className="space-y-6">
       {/* Payroll Summary */}
-      <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border-2 border-blue-200">
+      <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border-2 border-green-200">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-bold text-slate-900">Payroll Summary</h3>
             <p className="text-sm text-slate-600">Semester: {semester} {academicYear}</p>
           </div>
-          <DollarSign className="w-8 h-8 text-blue-600" />
+          <DollarSign className="w-8 h-8 text-green-600" />
         </div>
 
         <div className="grid grid-cols-3 gap-4">
           <div className="bg-white rounded-lg p-3">
             <p className="text-xs text-slate-600 mb-1">Base Salary</p>
-            <p className="text-xl font-bold text-blue-600">₹{payroll.base_salary?.toLocaleString('en-IN') || 'N/A'}</p>
+            <p className="text-xl font-bold text-green-600">₹{payroll.base_salary?.toLocaleString('en-IN') || 'N/A'}</p>
           </div>
 
           <div className="bg-white rounded-lg p-3">
@@ -235,7 +235,7 @@ export default function PayrollIntegrationPanel({ facultyId, semester, academicY
       {/* Payslip Download */}
       <button
         onClick={handleDownloadPayslip}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors"
+        className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors"
       >
         <Download size={20} />
         Download Payslip

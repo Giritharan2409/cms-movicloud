@@ -127,9 +127,9 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
       {/* Summary Cards */}
       {summary && (
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+          <div className="bg-green-50 p-3 rounded-lg border border-green-200">
             <p className="text-xs text-slate-600">Total Activities</p>
-            <p className="text-2xl font-bold text-blue-600">{summary.total_activities}</p>
+            <p className="text-2xl font-bold text-green-600">{summary.total_activities}</p>
           </div>
           <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
             <p className="text-xs text-slate-600">Conferences</p>
@@ -154,7 +154,7 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
       <div className="flex flex-wrap gap-3 items-center">
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
         >
           <Plus size={18} />
           Add Activity
@@ -199,7 +199,7 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
                 <select
                   value={formData.activity_type}
                   onChange={(e) => setFormData({...formData, activity_type: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500"
                 >
                   {activityTypes.map(type => (
                     <option key={type} value={type}>{type}</option>
@@ -215,7 +215,7 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
                   value={formData.title}
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
                   placeholder="Activity title"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500"
                 />
               </div>
 
@@ -227,7 +227,7 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
                   value={formData.organization}
                   onChange={(e) => setFormData({...formData, organization: e.target.value})}
                   placeholder="Organizing institution"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500"
                 />
               </div>
 
@@ -239,7 +239,7 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
                   value={formData.hours}
                   onChange={(e) => setFormData({...formData, hours: e.target.value})}
                   placeholder="Duration in hours"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500"
                 />
               </div>
 
@@ -250,7 +250,7 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
                   required
                   value={formData.start_date}
                   onChange={(e) => setFormData({...formData, start_date: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500"
                 />
               </div>
 
@@ -261,7 +261,7 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
                   required
                   value={formData.end_date}
                   onChange={(e) => setFormData({...formData, end_date: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500"
                 />
               </div>
 
@@ -273,7 +273,7 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
                   value={formData.budget_allocated}
                   onChange={(e) => setFormData({...formData, budget_allocated: e.target.value})}
                   placeholder="Budget allocated"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500"
                 />
               </div>
 
@@ -285,7 +285,7 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
                   value={formData.budget_spent}
                   onChange={(e) => setFormData({...formData, budget_spent: e.target.value})}
                   placeholder="Budget spent"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500"
                 />
               </div>
             </div>
@@ -297,14 +297,14 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                 placeholder="Activity details"
                 rows="3"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600-500"
               />
             </div>
 
             <div className="flex gap-3 pt-4">
               <button
                 type="submit"
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-colors"
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition-colors"
               >
                 Save Activity
               </button>
@@ -338,12 +338,12 @@ export default function ProfessionalDevelopmentPanel({ facultyId }) {
             <div key={activity._id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-start gap-3 flex-1">
-                  <Award className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
+                  <Award className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
                   <div className="flex-1">
                     <h4 className="font-bold text-slate-900">{activity.title}</h4>
                     <p className="text-sm text-slate-600">{activity.organization}</p>
                     <div className="flex gap-2 mt-2 flex-wrap">
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
                         {activity.activity_type}
                       </span>
                       <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded">

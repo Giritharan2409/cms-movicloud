@@ -9,7 +9,7 @@ export default function TabsSection({ tabs, activeTab, onTabChange, children }) 
               onClick={() => onTabChange(tab.id)}
               className={`px-4 py-2 font-medium rounded-lg transition-all ${
                 activeTab === tab.id
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-green-700 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >

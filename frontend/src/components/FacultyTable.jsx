@@ -11,7 +11,7 @@ export default function FacultyTable({ faculty, onEdit, onDelete, onViewDetails 
 
   const getDepartmentColors = (dept) => {
     const colors = {
-      'CS': 'bg-blue-100 text-blue-800',
+      'CS': 'bg-green-100 text-green-800',
       'ECE': 'bg-purple-100 text-purple-800',
       'ME': 'bg-cyan-100 text-cyan-800',
       'MATH': 'bg-green-100 text-green-800',
@@ -55,7 +55,7 @@ export default function FacultyTable({ faculty, onEdit, onDelete, onViewDetails 
             faculty.map((f) => (
               <tr
                 key={f.employeeId || f._id}
-                className="hover:bg-blue-50/30 transition-colors cursor-pointer border-slate-100"
+                className="hover:bg-green-50/30 transition-colors cursor-pointer border-slate-100"
                 onClick={() => {
                   const profileId = f._id || f.employeeId
                   if (!profileId) return
@@ -117,7 +117,7 @@ export default function FacultyTable({ faculty, onEdit, onDelete, onViewDetails 
                   <div className="flex items-center justify-end gap-2">
                     <button 
                       onClick={() => onEdit && onEdit(f)}
-                      className="p-1.5 text-slate-400 hover:text-[#1162d4] hover:bg-[#1162d4]/10 rounded-lg transition-colors"
+                      className="p-1.5 text-slate-400 hover:text-[#276221] hover:bg-[#276221]/10 rounded-lg transition-colors"
                       title="Edit Faculty"
                     >
                       <span className="material-symbols-outlined text-lg">edit</span>

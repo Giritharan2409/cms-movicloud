@@ -30,7 +30,7 @@ const Ico = {
 };
 
 // ─── Theme ────────────────────────────────────────────────────────────────────
-const C = { blue:'#2563eb', cyan:'#06b6d4', green:'#22c55e', orange:'#f97316', purple:'#8b5cf6', red:'#ef4444', teal:'#14b8a6', amber:'#f59e0b', indigo:'#6366f1' };
+const C = { blue:'#276221', cyan:'#06b6d4', green:'#22c55e', orange:'#f97316', purple:'#8b5cf6', red:'#ef4444', teal:'#14b8a6', amber:'#f59e0b', indigo:'#6366f1' };
 const DEPT_COLORS = { CS:C.blue, Phys:C.orange, Math:C.green, ECE:C.purple, Mech:C.cyan };
 const PIE_COLS  = [C.green, C.orange, C.red, C.blue, C.purple];
 const TT = { contentStyle:{ background:'#fff', border:'1px solid #e5e7eb', borderRadius:10, fontSize:12, boxShadow:'0 4px 12px rgba(0,0,0,.08)' } };
@@ -347,7 +347,7 @@ function CalendarRangePicker({startMY,endMY,onChange,onClose}){
     return{
       width:'100%',height:40,borderRadius:8,border:'none',fontSize:13,fontWeight:700,
       cursor:'pointer',transition:'all 0.1s',
-      background: isEdge?'#2563eb': inRange?'#dbeafe':'transparent',
+      background: isEdge?'#276221': inRange?'#f0f5f1':'transparent',
       color:      isEdge?'#fff'   : inRange?'#1e40af':'#374151',
       boxShadow:  isEdge?'0 2px 8px rgba(37,99,235,.3)':'none',
     };
@@ -367,7 +367,7 @@ function CalendarRangePicker({startMY,endMY,onChange,onClose}){
           <button onClick={()=>setViewYear(y=>y+1)} style={{width:28,height:28,borderRadius:7,border:'1px solid #e5e7eb',background:'#f9fafb',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}><Ico.ChevR/></button>
         </div>
         <div style={{fontSize:12,fontWeight:600,padding:'3px 10px',borderRadius:999,
-          color:      phase==='start'?'#2563eb':'#f97316',
+          color:      phase==='start'?'#276221':'#f97316',
           background: phase==='start'?'#eff6ff':'#fff7ed',
           border:`1px solid ${phase==='start'?'#bfdbfe':'#fed7aa'}`}}>
           {phase==='start'?'\u2460 Start month':'\u2461 End month'}
@@ -406,7 +406,7 @@ function CalendarRangePicker({startMY,endMY,onChange,onClose}){
 // ══════════════════════════════════════════════════════════════════════════════
 function SCard({label,value,sub,tone,icon,trend}){
   const bg={blue:'#eff6ff',green:'#f0fdf4',purple:'#f5f3ff',orange:'#fff7ed',red:'#fef2f2',teal:'#f0fdfa',cyan:'#ecfeff'};
-  const tc={blue:'#2563eb',green:'#16a34a',purple:'#7c3aed',orange:'#c2410c',red:'#b91c1c',teal:'#0f766e',cyan:'#0e7490'};
+  const tc={blue:'#276221',green:'#16a34a',purple:'#7c3aed',orange:'#c2410c',red:'#b91c1c',teal:'#0f766e',cyan:'#0e7490'};
   return(
     <div style={{background:bg[tone]??'#f9fafb',borderRadius:14,padding:'18px 20px',border:`1px solid ${bg[tone]??'#f3f4f6'}`,flex:1,minWidth:0}}>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
@@ -450,7 +450,7 @@ function RoleTab({tabs,active,onChange}){
       {tabs.map(t=>(
         <button key={t.id} onClick={()=>onChange(t.id)} style={{flex:1,height:36,borderRadius:9,border:'none',cursor:'pointer',fontSize:13,fontWeight:700,transition:'all 0.18s',
           background:active===t.id?'#fff':'transparent',
-          color:active===t.id?'#2563eb':'#6b7280',
+          color:active===t.id?'#276221':'#6b7280',
           boxShadow:active===t.id?'0 1px 6px rgba(0,0,0,.1)':'none'
         }}>{t.icon} {t.label}</button>
       ))}
@@ -570,7 +570,7 @@ function AdminView({activeMonths,rangeLabel,department,semester}){
         <>
           <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:18,marginBottom:28}}>
             {[
-              {id:'students',icon:'🎓',label:'Students & Academics',color:'#2563eb',bg:'#eff6ff',border:'#bfdbfe',
+              {id:'students',icon:'🎓',label:'Students & Academics',color:'#276221',bg:'#f0f5f1',border:'#d4e5d1',
                 stats:[
                   {k:'Total Students',   v:aCards.students},
                   {k:'Avg Attendance',   v:`${avgAtt}%`},
@@ -616,7 +616,7 @@ function AdminView({activeMonths,rangeLabel,department,semester}){
           </div>
 
           <CC title="📋 Department Summary" subtitle={`All departments — ${rangeLabel} composite view`} style={{marginBottom:20}}
-            action={<button onClick={()=>setTab('students')} style={{fontSize:11,fontWeight:700,padding:'4px 12px',borderRadius:7,border:'1.5px solid #2563eb',color:'#2563eb',background:'#eff6ff',cursor:'pointer'}}>Full view →</button>}>
+            action={<button onClick={()=>setTab('students')} style={{fontSize:11,fontWeight:700,padding:'4px 12px',borderRadius:7,border:'1.5px solid #276221',color:'#276221',background:'#f0f5f1',cursor:'pointer'}}>Full view →</button>}>
             <table style={{width:'100%',borderCollapse:'collapse'}}>
               <thead><tr><th style={tH}>#</th><th style={tH}>Department</th><th style={tH}>Students</th><th style={tH}>Faculty</th><th style={tH}>Avg Att</th><th style={tH}>CGPA</th><th style={tH}>Pass%</th><th style={tH}>Status</th><th style={tH}>Details</th></tr></thead>
               <tbody>{rankingData.map((d,i)=>(
@@ -894,7 +894,7 @@ function AdminView({activeMonths,rangeLabel,department,semester}){
                             {f.name}
                           </div>
                         </td>
-                        <td style={tD}><span style={{fontSize:11,fontWeight:600,padding:'2px 8px',borderRadius:999,background:f.designation==='Professor'?'#fffbeb':f.designation.includes('Assoc')?'#eff6ff':f.designation.includes('Asst')?'#f5f3ff':'#f3f4f6',color:f.designation==='Professor'?'#b45309':f.designation.includes('Assoc')?'#1d4ed8':f.designation.includes('Asst')?'#6d28d9':'#6b7280'}}>{f.designation}</span></td>
+                        <td style={tD}><span style={{fontSize:11,fontWeight:600,padding:'2px 8px',borderRadius:999,background:f.designation==='Professor'?'#fffbeb':f.designation.includes('Assoc')?'#e8f1eb':f.designation.includes('Asst')?'#f5f3ff':'#f3f4f6',color:f.designation==='Professor'?'#b45309':f.designation.includes('Assoc')?'#276221':f.designation.includes('Asst')?'#6d28d9':'#6b7280'}}>{f.designation}</span></td>
                         <td style={{...tD,color:'#374151'}}>{f.subject}</td>
                         <td style={tD}><span style={{fontWeight:800,color:attNum<80?C.red:attNum<85?C.orange:C.green}}>{f.att}</span></td>
                         <td style={tD}><span style={{fontWeight:800,color:passNum<80?C.red:passNum<88?C.orange:C.green}}>{f.passRate}</span></td>
@@ -1102,7 +1102,7 @@ function FinanceView({activeMonths,rangeLabel,department,semester}){
             action={
               <div style={{display:'flex',gap:6}}>
                 {['all','due','overdue'].map(f=>(
-                  <button key={f} onClick={()=>setPendingFilter(f)} style={{padding:'4px 10px',borderRadius:7,border:'1.5px solid',borderColor:pendingFilter===f?'#2563eb':'#e5e7eb',background:pendingFilter===f?'#eff6ff':'#fff',color:pendingFilter===f?'#2563eb':'#6b7280',fontSize:11,fontWeight:700,cursor:'pointer',textTransform:'capitalize'}}>{f}</button>
+                  <button key={f} onClick={()=>setPendingFilter(f)} style={{padding:'4px 10px',borderRadius:7,border:'1.5px solid',borderColor:pendingFilter===f?'#276221':'#e5e7eb',background:pendingFilter===f?'#f0f5f1':'#fff',color:pendingFilter===f?'#276221':'#6b7280',fontSize:11,fontWeight:700,cursor:'pointer',textTransform:'capitalize'}}>{f}</button>
                 ))}
               </div>
             }
@@ -1113,7 +1113,7 @@ function FinanceView({activeMonths,rangeLabel,department,semester}){
                 <tr key={i} style={{background:s.days<0?'#fff5f5':i%2===0?'#fafafa':'#fff'}}>
                   <td style={{...tD,fontWeight:700,fontSize:13}}>{s.name}</td>
                   <td style={{...tD,color:'#6b7280'}}>{s.rollNo}</td>
-                  <td style={tD}><span style={{background:'#eff6ff',color:'#2563eb',padding:'2px 8px',borderRadius:999,fontWeight:700,fontSize:11}}>{s.dept}</span></td>
+                  <td style={tD}><span style={{background:'#f0f5f1',color:'#276221',padding:'2px 8px',borderRadius:999,fontWeight:700,fontSize:11}}>{s.dept}</span></td>
                   <td style={{...tD,color:'#6b7280'}}>{s.sem}</td>
                   <td style={{...tD,fontWeight:800,color:C.red,fontSize:13}}>{s.amount}</td>
                   <td style={{...tD,color:'#6b7280'}}>{s.due}</td>
@@ -1484,7 +1484,7 @@ export default function AnalyticsPage({role:propRole}){
             <div style={{fontSize:11,fontWeight:700,color:'#9ca3af',textTransform:'uppercase',letterSpacing:.5,marginBottom:5,display:'flex',alignItems:'center',gap:4}}>
               <Ico.Calendar/> Date Range
             </div>
-            <button onClick={()=>setCalOpen(o=>!o)} style={{display:'flex',alignItems:'center',gap:8,height:38,padding:'0 14px',borderRadius:9,border:`1.5px solid ${calOpen?'#2563eb':'#e5e7eb'}`,background:calOpen?'#eff6ff':'#fff',color:'#1f2937',fontSize:13,fontWeight:700,cursor:'pointer',whiteSpace:'nowrap',boxShadow:calOpen?'0 0 0 3px rgba(37,99,235,.12)':'none',transition:'all 0.15s'}}>
+            <button onClick={()=>setCalOpen(o=>!o)} style={{display:'flex',alignItems:'center',gap:8,height:38,padding:'0 14px',borderRadius:9,border:`1.5px solid ${calOpen?'#276221':'#e5e7eb'}`,background:calOpen?'#f0f5f1':'#fff',color:'#1f2937',fontSize:13,fontWeight:700,cursor:'pointer',whiteSpace:'nowrap',boxShadow:calOpen?'0 0 0 3px rgba(39,98,33,.12)':'none',transition:'all 0.15s'}}>
               <Ico.Calendar/>{triggerLabel}<span style={{fontSize:10,color:'#9ca3af',marginLeft:2}}>▾</span>
             </button>
             {calOpen&&<CalendarRangePicker startMY={startMY} endMY={endMY} onChange={({startMY:s,endMY:e})=>{setStartMY(s);setEndMY(e);}} onClose={()=>setCalOpen(false)}/>}
@@ -1513,7 +1513,7 @@ export default function AnalyticsPage({role:propRole}){
 
           <div style={{marginLeft:'auto'}}>
             <div style={{fontSize:11,fontWeight:700,color:'transparent',marginBottom:5}}>—</div>
-            <button onClick={()=>exportCSV(role,activeMonths,rangeLabel,'students')} style={{display:'flex',alignItems:'center',gap:7,height:38,padding:'0 18px',borderRadius:9,border:'none',background:'linear-gradient(135deg,#2563eb,#1d4ed8)',color:'#fff',fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 2px 10px rgba(37,99,235,.4)'}}>
+            <button onClick={()=>exportCSV(role,activeMonths,rangeLabel,'students')} style={{display:'flex',alignItems:'center',gap:7,height:38,padding:'0 18px',borderRadius:9,border:'none',background:'linear-gradient(135deg,#276221,#1e4618)',color:'#fff',fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 2px 10px rgba(39,98,33,.4)'}}>
               <Ico.Download/> Download Report
             </button>
           </div>
@@ -1521,7 +1521,7 @@ export default function AnalyticsPage({role:propRole}){
 
         <div style={{display:'flex',gap:6,marginTop:12,flexWrap:'wrap',alignItems:'center'}}>
           <span style={{fontSize:11,color:'#9ca3af'}}>Showing:</span>
-          <span style={{fontSize:11,fontWeight:600,padding:'3px 10px',borderRadius:999,background:'#eff6ff',color:'#2563eb',border:'1px solid #bfdbfe'}}>{triggerLabel}</span>
+          <span style={{fontSize:11,fontWeight:600,padding:'3px 10px',borderRadius:999,background:'#f0f5f1',color:'#276221',border:'1px solid #d4e5d1'}}>{triggerLabel}</span>
           <span style={{fontSize:11,fontWeight:600,padding:'3px 10px',borderRadius:999,background:'#f5f3ff',color:'#7c3aed',border:'1px solid #ddd6fe'}}>{semester}</span>
           {department!==DEPT_OPTS[0]&&<span style={{fontSize:11,fontWeight:600,padding:'3px 10px',borderRadius:999,background:'#f0fdf4',color:'#16a34a',border:'1px solid #bbf7d0'}}>{department}</span>}
           {activeMonths.length>1&&<span style={{fontSize:11,fontWeight:600,padding:'3px 10px',borderRadius:999,background:'#fff7ed',color:'#c2410c',border:'1px solid #fed7aa'}}>{activeMonths.length} months</span>}

@@ -97,7 +97,7 @@ export default function AttendanceModal({ exam, onClose, onSave }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
-        <div className="bg-[#1162d4] text-white px-6 py-4">
+        <div className="bg-[#276221] text-white px-6 py-4">
           <h2 className="text-xl font-semibold flex items-center">
             <span className="material-symbols-outlined mr-2">fact_check</span>
             Mark Attendance - {exam.name}
@@ -111,7 +111,7 @@ export default function AttendanceModal({ exam, onClose, onSave }) {
             <div className="flex gap-3">
               <button
                 onClick={() => handleMarkAll('Present')}
-                className="px-4 py-2 bg-[#1162d4] text-white rounded-lg hover:bg-[#1162d4]/90 text-sm flex items-center gap-2"
+                className="px-4 py-2 bg-[#276221] text-white rounded-lg hover:bg-[#1e4618] text-sm flex items-center gap-2"
               >
                 <span className="material-symbols-outlined text-sm">check_circle</span>
                 Mark All Present
@@ -183,7 +183,7 @@ export default function AttendanceModal({ exam, onClose, onSave }) {
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-[#1162d4] text-white rounded-lg hover:bg-[#1162d4]/90"
+            className="px-4 py-2 bg-[#276221] text-white rounded-lg hover:bg-[#1e4618]"
           >
             Save Attendance
           </button>

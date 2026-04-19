@@ -106,16 +106,16 @@ const ROLE_FILTERS = {
 
 // ─── Category metadata ────────────────────────────────────────────────────────
 const CAT_META = {
-  academic:   { color: '#2563eb', bg: '#eff6ff', border: '#bfdbfe', emoji: '📚', label: 'Academic'    },
+  academic:   { color: '#276221', bg: '#eff6ff', border: '#bfdbfe', emoji: '📚', label: 'Academic'    },
   finance:    { color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', emoji: '💰', label: 'Finance'     },
   events:     { color: '#d97706', bg: '#fffbeb', border: '#fde68a', emoji: '🎉', label: 'Events'      },
   system:     { color: '#6b7280', bg: '#f9fafb', border: '#e5e7eb', emoji: '🔧', label: 'System'      },
   department: { color: '#7c3aed', bg: '#faf5ff', border: '#e9d5ff', emoji: '🏫', label: 'Department'  },
-  meetings:   { color: '#0891b2', bg: '#ecfeff', border: '#a5f3fc', emoji: '🤝', label: 'Meetings'    },
+  meetings:   { color: '#3d8b30', bg: '#ecfeff', border: '#a5f3fc', emoji: '🤝', label: 'Meetings'    },
   staff:      { color: '#be185d', bg: '#fdf2f8', border: '#fbcfe8', emoji: '👥', label: 'Staff'       },
   payments:   { color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', emoji: '💳', label: 'Payments'    },
   pending:    { color: '#c2410c', bg: '#fff7ed', border: '#fed7aa', emoji: '⏳', label: 'Pending'     },
-  scholarship:{ color: '#1d4ed8', bg: '#eff6ff', border: '#bfdbfe', emoji: '🎓', label: 'Scholarship' },
+  scholarship:{ color: '#1e4618', bg: '#eff6ff', border: '#bfdbfe', emoji: '🎓', label: 'Scholarship' },
 };
 
 // ─── Sample notifications per role ───────────────────────────────────────────
@@ -176,7 +176,7 @@ function fmtDate(dateStr) {
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
-const pill = (active, color = '#2563eb') => ({
+const pill = (active, color = '#276221') => ({
   display: 'inline-flex', alignItems: 'center', gap: 5,
   padding: '6px 14px', borderRadius: 999, border: '1.5px solid',
   cursor: 'pointer', fontSize: 13, fontWeight: 600, transition: 'all 0.15s',
@@ -302,7 +302,7 @@ export default function NotificationsPage({ role: propRole }) {
         style={{
           position: 'relative',
           background: n.read ? '#fff' : '#f8faff',
-          border: `1.5px solid ${isExp ? '#2563eb' : n.read ? '#f3f4f6' : '#bfdbfe'}`,
+          border: `1.5px solid ${isExp ? '#276221' : n.read ? '#f3f4f6' : '#bfdbfe'}`,
           borderRadius: 14,
           padding: '16px 18px',
           cursor: 'pointer',
@@ -327,7 +327,7 @@ export default function NotificationsPage({ role: propRole }) {
           <span style={{
             position: 'absolute', top: -1, left: 18,
             fontSize: 10, fontWeight: 700,
-            background: '#2563eb', color: '#fff',
+            background: '#276221', color: '#fff',
             padding: '2px 8px', borderRadius: '0 0 8px 8px',
             letterSpacing: 0.4,
           }}>📌 PINNED</span>
@@ -383,7 +383,7 @@ export default function NotificationsPage({ role: propRole }) {
                 style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}
               >
                 {!n.read && (
-                  <button type="button" onClick={() => markRead(n.id)} style={actionBtn('#2563eb')}>
+                  <button type="button" onClick={() => markRead(n.id)} style={actionBtn('#276221')}>
                     <Icon.Check /> Mark as Read
                   </button>
                 )}
@@ -587,7 +587,7 @@ export default function NotificationsPage({ role: propRole }) {
                     fontSize: 13, color: '#1f2937', outline: 'none',
                     background: '#f9fafb', transition: 'border 0.15s',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#2563eb')}
+                  onFocus={(e) => (e.target.style.borderColor = '#276221')}
                   onBlur={(e)  => (e.target.style.borderColor = '#e5e7eb')}
                 />
                 {searchQuery && (
@@ -604,7 +604,7 @@ export default function NotificationsPage({ role: propRole }) {
                   display: 'flex', alignItems: 'center', gap: 6,
                   height: 42, padding: '0 16px', borderRadius: 10,
                   border: '1.5px solid #bfdbfe', background: '#eff6ff',
-                  color: '#2563eb', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                  color: '#276221', fontSize: 13, fontWeight: 600, cursor: 'pointer',
                   whiteSpace: 'nowrap', transition: 'all 0.15s',
                 }}>
                   <Icon.Check /> Mark All as Read
@@ -743,7 +743,7 @@ export default function NotificationsPage({ role: propRole }) {
                   : 'You have no notifications in this category.'}
               </div>
               {searchQuery && (
-                <button type="button" onClick={() => setSearchQuery('')} style={{ marginTop: 16, ...actionBtn('#2563eb', '#eff6ff'), fontSize: 13 }}>
+                <button type="button" onClick={() => setSearchQuery('')} style={{ marginTop: 16, ...actionBtn('#276221', '#eff6ff'), fontSize: 13 }}>
                   Clear Search
                 </button>
               )}
@@ -783,7 +783,7 @@ export default function NotificationsPage({ role: propRole }) {
               {[
                 { dot: '#ef4444', label: 'Unread' },
                 { dot: '#22c55e', label: 'Read'   },
-                { dot: '#2563eb', label: 'Pinned' },
+                { dot: '#276221', label: 'Pinned' },
               ].map(({ dot, label }) => (
                 <span key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#6b7280' }}>
                   <span style={{ width: 8, height: 8, borderRadius: '50%', background: dot, display: 'inline-block' }} />

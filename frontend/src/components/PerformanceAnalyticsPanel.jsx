@@ -54,7 +54,7 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
       case 'Excellent':
         return { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-300' };
       case 'Good':
-        return { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-300' };
+        return { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-300' };
       case 'Average':
         return { bg: 'bg-yellow-100', text: 'text-yellow-700', border: 'border-yellow-300' };
       default:
@@ -64,7 +64,7 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
 
   const getScoreBadge = (score) => {
     if (score >= 4.5) return 'bg-green-600 text-white';
-    if (score >= 3.5) return 'bg-blue-600 text-white';
+    if (score >= 3.5) return 'bg-green-600 text-white';
     if (score >= 2.5) return 'bg-yellow-600 text-white';
     return 'bg-red-600 text-white';
   };
@@ -133,7 +133,7 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
                       metrics.overall_score >= 4.5
                         ? 'bg-green-600'
                         : metrics.overall_score >= 3.5
-                        ? 'bg-blue-600'
+                        ? 'bg-green-600'
                         : metrics.overall_score >= 2.5
                         ? 'bg-yellow-600'
                         : 'bg-red-600'
@@ -152,7 +152,7 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
               title="Student Satisfaction"
               value={metrics.student_satisfaction.toFixed(1)}
               unit="/5"
-              color="text-blue-600"
+              color="text-green-600"
             />
             <MetricCard
               icon={TrendingUp}
@@ -173,7 +173,7 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
           {/* Research Metrics */}
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
             <h4 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
-              <TrendingUp size={18} className="text-blue-600" />
+              <TrendingUp size={18} className="text-green-600" />
               Research Performance
             </h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -182,7 +182,7 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
                 title="Publications"
                 value={metrics.publications_count}
                 unit=""
-                color="text-blue-600"
+                color="text-green-600"
               />
               <MetricCard
                 icon={Zap}
@@ -220,7 +220,7 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
                 title="Committee Participation"
                 value={metrics.committee_participation}
                 unit=""
-                color="text-blue-600"
+                color="text-green-600"
               />
               <MetricCard
                 icon={Users}
@@ -234,12 +234,12 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
 
           {/* Performance Breakdown */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
-              <h4 className="font-semibold text-blue-900 mb-3">Teaching (35%)</h4>
-              <p className="text-3xl font-bold text-blue-600">
+            <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
+              <h4 className="font-semibold text-green-900 mb-3">Teaching (35%)</h4>
+              <p className="text-3xl font-bold text-green-600">
                 {(metrics.student_satisfaction).toFixed(1)}/5
               </p>
-              <p className="text-xs text-blue-700 mt-2">
+              <p className="text-xs text-green-700 mt-2">
                 Based on student satisfaction and completion rates
               </p>
             </div>
@@ -281,7 +281,7 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
                           item.overall_score >= 4.5
                             ? 'bg-green-600'
                             : item.overall_score >= 3.5
-                            ? 'bg-blue-600'
+                            ? 'bg-green-600'
                             : item.overall_score >= 2.5
                             ? 'bg-yellow-600'
                             : 'bg-red-600'
@@ -307,9 +307,9 @@ export default function PerformanceAnalyticsPanel({ facultyId, academicYear }) {
 
       {/* Recommendations */}
       {metrics && (
-        <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
-          <h4 className="font-semibold text-blue-900 mb-2">📊 Recommendations</h4>
-          <ul className="text-sm text-blue-800 space-y-1">
+        <div className="bg-green-50 border-l-4 border-green-600 p-4 rounded">
+          <h4 className="font-semibold text-green-900 mb-2">📊 Recommendations</h4>
+          <ul className="text-sm text-green-800 space-y-1">
             {metrics.performance_category === 'Excellent' && (
               <>
                 <li>• Continue your excellent work</li>

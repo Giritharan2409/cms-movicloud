@@ -7,19 +7,19 @@ export default function FacultyDetailsModal({ faculty, isOpen, onClose, onOpenPr
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header with Gradient */}
-        <div className="sticky top-0 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white p-8 flex justify-between items-start rounded-t-2xl">
+        <div className="sticky top-0 bg-gradient-to-r from-green-700 via-green-800 to-green-900 text-white p-8 flex justify-between items-start rounded-t-2xl">
           <div className="flex-1">
             <h2 className="text-4xl font-bold mb-2">{faculty.name}</h2>
-            <div className="flex items-center gap-3 text-blue-100">
+            <div className="flex items-center gap-3 text-green-100">
               <Award size={18} />
               <p className="text-lg font-medium">{faculty.designation}</p>
-              <span className="text-blue-200">•</span>
+              <span className="text-green-200">•</span>
               <p className="text-lg font-medium">{faculty.departmentId}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-white hover:bg-blue-700 p-2 rounded-lg transition duration-200 hover:scale-110"
+            className="text-white hover:bg-green-800 p-2 rounded-lg transition duration-200 hover:scale-110"
           >
             <X size={28} />
           </button>
@@ -37,7 +37,7 @@ export default function FacultyDetailsModal({ faculty, isOpen, onClose, onOpenPr
               ● {faculty.employment_status || 'Active'}
             </span>
             {faculty.contract_end_date && (
-              <span className="px-4 py-2 rounded-full text-sm font-bold bg-blue-100 text-blue-800">
+              <span className="px-4 py-2 rounded-full text-sm font-bold bg-green-100 text-green-800">
                 Contract ends: {new Date(faculty.contract_end_date).toLocaleDateString()}
               </span>
             )}
@@ -45,17 +45,17 @@ export default function FacultyDetailsModal({ faculty, isOpen, onClose, onOpenPr
 
           {/* Contact Information */}
           <div>
-            <h3 className="text-xl font-bold text-slate-900 mb-5 pb-3 border-b-2 border-blue-600">
+            <h3 className="text-xl font-bold text-slate-900 mb-5 pb-3 border-b-2 border-green-700">
               Contact Information
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-lg hover:shadow-md transition">
-                <div className="p-3 bg-blue-600 text-white rounded-lg">
+              <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-green-50 to-green-100/50 rounded-lg hover:shadow-md transition">
+                <div className="p-3 bg-green-700 text-white rounded-lg">
                   <Mail size={20} />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-blue-600 uppercase tracking-wider">Email</p>
-                  <a href={`mailto:${faculty.email}`} className="text-sm font-semibold text-slate-900 hover:text-blue-600 transition">
+                  <p className="text-xs font-bold text-green-700 uppercase tracking-wider">Email</p>
+                  <a href={`mailto:${faculty.email}`} className="text-sm font-semibold text-slate-900 hover:text-green-700 transition">
                     {faculty.email}
                   </a>
                 </div>
@@ -95,12 +95,12 @@ export default function FacultyDetailsModal({ faculty, isOpen, onClose, onOpenPr
 
           {/* Academic Details */}
           <div>
-            <h3 className="text-xl font-bold text-slate-900 mb-5 pb-3 border-b-2 border-blue-600">
+            <h3 className="text-xl font-bold text-slate-900 mb-5 pb-3 border-b-2 border-green-700">
               Academic Details
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-lg p-4 hover:shadow-lg transition">
-                <p className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Qualification</p>
+              <div className="bg-gradient-to-br from-green-50 to-green-100 border-l-4 border-green-700 rounded-lg p-4 hover:shadow-lg transition">
+                <p className="text-xs font-bold text-green-700 uppercase tracking-wider mb-2">Qualification</p>
                 <p className="text-sm font-bold text-slate-900">{faculty.qualification || 'Not provided'}</p>
               </div>
               <div className="bg-gradient-to-br from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-lg p-4 hover:shadow-lg transition">
@@ -144,14 +144,14 @@ export default function FacultyDetailsModal({ faculty, isOpen, onClose, onOpenPr
           {/* Specializations */}
           {faculty.specializations && faculty.specializations.length > 0 && (
             <div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4 pb-3 border-b-2 border-blue-600">
+              <h3 className="text-xl font-bold text-slate-900 mb-4 pb-3 border-b-2 border-green-700">
                 Specializations
               </h3>
               <div className="flex flex-wrap gap-3">
                 {faculty.specializations.map((spec, i) => (
                   <span
                     key={i}
-                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition"
+                    className="px-4 py-2 bg-gradient-to-r from-green-700 to-green-800 text-white rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition"
                   >
                     {spec}
                   </span>
@@ -164,13 +164,13 @@ export default function FacultyDetailsModal({ faculty, isOpen, onClose, onOpenPr
           <div className="flex gap-3 pt-6 border-t border-slate-200">
             <button
               onClick={() => onOpenProfile?.(faculty)}
-              className="flex-1 px-6 py-3 bg-white text-blue-700 border border-blue-200 rounded-lg font-bold hover:bg-blue-50 transition"
+              className="flex-1 px-6 py-3 bg-white text-green-700 border border-green-200 rounded-lg font-bold hover:bg-green-50 transition"
             >
               Open Full Profile
             </button>
             <button
               onClick={onClose}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-bold hover:from-blue-700 hover:to-blue-800 transition shadow-lg hover:shadow-xl transform hover:scale-105 duration-200"
+              className="flex-1 px-6 py-3 bg-gradient-to-r from-green-700 to-green-800 text-white rounded-lg font-bold hover:from-green-800 hover:to-green-900 transition shadow-lg hover:shadow-xl transform hover:scale-105 duration-200"
             >
               Close
             </button>

@@ -53,7 +53,7 @@ export default function NotificationsPanel({ facultyId, isOpen, onClose }) {
       case 'WorkloadAlert':
         return <AlertCircle className="w-5 h-5 text-red-500" />;
       case 'Performance':
-        return <CheckCircle className="w-5 h-5 text-blue-500" />;
+        return <CheckCircle className="w-5 h-5 text-green-500" />;
       default:
         return <Info className="w-5 h-5 text-slate-500" />;
     }
@@ -66,7 +66,7 @@ export default function NotificationsPanel({ facultyId, isOpen, onClose }) {
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[80vh] flex flex-col overflow-hidden">
         <div className="flex items-center justify-between p-6 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <Bell size={24} className="text-blue-600" />
+            <Bell size={24} className="text-green-600" />
             <div>
               <h2 className="text-xl font-bold text-slate-800">Notifications</h2>
               <p className="text-sm text-slate-500">{unreadCount} unread</p>
@@ -96,7 +96,7 @@ export default function NotificationsPanel({ facultyId, isOpen, onClose }) {
                   className={`p-4 cursor-pointer transition-colors ${
                     notification.is_read
                       ? 'bg-white hover:bg-slate-50'
-                      : 'bg-blue-50 hover:bg-blue-100'
+                      : 'bg-green-50 hover:bg-green-100'
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -109,7 +109,7 @@ export default function NotificationsPanel({ facultyId, isOpen, onClose }) {
                           {notification.title}
                         </h3>
                         {!notification.is_read && (
-                          <div className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0" />
+                          <div className="w-2 h-2 bg-green-600 rounded-full flex-shrink-0" />
                         )}
                       </div>
                       <p className="text-sm text-slate-600 mt-1">

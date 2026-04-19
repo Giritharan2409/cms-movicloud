@@ -118,7 +118,7 @@ export default function CareerPathwayTracking({ facultyId }) {
         <p className="text-slate-600 mb-4">No career pathway defined yet</p>
         <button
           onClick={() => setShowAddForm(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors"
+          className="bg-green-700 hover:bg-green-800 text-white px-6 py-2 rounded-lg transition-colors"
         >
           Create Career Pathway
         </button>
@@ -138,7 +138,7 @@ export default function CareerPathwayTracking({ facultyId }) {
       {pathway && !editMode && (
         <>
           {/* Career Journey Overview */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border-2 border-blue-200">
+          <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border-2 border-green-200">>
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-lg text-slate-900">Career Development Pathway</h3>
               <button
@@ -146,7 +146,7 @@ export default function CareerPathwayTracking({ facultyId }) {
                   setEditMode(true);
                   setFormData(pathway);
                 }}
-                className="text-blue-600 hover:text-blue-700 font-semibold text-sm"
+                className="text-green-700 hover:text-green-800 font-semibold text-sm"
               >
                 Edit
               </button>
@@ -158,11 +158,11 @@ export default function CareerPathwayTracking({ facultyId }) {
                 <p className="text-lg font-bold text-slate-900">{pathway.current_designation}</p>
               </div>
               
-              <ArrowRight className="w-6 h-6 text-blue-600 flex-shrink-0" />
+              <ArrowRight className="w-6 h-6 text-green-700 flex-shrink-0" />
               
               <div className="flex-1">
                 <p className="text-sm text-slate-600">Target Position</p>
-                <p className="text-lg font-bold text-blue-600">{pathway.target_designation}</p>
+                <p className="text-lg font-bold text-green-700">{pathway.target_designation}</p>
               </div>
             </div>
 
@@ -170,11 +170,11 @@ export default function CareerPathwayTracking({ facultyId }) {
             <div className="mb-4">
               <div className="flex justify-between items-center mb-2">
                 <p className="text-sm font-semibold text-slate-700">Overall Progress</p>
-                <span className="text-sm font-bold text-blue-600">{calculateProgress()}%</span>
+                <span className="text-sm font-bold text-green-700">{calculateProgress()}%</span>
               </div>
               <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
                 <div
-                  className="h-full bg-blue-600 transition-all"
+                  className="h-full bg-green-700 transition-all"
                   style={{ width: `${calculateProgress()}%` }}
                 />
               </div>
@@ -249,7 +249,7 @@ export default function CareerPathwayTracking({ facultyId }) {
               <div className="space-y-2">
                 {pathway.mentors.map((mentor, idx) => (
                   <div key={idx} className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
-                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                    <div className="w-8 h-8 bg-green-700 text-white rounded-full flex items-center justify-center text-xs font-bold">
                       {mentor.charAt(0).toUpperCase()}
                     </div>
                     <p className="text-sm text-slate-700">{mentor}</p>
@@ -278,7 +278,7 @@ export default function CareerPathwayTracking({ facultyId }) {
                   value={formData.current_designation}
                   onChange={(e) => setFormData({...formData, current_designation: e.target.value})}
                   placeholder="e.g., Assistant Professor"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
               </div>
 
@@ -290,7 +290,7 @@ export default function CareerPathwayTracking({ facultyId }) {
                   value={formData.target_designation}
                   onChange={(e) => setFormData({...formData, target_designation: e.target.value})}
                   placeholder="e.g., Associate Professor"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
               </div>
 
@@ -302,7 +302,7 @@ export default function CareerPathwayTracking({ facultyId }) {
                   max="10"
                   value={formData.target_years}
                   onChange={(e) => setFormData({...formData, target_years: parseInt(e.target.value)})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
               </div>
             </div>
@@ -310,7 +310,7 @@ export default function CareerPathwayTracking({ facultyId }) {
             <div className="flex gap-3 pt-4">
               <button
                 type="submit"
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-colors"
+                className="flex-1 bg-green-700 hover:bg-green-800 text-white font-semibold py-2 rounded-lg transition-colors"
               >
                 {editMode ? 'Update Pathway' : 'Create Pathway'}
               </button>
