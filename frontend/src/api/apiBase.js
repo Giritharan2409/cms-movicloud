@@ -16,6 +16,9 @@ function resolveHostBase() {
   // Render static rewrite for /api is unreliable in this deployment,
   // so use direct backend host in production by default.
   if (!import.meta.env.DEV && typeof window !== 'undefined') {
+    if (window.location.hostname === 'cms-frontend-tsds.onrender.com') {
+      return 'https://cms-backend-degr.onrender.com';
+    }
     if (window.location.hostname === 'cms1-weof.onrender.com') {
       return 'https://cms-x82g.onrender.com';
     }

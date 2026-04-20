@@ -55,6 +55,7 @@ def _parse_origins(value: Optional[str]):
 
 configured_origins = _parse_origins(os.getenv("CORS_ORIGINS"))
 default_origins = [
+    "https://cms-frontend-tsds.onrender.com",
     "https://cms1-weof.onrender.com",
     "http://localhost:5173",
     "http://127.0.0.1:5173",

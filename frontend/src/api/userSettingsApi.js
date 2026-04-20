@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+import { buildApiUrl } from './apiBase';
+
 const REQUEST_TIMEOUT_MS = 8000;
 
 function resolveRoleAndUserId(roleOrUserId, maybeUserId) {
@@ -34,7 +35,7 @@ async function request(path, options = {}) {
   const timeoutId = globalThis.setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
+    const response = await fetch(buildApiUrl(path), {
       headers: {
         'Content-Type': 'application/json',
         ...(fetchOptions.headers || {}),
@@ -51,11 +52,11 @@ async function request(path, options = {}) {
     return payload;
   } catch (error) {
     if (error?.name === 'AbortError') {
-      throw new Error('Settings service request timed out. Ensure backend is running on http://localhost:5000.');
+      throw new Error('Settings service request timed out. Please check your internet connection.');
     }
 
     if (error instanceof TypeError) {
-      throw new Error('Settings service is unavailable. Start backend server on http://localhost:5000 and retry.');
+      throw new Error('Settings service is unavailable. Please ensure the backend server is reachable.');
     }
 
     throw error;

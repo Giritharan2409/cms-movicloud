@@ -3,8 +3,9 @@ import Layout from '../components/Layout';
 import KpiCard from '../components/KpiCard';
 import KpiGrid from '../components/KpiGrid';
 import { Building2, Users, BookOpen, Mail, MapPin, Share2, Edit, X, Save } from 'lucide-react';
+import { buildApiUrl } from '../api/apiBase';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// Removed hardcoded API_BASE_URL
 
 // Mock department data for Faculty
 const mockDepartments = [

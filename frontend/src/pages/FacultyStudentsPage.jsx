@@ -4,8 +4,9 @@ import Layout from '../components/Layout';
 import KpiCard from '../components/KpiCard';
 import KpiGrid from '../components/KpiGrid';
 import { Users, Search, Filter, BookOpen, Mail, Phone, Plus, X } from 'lucide-react';
+import { buildApiUrl } from '../api/apiBase';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// Removed hardcoded API_BASE_URL
 
 // Add Student Modal Component
 function AddStudentModal({ isOpen, onClose, onAdd }) {
@@ -400,7 +401,7 @@ export default function FacultyStudentsPage() {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      let url = `${API_BASE_URL}/students`;
+      let url = buildApiUrl('/api/students');
       if (departmentFilter) {
         url += `?department=${encodeURIComponent(departmentFilter)}`;
       }
